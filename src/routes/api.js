@@ -1,18 +1,27 @@
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 const submissionService = require("../services/submission");
+const { computeResults } = require("../services/results");
 const webflowService = require("../services/webflow");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const createStripeClient = require("stripe");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 const { google } = require("googleapis"); // ← ADD THIS LINE
-require("dotenv").config();
 const crypto = require("crypto");
+const fetch = require("node-fetch");
+const sharp = require("sharp");
+
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? createStripeClient(process.env.STRIPE_SECRET_KEY)
+  : null;
 
 // Configure Mailchimp
-mailchimp.setConfig({
-  apiKey: process.env.MAILCHIMP_API_KEY,
-  server: process.env.MAILCHIMP_API_KEY.split("-")[1],
-});
+if (process.env.MAILCHIMP_API_KEY) {
+  mailchimp.setConfig({
+    apiKey: process.env.MAILCHIMP_API_KEY,
+    server: process.env.MAILCHIMP_API_KEY.split("-")[1],
+  });
+}
 const PLANS = {
   monthly: {
     type: "inline",
@@ -248,11 +257,59 @@ router.post("/submit", async (req, res) => {
     } else {
       submission.submitted_at = new Date().toISOString();
     }
-    await submissionService.saveSubmission(submission);
-    res.json({ ok: true });
+    const result = await submissionService.saveSubmission(submission);
+    res.json({ ok: true, result });
   } catch (error) {
     console.error("Submission failed:", error);
     res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+router.post("/calculate-results", (req, res) => {
+  try {
+    res.json({ ok: true, result: computeResults(req.body?.quizState || req.body || {}) });
+  } catch (error) {
+    console.error("Result calculation failed:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+const RESULT_IMAGE_HOSTS = new Set([
+  "cdn.prod.website-files.com",
+  "s3.amazonaws.com",
+]);
+
+router.get("/result-image", async (req, res) => {
+  try {
+    const sourceUrl = new URL(req.query.url);
+    if (sourceUrl.protocol !== "https:" || !RESULT_IMAGE_HOSTS.has(sourceUrl.hostname)) {
+      return res.status(400).json({ ok: false, error: "Unsupported image source" });
+    }
+
+    const response = await fetch(sourceUrl.toString(), { size: 25 * 1024 * 1024 });
+    if (!response.ok) {
+      return res.status(502).json({ ok: false, error: "Unable to fetch result image" });
+    }
+
+    const source = await response.buffer();
+    const requestedName = String(req.query.name || "soulbox-result.jpg")
+      .replace(/[^a-zA-Z0-9._-]/g, "_");
+    const wantsPng = requestedName.toLowerCase().endsWith(".png");
+    const image = sharp(source, { failOn: "warning" }).rotate();
+    const output = wantsPng
+      ? await image.png({ compressionLevel: 9 }).toBuffer()
+      : await image.jpeg({ quality: 92, mozjpeg: true }).toBuffer();
+
+    res.set({
+      "Content-Type": wantsPng ? "image/png" : "image/jpeg",
+      "Content-Disposition": `attachment; filename="${requestedName}"`,
+      "Cache-Control": "public, max-age=86400, s-maxage=604800",
+      "X-Content-Type-Options": "nosniff",
+    });
+    return res.send(output);
+  } catch (error) {
+    console.error("Result image cleanup failed:", error);
+    return res.status(500).json({ ok: false, error: "Unable to prepare result image" });
   }
 });
 
@@ -269,6 +326,12 @@ router.get("/soul-report/:arcLabel", async (req, res) => {
 
 router.post("/create-checkout-session", async (req, res) => {
   try {
+    if (!stripe) {
+      return res.status(500).json({
+        error: "Stripe is not configured. Set STRIPE_SECRET_KEY in Vercel.",
+      });
+    }
+
     const { plan, email, submission } = req.body;
 
     if (!PLANS[plan]) {
@@ -350,6 +413,10 @@ router.post("/create-checkout-session", async (req, res) => {
 router.post("/mailchimp-subscribe", async (req, res) => {
   try {
     const { email, tags = ["Waitlist"] } = req.body;
+    if (!process.env.MAILCHIMP_API_KEY) {
+      throw new Error("Mailchimp API key is not configured");
+    }
+
     if (
       !process.env.MAILCHIMP_AUDIENCE_ID ||
       process.env.MAILCHIMP_AUDIENCE_ID === "xxxxxxxxxx"
@@ -441,9 +508,11 @@ router.get("/debug-sheets", async (req, res) => {
   // Use lower-level JWT for clearer error reporting
   let jwtClient;
   try {
-    jwtClient = new google.auth.JWT(clientEmail.trim(), null, privateKey, [
-      "https://www.googleapis.com/auth/spreadsheets",
-    ]);
+    jwtClient = new google.auth.JWT({
+      email: clientEmail.trim(),
+      key: privateKey,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
 
     await jwtClient.authorize();
     info("✔ Authentication successful");

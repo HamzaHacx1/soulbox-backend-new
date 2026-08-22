@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "node test/results.test.js"
   },
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
@@ -14,6 +15,7 @@
     "express": "^4.18.2",
     "googleapis": "^161.0.0",
     "node-fetch": "^2.6.7",
+    "sharp": "^0.34.3",
     "stripe": "^19.0.0"
   },
   "devDependencies": {

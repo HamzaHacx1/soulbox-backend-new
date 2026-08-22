@@ -15,6 +15,7 @@ app.use(
   origin: [
     'https://soul-box.webflow.io',
     'https://soulboxed.com',
+    'https://www.soulboxed.com',
   ],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],

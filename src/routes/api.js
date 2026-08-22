@@ -8,6 +8,8 @@ const createStripeClient = require("stripe");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
 const { google } = require("googleapis"); // ← ADD THIS LINE
 const crypto = require("crypto");
+const fetch = require("node-fetch");
+const sharp = require("sharp");
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? createStripeClient(process.env.STRIPE_SECRET_KEY)
@@ -269,6 +271,45 @@ router.post("/calculate-results", (req, res) => {
   } catch (error) {
     console.error("Result calculation failed:", error);
     res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+const RESULT_IMAGE_HOSTS = new Set([
+  "cdn.prod.website-files.com",
+  "s3.amazonaws.com",
+]);
+
+router.get("/result-image", async (req, res) => {
+  try {
+    const sourceUrl = new URL(req.query.url);
+    if (sourceUrl.protocol !== "https:" || !RESULT_IMAGE_HOSTS.has(sourceUrl.hostname)) {
+      return res.status(400).json({ ok: false, error: "Unsupported image source" });
+    }
+
+    const response = await fetch(sourceUrl.toString(), { size: 25 * 1024 * 1024 });
+    if (!response.ok) {
+      return res.status(502).json({ ok: false, error: "Unable to fetch result image" });
+    }
+
+    const source = await response.buffer();
+    const requestedName = String(req.query.name || "soulbox-result.jpg")
+      .replace(/[^a-zA-Z0-9._-]/g, "_");
+    const wantsPng = requestedName.toLowerCase().endsWith(".png");
+    const image = sharp(source, { failOn: "warning" }).rotate();
+    const output = wantsPng
+      ? await image.png({ compressionLevel: 9 }).toBuffer()
+      : await image.jpeg({ quality: 92, mozjpeg: true }).toBuffer();
+
+    res.set({
+      "Content-Type": wantsPng ? "image/png" : "image/jpeg",
+      "Content-Disposition": `attachment; filename="${requestedName}"`,
+      "Cache-Control": "public, max-age=86400, s-maxage=604800",
+      "X-Content-Type-Options": "nosniff",
+    });
+    return res.send(output);
+  } catch (error) {
+    console.error("Result image cleanup failed:", error);
+    return res.status(500).json({ ok: false, error: "Unable to prepare result image" });
   }
 });
 

@@ -31,6 +31,100 @@ const WHY_SLUGS = {
   "Wonder and awe": "wonder_and_awe",
 };
 
+const SOULCHARACTER_YEARNING_GROUPS = {
+  "To be loved": "GROUP_A",
+  "To belong": "GROUP_A",
+  "To be seen": "GROUP_A",
+  "To feel worthy": "GROUP_A",
+  "To feel peace": "GROUP_A",
+  "To find peace": "GROUP_A",
+  "To be free": "GROUP_B",
+  "To change": "GROUP_B",
+  "To discover": "GROUP_B",
+  "To leave an impact": "GROUP_C",
+  "To have impact": "GROUP_C",
+  "To redeem": "GROUP_C",
+  "To preserve": "GROUP_C",
+};
+
+const SOULCHARACTER_LOOKUP = {
+  Hearth: { GROUP_A: "winnie_the_pooh", GROUP_B: "cinderella", GROUP_C: "anne_shirley" },
+  Bond: { GROUP_A: "elizabeth_bennet", GROUP_B: "juliet", GROUP_C: "guinevere" },
+  Ache: { GROUP_A: "quasimodo", GROUP_B: "anna_karenina", GROUP_C: "orpheus" },
+  Surge: { GROUP_A: "helen_of_troy", GROUP_B: "icarus", GROUP_C: "cleopatra" },
+  Abyss: { GROUP_A: "frankensteins_creature", GROUP_B: "mr_hyde", GROUP_C: "dracula" },
+  Gauntlet: { GROUP_A: "odysseus", GROUP_B: "mowgli", GROUP_C: "hercules" },
+  "Art of War": { GROUP_A: "hector", GROUP_B: "athena", GROUP_C: "achilles" },
+  Web: { GROUP_A: "morgan_le_fay", GROUP_B: "loki", GROUP_C: "macbeth" },
+  Mythical: { GROUP_A: "persephone", GROUP_B: "circe", GROUP_C: "merlin" },
+  Threshold: { GROUP_A: "dorothy", GROUP_B: "alice", GROUP_C: "alice" },
+  Populace: { GROUP_A: "jean_valjean", GROUP_B: "robin_hood", GROUP_C: "antigone" },
+  Inner: { GROUP_A: "jane_eyre", GROUP_B: "nora_helmer", GROUP_C: "hamlet" },
+  Cunning: { GROUP_A: "aladdin", GROUP_B: "sherlock_holmes", GROUP_C: "sherlock_holmes" },
+  "The Novel": { GROUP_A: "prospero", GROUP_B: "don_quixote", GROUP_C: "scheherazade" },
+};
+
+const SOULCHARACTER_NAMES = {
+  achilles: "Achilles",
+  aladdin: "Aladdin",
+  alice: "Alice",
+  anna_karenina: "Anna Karenina",
+  anne_shirley: "Anne Shirley",
+  antigone: "Antigone",
+  athena: "Athena",
+  cinderella: "Cinderella",
+  circe: "Circe",
+  cleopatra: "Cleopatra",
+  don_quixote: "Don Quixote",
+  dorothy: "Dorothy",
+  dracula: "Dracula",
+  elizabeth_bennet: "Elizabeth Bennet",
+  frankensteins_creature: "Frankenstein's Creature",
+  guinevere: "Guinevere",
+  hamlet: "Hamlet",
+  hector: "Hector",
+  helen_of_troy: "Helen of Troy",
+  hercules: "Hercules",
+  icarus: "Icarus",
+  jane_eyre: "Jane Eyre",
+  jean_valjean: "Jean Valjean",
+  juliet: "Juliet",
+  loki: "Loki",
+  macbeth: "Macbeth",
+  merlin: "Merlin",
+  morgan_le_fay: "Morgan le Fay",
+  mowgli: "Mowgli",
+  mr_hyde: "Mr. Hyde",
+  nora_helmer: "Nora Helmer",
+  odysseus: "Odysseus",
+  orpheus: "Orpheus",
+  persephone: "Persephone",
+  prospero: "Prospero",
+  puss_in_boots: "Puss in Boots",
+  quasimodo: "Quasimodo",
+  robin_hood: "Robin Hood",
+  scheherazade: "Scheherazade",
+  sherlock_holmes: "Sherlock Holmes",
+  winnie_the_pooh: "Winnie the Pooh",
+};
+
+const HOUSE_BY_TEXTURE = {
+  Inner: "Mind",
+  Populace: "Mind",
+  "The Novel": "Mind",
+  Hearth: "Heart",
+  Bond: "Heart",
+  Ache: "Heart",
+  Surge: "Body",
+  Abyss: "Body",
+  Web: "Body",
+  Mythical: "Soul",
+  Threshold: "Soul",
+  Gauntlet: "Soul",
+  "Art of War": "Soul",
+  Cunning: "Soul",
+};
+
 const YEARNINGS = [
   "To be loved",
   "To belong",
@@ -353,35 +447,56 @@ function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 }
 
+function computeSoulCharacter(texture, yearning) {
+  const group = SOULCHARACTER_YEARNING_GROUPS[yearning] || "GROUP_A";
+  let character = SOULCHARACTER_LOOKUP[texture]?.[group]
+    || SOULCHARACTER_LOOKUP[texture]?.GROUP_A
+    || SOULCHARACTER_LOOKUP.Threshold.GROUP_A;
+
+  if (texture === "Bond" && oneOf(yearning, ["To be loved", "To belong"])) character = "juliet";
+  if (texture === "Ache" && oneOf(yearning, ["To feel peace", "To find peace"])) character = "orpheus";
+  if (texture === "Art of War" && oneOf(yearning, ["To be seen", "To feel worthy"])) character = "achilles";
+  if (texture === "Art of War" && oneOf(yearning, ["To preserve", "To redeem"])) character = "hector";
+  if (texture === "Populace" && yearning === "To be seen") character = "antigone";
+  if (texture === "Populace" && yearning === "To redeem") character = "jean_valjean";
+  if (texture === "Inner" && oneOf(yearning, ["To feel peace", "To find peace"])) character = "hamlet";
+  if (texture === "Cunning" && oneOf(yearning, ["To feel peace", "To find peace"])) character = "puss_in_boots";
+  if (texture === "Cunning" && yearning === "To be free") character = "puss_in_boots";
+  if (texture === "The Novel" && yearning === "To redeem") character = "prospero";
+
+  return {
+    name: SOULCHARACTER_NAMES[character],
+    slug: character,
+  };
+}
+
 function computeResults(submission) {
   const inputs = normalizeInputs(submission || {});
   const texture = computeTexture(inputs);
   const yearningIndex = Math.max(0, YEARNINGS.indexOf(inputs.yearning));
   const why = WHY_LOOKUP[texture]?.[yearningIndex] || WHY_LOOKUP[texture]?.[0] || "Recognition";
-  const house = oneOf(why, ["Cognitive stimulation", "Moral clarification", "Justice hunger"])
-    ? "Mind"
-    : oneOf(why, ["Repair", "Recognition", "Belonging"])
-      ? "Heart"
-      : oneOf(why, ["Intensity regulation", "Catharsis", "Controlled confrontation"])
-        ? "Body"
-        : "Soul";
+  const house = HOUSE_BY_TEXTURE[texture] || "Soul";
   const curator = {
     Mind: ["Lucas"],
     Heart: ["Claire"],
-    Soul: ["Sienna", "Riya"],
-    Body: ["Tanyah", "Ahmed"],
+    Body: ["Riya"],
+    Soul: ["Ahmed"],
   }[house];
   const style = computeStyle(inputs);
+  const soulCharacter = computeSoulCharacter(texture, inputs.yearning);
   return {
     texture,
     why,
     style,
     house,
     curator,
+    soulCharacter: soulCharacter.name,
     images: {
+      soulCharacter: `soulcharacter_${soulCharacter.slug}.png`,
       texture: `story_texture_${TEXTURE_SLUGS[texture]}.png`,
       why: `why_you_read_${WHY_SLUGS[why]}.png`,
       style: `reading_style_${slug(style)}.png`,
+      preHouse: "pre_house_reveal.png",
       house: `house_${slug(house)}.png`,
       grounding: `grounding_${slug(house)}.png`,
       gradient: `gradient_${slug(house)}.png`,
@@ -389,4 +504,12 @@ function computeResults(submission) {
   };
 }
 
-module.exports = { computeResults, normalizeInputs, TEXTURE_SLUGS, WHY_SLUGS };
+module.exports = {
+  computeResults,
+  computeSoulCharacter,
+  normalizeInputs,
+  TEXTURE_SLUGS,
+  WHY_SLUGS,
+  SOULCHARACTER_LOOKUP,
+  HOUSE_BY_TEXTURE,
+};

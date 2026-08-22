@@ -108,11 +108,15 @@ const HEADERS = [
 
   "result.house",
 
+  "SoulCharacter",
+
   "result.curator",
 
 ];
 
 const FALLBACK_PATHS = {
+
+  SoulCharacter: ["result.soulCharacter"],
 
   "desire.genre_fluidity": ["desire.genre_fluidity.value"],
 

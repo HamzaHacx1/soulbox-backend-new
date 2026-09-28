@@ -1,0 +1,105 @@
+<!-- QUIZ CORRECTIONS: image URL fix + Tone question update + Literaryness scoring -->
+<script>
+(() => {
+  const toneOptions = [
+    { value: "Warm", label: "Warm", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b702_Tone.Warm.jpg", image_id: "Tone.Warm" },
+    { value: "Playful", label: "Playful", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc171d83e014473ff076_Tone.Playful.jpg", image_id: "Tone.Playful" },
+    { value: "Grounded", label: "Grounded", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc145cd223a118c33a1e_Copy%20of%20Tone.Grounded.jpg", image_id: "Tone.Grounded" },
+    { value: "Melancholic", label: "Melancholic", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bacbc5ce17ba73c28_Tone.Melancholic.jpg", image_id: "Tone.Melancholic" },
+    { value: "Tense", label: "Tense", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1ba8270492863aae6a_Tone.Tense.jpg", image_id: "Tone.Tense" },
+    { value: "Heavy", label: "Heavy", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b6e8_Tone.Heavy.jpg", image_id: "Tone.Heavy" }
+  ];
+
+  const literarynessQuestions = [
+    { id: "desire.literary_depth_q1", type: "image", prompt: "The greatest books are...", gridClass: "grid-3x1", showLabelBelow: true, literaryScoreQuestion: true, options: [
+      { value: "Commercial", label: "Genuine entertainment.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc168b034178821c1890_Literaryness.Q1.A.jpg", image_id: "Literaryness.Q1.A" },
+      { value: "Literary", label: "A beautiful author's point of view.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1660f2fa3b2510de9f_Literaryness.Q1.B.jpg", image_id: "Literaryness.Q1.B" },
+      { value: "Mixed", label: "A world you fall into, yet a world to feel.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc168a6d86fced830c1a_Literaryness.Q1.C.jpg", image_id: "Literaryness.Q1.C" }
+    ] },
+    { id: "desire.literary_depth_q2", type: "image", prompt: "The greatest authors...", gridClass: "grid-3x1", showLabelBelow: true, literaryScoreQuestion: true, options: [
+      { value: "Commercial", label: "Make the hours fly past.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dca040ee7c1c9fc7_Literaryness.Q2.A.jpg", image_id: "Literaryness.Q2.A" },
+      { value: "Literary", label: "Get inside my head and never leave.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16a8270492863aa874_Literaryness.Q2.B.jpg", image_id: "Literaryness.Q2.B" },
+      { value: "Mixed", label: "Pull me in, then leave me changed.", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16972ac4970d708428_Literaryness.Q2.C.jpg", image_id: "Literaryness.Q2.C" }
+    ] },
+    { id: "desire.literary_depth", type: "grid", prompt: "Which one hits you hardest?", gridClass: "grid", literaryScoreQuestion: true, options: [
+      { value: "Commercial", label: "", text: "He shoved the door open, heart pounding, scanning the room for threats. Nothing moved, but he knew someone was there.", image_id: "Literaryness.Q3.A" },
+      { value: "Literary", label: "", text: "The door resisted, swollen with years of damp, until it yielded with a sigh that drifted through the dim air like memory. She stepped inside, every shadow alive with the weight of what was not said.", image_id: "Literaryness.Q3.B" },
+      { value: "Mixed", label: "", text: "The door creaked open and the smell of dust rushed out, as though the room had been holding its breath. He entered, the silence pressing on him harder than any welcome.", image_id: "Literaryness.Q3.C" }
+    ] }
+  ];
+
+  const scoreMap = { Commercial: 1, Mixed: 2, Literary: 3 };
+  const mapLiterarynessScore = (score) => score <= 4 ? "Commercial" : score <= 6 ? "Mixed" : "Literary";
+
+  const fixSatiricalUrl = (value) => {
+    if (Array.isArray(value)) return value.forEach(fixSatiricalUrl);
+    if (!value || typeof value !== "object") return;
+    if (value.image_id === "LiteraryStyle.Satirical") value.image = "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16392145753429d41a_LiteraryStyle.Satirical.jpg";
+    Object.values(value).forEach(fixSatiricalUrl);
+  };
+
+  fixSatiricalUrl(window.SOULBOX_QUESTIONS_PART_2);
+
+  const applyToneUpdate = () => {
+    if (typeof questions === "undefined" || !Array.isArray(questions)) return false;
+    const toneQuestion = questions.find((question) => question.id === "desire.tone");
+    if (!toneQuestion) return false;
+    toneQuestion.gridClass = "grid-3x2";
+    toneQuestion.showLabelBelow = true;
+    toneQuestion.options = toneOptions;
+    window.SOULBOX_TONE_UPDATED = true;
+    return true;
+  };
+
+  const applyLiterarynessUpdate = () => {
+    if (typeof questions === "undefined" || !Array.isArray(questions)) return false;
+    const oldIndex = questions.findIndex((question) => question.id === "desire.literary_depth");
+    if (oldIndex === -1) return false;
+    if (!questions.some((question) => question.id === "desire.literary_depth_q1")) questions.splice(oldIndex, 1, ...literarynessQuestions);
+    window.SOULBOX_LITERARYNESS_UPDATED = true;
+    return true;
+  };
+
+  const wrapSaveAnswerForLiteraryness = () => {
+    if (typeof saveAnswer !== "function" || window.SOULBOX_LITERARYNESS_SAVE_WRAPPED) return false;
+    const originalSaveAnswer = saveAnswer;
+    saveAnswer = function(value, image_id) {
+      const question = Array.isArray(questions) ? questions[currentQuestion] : null;
+      if (question && question.literaryScoreQuestion) {
+        const score = scoreMap[value] || 0;
+        state.desire = state.desire || {};
+        const scoreState = state.desire.literary_depth_score || { value: 0, answers: {} };
+        scoreState.answers = scoreState.answers || {};
+        scoreState.answers[question.id] = score;
+        scoreState.value = Object.values(scoreState.answers).reduce((total, item) => total + Number(item || 0), 0);
+        state.desire.literary_depth_score = scoreState;
+        if (question.id === "desire.literary_depth") {
+          const mappedValue = mapLiterarynessScore(scoreState.value);
+          const selectedOption = (question.options || []).find((option) => option.value === value);
+          if (selectedOption) selectedOption.saveValue = mappedValue;
+          state.desire.literary_depth_score.mapped_value = mappedValue;
+        }
+        localStorage.setItem("quizState", JSON.stringify(state));
+      }
+      return originalSaveAnswer(value, image_id);
+    };
+    window.SOULBOX_LITERARYNESS_SAVE_WRAPPED = true;
+    return true;
+  };
+
+  const applyAllQuizCorrections = () => {
+    const toneDone = applyToneUpdate();
+    const literaryDone = applyLiterarynessUpdate();
+    const saveWrapped = wrapSaveAnswerForLiteraryness();
+    return toneDone && literaryDone && saveWrapped;
+  };
+
+  if (!applyAllQuizCorrections()) {
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (applyAllQuizCorrections() || attempts >= 80) window.clearInterval(timer);
+    }, 50);
+  }
+})();
+</script>

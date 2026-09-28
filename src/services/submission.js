@@ -438,7 +438,7 @@ async function saveSubmission(submission) {
 
       });
 
-      return;
+      throw new Error("Email and country are required to save your profile.");
 
     }
 
@@ -466,6 +466,7 @@ async function saveSubmission(submission) {
 
     const result = computeResults(submission);
     submission.result = result;
+    submission.chosen_curator = result.curator[0];
 
     const flattened = flattenObject(submission);
 
@@ -517,15 +518,19 @@ async function saveSubmission(submission) {
 
         range: headerRange,
 
-      })
-
-      .catch(() => null);
+      });
 
     const existingHeaders = existing?.data?.values?.[0] || [];
 
+    // Preserve existing columns so historical responses stay under their headers.
+    const headers = [...existingHeaders];
+    for (const header of HEADERS) {
+      if (!headers.includes(header)) headers.push(header);
+    }
+
     const headersMissing = existingHeaders.length === 0;
 
-    const headersMismatch = existingHeaders.length !== HEADERS.length;
+    const headersMismatch = existingHeaders.length !== headers.length;
 
     console.log("[SubmissionService] Header check", {
 
@@ -555,7 +560,7 @@ async function saveSubmission(submission) {
 
         valueInputOption: "RAW",
 
-        resource: { values: [HEADERS] },
+        resource: { values: [headers] },
 
       });
 
@@ -633,7 +638,7 @@ async function saveSubmission(submission) {
 
     console.log("[SubmissionService] Header mapping debug", mappingDebug);
 
-    const row = HEADERS.map((header) => getValue(header));
+    const row = headers.map((header) => getValue(header));
 
     console.log("[SubmissionService] Final row preview", {
 
@@ -643,23 +648,23 @@ async function saveSubmission(submission) {
 
       submitted_at: flattened.submitted_at,
 
-      "desire.genre_fluidity": previewValue(row[HEADERS.indexOf("desire.genre_fluidity")]),
+      "desire.genre_fluidity": previewValue(row[headers.indexOf("desire.genre_fluidity")]),
 
-      "desire.plot_engine": previewValue(row[HEADERS.indexOf("desire.plot_engine")]),
+      "desire.plot_engine": previewValue(row[headers.indexOf("desire.plot_engine")]),
 
-      "desire.genre_cluster": previewValue(row[HEADERS.indexOf("desire.genre_cluster")]),
+      "desire.genre_cluster": previewValue(row[headers.indexOf("desire.genre_cluster")]),
 
-      "desire.literary_depth_score": previewValue(row[HEADERS.indexOf("desire.literary_depth_score")]),
+      "desire.literary_depth_score": previewValue(row[headers.indexOf("desire.literary_depth_score")]),
 
-      wounds: previewValue(row[HEADERS.indexOf("wounds")]),
+      wounds: previewValue(row[headers.indexOf("wounds")]),
 
-      "cultural_lens.final": previewValue(row[HEADERS.indexOf("cultural_lens.final")]),
+      "cultural_lens.final": previewValue(row[headers.indexOf("cultural_lens.final")]),
 
-      chosen_curator: previewValue(row[HEADERS.indexOf("chosen_curator")]),
+      chosen_curator: previewValue(row[headers.indexOf("chosen_curator")]),
 
-      "reader_context.themes_issues": previewValue(row[HEADERS.indexOf("reader_context.themes_issues")]),
+      "reader_context.themes_issues": previewValue(row[headers.indexOf("reader_context.themes_issues")]),
 
-      "reader_context.age_stage": previewValue(row[HEADERS.indexOf("reader_context.age_stage")]),
+      "reader_context.age_stage": previewValue(row[headers.indexOf("reader_context.age_stage")]),
 
     });
 
@@ -690,6 +695,8 @@ async function saveSubmission(submission) {
       console.error("[SubmissionService] Google API error data:", error.response.data);
 
     }
+
+    throw error;
 
   }
 

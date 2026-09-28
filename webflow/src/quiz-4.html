@@ -1,0 +1,563 @@
+<!-- =========================================================
+WEBFLOW EMBED 3 START: QUESTION DATA PART 3 + QUIZ ENGINE
+Paste from this comment down to "WEBFLOW EMBED 3 END" into the third Webflow Embed element.
+Place directly below Embed 2.
+========================================================= -->
+<div class="w-embed w-script">
+  <script>
+    const questions = [
+      ...(window.SOULBOX_QUESTIONS_PART_1 || []),
+      ...(window.SOULBOX_QUESTIONS_PART_2 || []),
+      ...[
+      {
+        id: "desire.genre_fluidity",
+        type: "button",
+        prompt: "When you walk into a bookstore, where do you go?",
+        bridgeImage:
+          "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1b6c04dc55495de3b_desire.secondary_genre.jpg",
+        gridClass: "button-grid",
+        buttons: [
+          {
+            value: "focused",
+            label: "Straight to my section. I know what I love.",
+            image_id: "q2_secondary.jpg",
+          },
+          {
+            value: "open",
+            label: "I usually start there, but I wander.",
+            image_id: "q2_secondary.jpg",
+          },
+          {
+            value: "fluid",
+            label: "Honestly, I could end up anywhere.",
+            image_id: "q2_secondary.jpg",
+          },
+        ],
+      },
+
+     {
+        id: "desire.tone",
+        type: "image",
+        prompt: "Every story carries a mood. Which calls you most?",
+        gridClass: "grid-3x2",
+        options: [
+          { value: "Warm", label: "Warm", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b702_Tone.Warm.jpg", image_id: "Tone.Warm" },
+          { value: "Playful", label: "Playful", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc171d83e014473ff076_Tone.Playful.jpg", image_id: "Tone.Playful" },
+          { value: "Grounded", label: "Grounded", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc145cd223a118c33a1e_Copy%20of%20Tone.Grounded.jpg", image_id: "Tone.Grounded" },
+          { value: "Melancholic", label: "Melancholic", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bacbc5ce17ba73c28_Tone.Melancholic.jpg", image_id: "Tone.Melancholic" },
+          { value: "Tense", label: "Tense", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1ba8270492863aae6a_Tone.Tense.jpg", image_id: "Tone.Tense" },
+          { value: "Heavy", label: "Heavy", image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b6e8_Tone.Heavy.jpg", image_id: "Tone.Heavy" },
+        ],
+      },
+      {
+        id: "desire.pacing",
+        type: "button",
+        prompt: "Your story is a great stone bridge. Do you…",
+        bridgeImage:
+          "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6baa4f1542ae6441e_Q3_bridge.jpg.jpg",
+        gridClass: "button-grid",
+        buttons: [
+          {
+            value: "Fast",
+            label: "Run across in three strides, eager for what’s next.",
+            image_id: "q3_bridge.jpg",
+          },
+          {
+            value: "Medium",
+            label: "Pause midway, looking out at the river and both shores.",
+            image_id: "q3_bridge.jpg",
+          },
+          {
+            value: "Slow",
+            label: "Kneel to watch the beautiful carvings etched in the stone.",
+            image_id: "q3_bridge.jpg",
+          },
+        ],
+      },
+      
+      {
+        id: "desire.literary_depth",
+        type: "grid",
+        prompt:
+          "Read these openings. Which one feels more like the kind of story you’d keep reading?",
+        gridClass: "grid",
+        options: [
+          {
+            value: "Commercial",
+            label: "",
+            text: "He shoved the door open, heart pounding, scanning the room for threats. Nothing moved, but he knew someone was there.",
+            image_id: "q4_excerpt_01.txt",
+          },
+          {
+            value: "Mixed",
+            label: "",
+            text: "The door creaked open and the smell of dust rushed out, as though the room had been holding its breath. He entered, the silence pressing on him harder than any welcome.",
+            image_id: "q4_excerpt_02.txt",
+          },
+          {
+            value: "Literary",
+            label: "",
+            text: "The door resisted, swollen with years of damp, until it yielded with a sigh that drifted through the dim air like memory. She stepped inside, every shadow alive with the weight of what wasn’t said.",
+            image_id: "q4_excerpt_03.txt",
+          },
+        ],
+      },
+      
+      {
+        id: "desire.sensitivity",
+        type: "slider",
+        prompt:
+          "How sensitive are you to heavy themes? Slide to where you feel at home.",
+        options: ["Gentle", "Testing", "Unflinching"],
+      },
+      ],
+    ];
+
+   function renderQuestion() {
+  try {
+    if (!questions[currentQuestion]) {
+      document.getElementById("quiz-container").innerHTML =
+        '<p class="error-message">Error: Unable to load question. Please try again.</p>';
+      return;
+    }
+
+    const question = questions[currentQuestion];
+    let options = question.options;
+    let displayPrompt = question.prompt;
+
+    if (question.id === "desire.genre_flavour") {
+      const selectedGenre = getStateValue("desire.genre_calling");
+      if (selectedGenre === "Romance") {
+        displayPrompt = "What kind of love calls you?";
+      }
+    }
+
+    if (question.id === "desire.genre_visual") {
+      const selectedGenre = getStateValue("desire.genre_calling");
+      if (selectedGenre === "Romance") {
+        displayPrompt = "What world do you see love living in?";
+      }
+    }
+
+    if (question.dynamicOptions) {
+      const prevAnswer = getStateValue(
+        question.id === "desire.genre_flavour"
+          ? "desire.genre_calling"
+          : question.id === "desire.genre_visual" &&
+              getStateValue("desire.genre_calling") === "Literary"
+              ? "desire.genre_visual_route"
+          : question.id === "desire.genre_visual"
+          ? "desire.genre_calling"
+          : "desire.genre_flavour"
+      );
+      options = question.dynamicOptions[prevAnswer] || [];
+      if (options.length === 0) {
+        options = [
+          {
+            value: "error",
+            label: "Error: No options available",
+            image:
+              "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68dbc4445f2515663629dd92_Section%200%20-%20Coming%20soon.png",
+            image_id: "q0_bot_01.jpg",
+            disabled: true,
+          },
+        ];
+      }
+    }
+
+    const isToneQuestion = question.id === "desire.tone";
+    const useLabelBelow =
+      Boolean(question.showLabelBelow) ||
+      (question.type === "image" &&
+        (question.id !== "desire.genre_calling" || question.isRoutingQuestion));
+    const gridClass =
+      question.gridClass ||
+      (question.id === "desire.genre_flavour" &&
+      state.desire.genre_calling === "Romantasy"
+        ? "grid-2x3"
+        : "grid-3x2");
+
+    const container = document.getElementById("quiz-container");
+    container.classList.remove("tone");
+    if (isToneQuestion) container.classList.add("tone");
+
+    const finalGridClass = question.type === "image" ? "image-grid" : gridClass;
+
+    container.innerHTML = `
+      <h1>${displayPrompt}</h1>
+      ${
+        question.bridgeImage
+          ? `<img src="${question.bridgeImage}" alt="Bridge image" style="width: 100%; max-width: 400px; height: auto; margin: 16px 0; border-radius: 8px;" loading="lazy">`
+          : ""
+      }
+     ${
+  question.type === "image"
+    ? `
+  <div class="grid ${finalGridClass}" data-count="${options.length}">
+    ${options
+      .map((opt) => {
+const selectedGenre = getStateValue("desire.genre_calling");
+const hideLabel =
+  (question.id === "desire.genre_calling" && !question.isRoutingQuestion) ||
+  question.id === "desire.tone" ||
+  (["Literary", "Contemporary"].includes(selectedGenre) &&
+    ["desire.genre_flavour", "desire.genre_subflavour"].includes(question.id));
+        return `
+<div class="image-parent ${useLabelBelow ? "tone-card" : ""} ${opt.isStrip ? "strip-parent" : ""}">
+              <div class="image-tile ${opt.disabled ? "disabled" : ""} ${opt.comingSoon ? "coming-soon" : ""} ${opt.isStrip ? "contemporary-strip-tile" : ""}" ${
+  opt.disabled || opt.comingSoon
+    ? ""
+    : `onclick="saveAnswer('${opt.value}', '${opt.image_id}')"`
+} data-image-id="${opt.image_id}" data-internal-value="${opt.value}">
+              <img src="${opt.image}" alt="${opt.label}" loading="lazy">
+              ${hideLabel || useLabelBelow ? "" : `<p>${opt.label}</p>`}
+            </div>
+            ${useLabelBelow ? `<p class="tone-label">${opt.label}</p>` : ""}
+          </div>
+        `;
+      })
+      .join("")}
+  </div>
+`
+          : question.type === "grid"
+          ? `
+        <div class="grid ${gridClass}">
+          ${options
+            .map(
+              (opt) => `
+            <div class="text-tile" onclick="saveAnswer('${opt.value}', '${opt.image_id}')">
+              <p>${opt.text}</p>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+      `
+          : question.type === "button"
+          ? `
+        <div class="button-grid ${window.innerWidth < 480 ? "fallback" : ""}">
+          ${question.buttons
+            .map(
+              (btn) => `
+            <button class="button" onclick="saveAnswer('${btn.value}', '${btn.image_id}')">${btn.label}</button>
+          `
+            )
+            .join("")}
+        </div>
+      `
+          : question.type === "slider"
+          ? `
+        <div class="sensitivity-container">
+          <input type="range" min="0" max="2" value="0" class="sensitivity-slider" id="sensitivity-slider">
+          <div class="sensitivity-labels">
+            ${question.options.map((opt) => `<span>${opt}</span>`).join("")}
+          </div>
+          <button class="button" id="next-button" disabled>Next</button>
+        </div>
+      `
+          : '<p class="error-message">Error: Invalid question type</p>'
+      }
+    `;
+
+    container.classList.add("active");
+
+
+    if (question.type === "slider") {
+      const slider = document.getElementById("sensitivity-slider");
+      const nextButton = document.getElementById("next-button");
+
+      const updateSliderValue = () => {
+        selectedAnswer = question.options[slider.value];
+        nextButton.disabled = false;
+      };
+
+      slider.addEventListener("input", updateSliderValue);
+      slider.addEventListener("change", updateSliderValue);
+      updateSliderValue();
+
+      nextButton.addEventListener("click", () => {
+        saveAnswer(selectedAnswer, "slider_" + selectedAnswer.toLowerCase());
+      });
+    }
+
+    if (question.type === "image" || question.type === "grid") {
+      document
+        .querySelectorAll(".image-tile:not(.disabled), .text-tile")
+        .forEach((tile) => {
+          tile.addEventListener("click", () => {
+            document
+              .querySelectorAll(".image-tile, .text-tile")
+              .forEach((t) => t.classList.remove("selected"));
+            tile.classList.add("selected");
+          });
+        });
+    }
+  } catch (error) {
+    console.error("Error rendering question:", error);
+    document.getElementById("quiz-container").innerHTML =
+      '<p class="error-message">Error: Unable to load question. Please try again.</p>';
+  }
+}
+    function selectSensitivity(value) {
+      selectedAnswer = value;
+    }
+
+    function saveAnswer(value, image_id) {
+      try {
+        if (!value && questions[currentQuestion].type !== "text") {
+          document.getElementById("quiz-container").innerHTML +=
+            '<p class="error-message">Please select an option.</p>';
+          return;
+        }
+
+        function getCurrentRenderedOptions(question) {
+          if (!question.dynamicOptions) return question.options || [];
+
+          const prevAnswer = getStateValue(
+            question.id === "desire.genre_flavour"
+              ? "desire.genre_calling"
+              : question.id === "desire.genre_visual" &&
+              getStateValue("desire.genre_calling") === "Literary"
+              ? "desire.genre_visual_route"
+              : question.id === "desire.genre_visual"
+              ? "desire.genre_calling"
+              : "desire.genre_flavour"
+          );
+
+          return question.dynamicOptions[prevAnswer] || [];
+        }
+
+        const questionId = questions[currentQuestion].id;
+        const keys = questionId.split(".");
+        let target = state;
+        for (let i = 0; i < keys.length - 1; i++) {
+          target[keys[i]] = target[keys[i]] || {};
+          target = target[keys[i]];
+        }
+        const currentOption =
+          getCurrentRenderedOptions(questions[currentQuestion]).find((opt) => opt.value === value) || null;
+
+        const finalValue = currentOption?.saveValue || value;
+
+        target[keys[keys.length - 1]] = { value: finalValue, image_id };
+        localStorage.setItem("quizState", JSON.stringify(state));
+        // For Science Fiction and Horror, direct flavour also becomes subflavour.
+        // Cluster routes: Q1a should save into desire.genre_cluster instead of only flavour.
+        if (
+          questionId === "desire.genre_flavour" &&
+          ["Historical Fiction", "Literary", "Contemporary"].includes(getStateValue("desire.genre_calling"))
+        ) {
+          state.desire.genre_cluster = {
+            value: finalValue,
+            image_id,
+          };
+
+          localStorage.setItem("quizState", JSON.stringify(state));
+        }
+        if (
+          questionId === "desire.genre_flavour" &&
+          ["Science Fiction", "Sci-Fi", "Horror"].includes(getStateValue("desire.genre_calling"))
+        ) {
+          state.desire.genre_subflavour = {
+            value: finalValue,
+            image_id,
+          };
+
+          localStorage.setItem("quizState", JSON.stringify(state));
+        }
+
+// Historical Fiction and Literary/Contemporary: Q1b should save into genre_flavour, not genre_subflavour.
+if (
+  questionId === "desire.genre_subflavour" &&
+  ["Historical Fiction", "Literary", "Contemporary"].includes(getStateValue("desire.genre_calling"))
+) {
+  state.desire.genre_flavour = {
+    value: finalValue,
+    image_id,
+  };
+
+  delete state.desire.genre_subflavour;
+  localStorage.setItem("quizState", JSON.stringify(state));
+}
+
+        if (questionId === "desire.sensitivity") {
+          document.getElementById("milestone1").classList.add("glow");
+          console.log("[Quiz-1] Navigating to quiz-2", { quizState: state });
+          setTimeout(() => {
+            window.location.assign("/quiz-2");
+          }, 240);
+          return;
+        }
+
+       
+
+        selectedAnswer = null;
+        setTimeout(() => {
+          currentQuestion++;
+
+          const savedGenre = getStateValue("desire.genre_calling");
+
+          if (
+            questionId === "desire.genre_subflavour" &&
+            savedGenre === "Literary"
+          ) {
+            const literaryStyleIndex = questions.findIndex(
+              (q) => q.conditionType === "literary_style_q1c"
+            );
+            if (literaryStyleIndex !== -1) currentQuestion = literaryStyleIndex;
+          }
+
+          if (
+            questionId === "desire.genre_visual" &&
+            savedGenre === "Literary"
+          ) {
+            const genreFluidityIndex = questions.findIndex(
+              (q) => q.id === "desire.genre_fluidity"
+            );
+            if (genreFluidityIndex !== -1) currentQuestion = genreFluidityIndex;
+          }
+
+          // Skip any conditional questions that are not relevant for the selected path
+          while (
+            currentQuestion < questions.length &&
+            questions[currentQuestion].conditional &&
+            !shouldShowConditional()
+          ) {
+            currentQuestion++;
+          }
+
+          if (currentQuestion < questions.length) {
+            renderQuestion();
+          } else {
+            console.log("[Quiz-1] Navigating to quiz-2", { quizState: state });
+            localStorage.setItem("quizState", JSON.stringify(state));
+            window.location.assign("/quiz-2");
+          }
+        }, 240);
+      } catch (error) {
+        console.error("Error saving answer:", error);
+        document.getElementById("quiz-container").innerHTML =
+          '<p class="error-message">Error: Unable to save answer. Please try again.</p>';
+      }
+    }
+
+// Locate and replace the existing shouldShowConditional function:
+
+function shouldShowConditional() {
+  try {
+    const currentQ = questions[currentQuestion];
+    const currentQId = currentQ.id;
+    const genre = getStateValue("desire.genre_calling");
+    const flavour = getStateValue("desire.genre_flavour");
+
+    if (currentQ.conditionType === "romance_intermediary") {
+      return genre === "RomanceRoute";
+    }
+
+    if (currentQ.conditionType === "literary_style_q1c") {
+      return genre === "Literary";
+    }
+
+    if (currentQ.conditionType === "literary_style_q1d") {
+      return ["Literary", "Romance", "Romantasy"].includes(genre);
+    }
+
+    if (currentQId === "desire.genre_subflavour") {
+      return (
+        (genre === "Romantasy" &&
+          [
+            "rom_conflict_dynamic",
+            "rom_outsider_dynamic",
+            "rom_bond_dynamic",
+            "rom_sanctuary_dynamic",
+            "rom_nocturne",
+          ].includes(flavour)) ||
+        (genre === "Fantasy" &&
+          [
+            "fantasy_grand_adventure",
+            "fantasy_survive",
+            "fantasy_heart_home",
+            "fantasy_sacred_strange",
+            "fantasy_schemes_politics",
+            "fantasy_modern_magic",
+          ].includes(flavour)) ||
+        (genre === "Romance" &&
+          [
+            "rce_conflict_dynamic",
+            "rce_outsider_dynamic",
+            "rce_bond_dynamic",
+            "rce_sanctuary_dynamic",
+          ].includes(flavour)) ||
+        (genre === "Historical Fiction" &&
+          [
+            "hist_ancient_world",
+            "hist_age_sword",
+            "hist_age_gunpowder",
+            "hist_british",
+            "hist_recent_past",
+          ].includes(flavour)) ||
+        (["Literary", "Contemporary"].includes(genre) &&
+          [
+            "cont_family",
+            "cont_love",
+            "cont_identity",
+            "cont_mind",
+            "cont_society",
+          ].includes(flavour))
+      );
+    }
+
+    if (currentQId === "desire.genre_visual") {
+      return (
+        genre === "Romantasy" ||
+        genre === "Romance" ||
+        currentQ.conditionType === "literary_style_q1d"
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in shouldShowConditional:", error);
+    return false;
+  }
+}
+    function getStateValue(id) {
+      try {
+        const keys = id.split(".");
+        let target = state;
+        for (const key of keys) {
+          if (!target[key]) return null;
+          target = target[key];
+        }
+        return target.value || target;
+      } catch (error) {
+        console.error("Error in getStateValue:", error);
+        return null;
+      }
+    }
+
+    function nextQuestion() {
+      try {
+        document.getElementById("gate-screen").classList.remove("active");
+        renderQuestion();
+      } catch (error) {
+        console.error("Error in nextQuestion:", error);
+        document.getElementById("quiz-container").innerHTML =
+          '<p class="error-message">Error: Unable to proceed. Please try again.</p>';
+      }
+    }
+
+   try {
+  document.querySelector(".progress").classList.add("active");
+  renderQuestion();
+} catch (error) {
+  console.error("Error initializing quiz:", error);
+  document.getElementById("quiz-container").innerHTML =
+    '<p class="error-message">Error: Unable to initialize quiz. Please try again.</p>';
+}
+  </script>
+</div>
+<!-- =========================================================
+WEBFLOW EMBED 3 END: QUESTION DATA PART 3 + QUIZ ENGINE
+========================================================= -->
+

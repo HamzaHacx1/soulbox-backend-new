@@ -1,0 +1,97 @@
+<!-- QUIZ IMAGE URL MAP: must remain between question data parts 2 and 3 -->
+<script>
+(() => {
+  const urls = {
+    "NEWGENRE.HOSTORICALFICTION": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54daca4164caab75ab7073_NEWGENRE.HOSTORICALFICTION.jpg",
+    "NEWGENRE.CONTEMPORARYSTRIP": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc16441e03bb80c27e3e_NEWGENRE.CONTEMPORARYSTRIP%20(1).jpg",
+    "NEWROMANTASYROUTE": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1737de371861510cd1_NEWROMANTASYROUTE.jpg",
+    "NEWROMANCEROUTE": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dcbdc6600f35c0ff_NEWROMANCEROUTE.jpg",
+    "q1_horror_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1718d9ee3bac5d2137_q1_horror_01.jpg",
+    "q1_horror_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1736e990a2e237c34d_q1_horror_02.jpg",
+    "q1_horror_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178740aaa736cd5c51_q1_horror_03.jpg",
+    "q1_horror_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17e80abd0572c47970_q1_horror_04.jpg",
+    "q1_horror_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc189790610aa319eacb_q1_horror_05.jpg",
+    "q1_horror_06.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18dca040ee7c1ca058_q1_horror_06.jpg",
+    "q1_hist_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178a6d86fced830eac_q1_hist_01.jpg",
+    "q1_hist_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17b662e7aa3848b388_q1_hist_02.jpg",
+    "q1_hist_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ebc_q1_hist_03.jpg",
+    "q1_hist_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ec0_q1_hist_04.jpg",
+    "q1_hist_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dc5aabbe1f669717_q1_hist_05.jpg",
+    "q1_cont_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56de_q1_cont_01.jpg",
+    "q1_cont_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d7ced48cb55c4ae8_q1_cont_02.jpg",
+    "q1_cont_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc177aad5170f4f2ad51_q1_cont_03.jpg",
+    "q1_cont_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17acbc5ce17ba73823_q1_cont_04.jpg",
+    "q1_cont_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d54e6bcacb505127_q1_cont_05.jpg",
+    "q1b_fam_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e0a9a0910c442b93_q1b_fam_01.jpg",
+    "q1b_fam_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18bff580afc1e45ff5_q1b_fam_02.jpg",
+    "q1b_fam_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc15441e03bb80c27dd2_q1b_fam_03.jpg",
+    "q1b_love_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc13d326b360e655faa3_q1b_love_01.jpg",
+    "q1b_love_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19dcbdc6600f35c8d5_q1b_love_02.jpg",
+    "q1b_love_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1db18ad47dadb1c101_q1b_love_03.jpg",
+    "q1b_identity_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc194164caab75ac75f3_q1b_identity_01.jpg",
+    "q1b_identity_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc1038f16094f7444905_q1b_identity_02.jpg",
+    "q1b_identity_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc145cd223a118c339da_q1b_identity_03.jpg",
+    "q1b_mind_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1936e990a2e237c85b_q1b_mind_01.jpg",
+    "q1b_mind_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19972ac4970d708869_q1b_mind_02.jpg",
+    "q1b_mind_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc198740aaa736cd5d15_q1b_mind_03.jpg",
+    "q1b_society_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc17e233493b9f57f454_q1b_society_01.jpg",
+    "q1b_society_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da40_q1b_society_02.jpg",
+    "q1b_society_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1aacbc5ce17ba73bdd_q1b_society_03.jpg",
+    "q1b_society_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc19f4f6f40df37d7c98_q1b_society_04.jpg",
+    "q1b_ancient_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1864ddb74f3be96d83_q1b_ancient_01.jpg",
+    "q1b_ancient_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18d54e6bcacb505162_q1b_ancient_02.jpg",
+    "q1b_ancient_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18ba313327bf6e92cd_q1b_ancient_03.jpg",
+    "q1b_ancient_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1895f8b3779907b6cc_q1b_ancient_04.jpg",
+    "q1b_sword_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a338bfedff0d1b23f_q1b_sword_01.jpg",
+    "q1b_sword_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a99a728deb665b524_q1b_sword_02.jpg",
+    "q1b_sword_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da47_q1b_sword_03.jpg",
+    "q1b_sword_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a8b034178821c1a99_q1b_sword_04.jpg",
+    "q1b_sword_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a9c775de11bbbac32_q1b_sword_05.jpg",
+    "q1b_gunpowder_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18338bfedff0d1b074_q1b_gunpowder_01.jpg",
+    "q1b_gunpowder_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1960f2fa3b2510dfaa_q1b_gunpowder_02.jpg",
+    "q1b_gunpowder_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e0a9a0910c442ba7_q1b_gunpowder_03.jpg",
+    "q1b_gunpowder_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19e97151d6ff9405b7_q1b_gunpowder_04.jpg",
+    "q1b_gunpowder_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc195b903a2fa50b6cd7_q1b_gunpowder_05.jpg",
+    "q1b_british_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e97151d6ff940140_q1b_british_01.jpg",
+    "q1b_british_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1864ddb74f3be96d95_q1b_british_02.jpg",
+    "q1b_british_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc188740aaa736cd5ca7_q1b_british_03.jpg",
+    "q1b_british_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18d6acf999f469f011_q1b_british_04.jpg",
+    "q1b_recent_01.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19ba313327bf6e93be_q1b_recent_01.jpg",
+    "q1b_recent_02.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19d7bf40956c04cb7e_q1b_recent_02.jpg",
+    "q1b_recent_03.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19b768fad8c4ae7356_q1b_recent_03.jpg",
+    "q1b_recent_04.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19392145753429d9e7_q1b_recent_04.jpg",
+    "q1b_recent_05.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da05_q1b_recent_05.jpg",
+    "Literary.NovelAs_Beauty": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dcbdc6600f35c0d1_Literary.NovelAs_Beauty.jpg",
+    "Literary.NovelAs_Truth": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16950ac3e9712f6a88_Literary.NovelAs_Truth.jpg",
+    "Literary.NovelAs_Game": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17fbb935ec54ea017b_Literary.NovelAs_Game.jpg",
+    "LiteraryStyle.Lyrical": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb18ad47dadb1bd43_LiteraryStyle.Lyrical.jpg",
+    "LiteraryStyle.Gothic": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc166056f57508233df9_LiteraryStyle.Gothic.jpg",
+    "LiteraryStyle.MagicalRealism": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17b662e7aa3848b2fe_LiteraryStyle.MagicalRealism.jpg",
+    "LiteraryStyle.Minimalist": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dcf1118afd882ab2_LiteraryStyle.Minimalist.jpg",
+    "LiteraryStyle.Psychological": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1744e8daf778cd2aa3_LiteraryStyle.Psychological.jpg",
+    "LiteraryStyle.Satirical": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16392145753429d41a_LiteraryStyle.Satirical.jpg",
+    "LiteraryStyle.Experimental": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dca040ee7c1c9fe5_LiteraryStyle.Experimental.jpg",
+    "LiteraryStyle.Postmodern": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16b768fad8c4ae6f7e_LiteraryStyle.Postmodern.jpg",
+    "LiteraryStyle.Structural": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56b5_LiteraryStyle.Structural.jpg"
+  };
+
+  const applyUrls = (value) => {
+    if (Array.isArray(value)) {
+      value.forEach(applyUrls);
+      return;
+    }
+    if (!value || typeof value !== "object") return;
+    if (typeof value.image === "string" && value.image.startsWith("REPLACE_WITH_") && urls[value.image_id]) {
+      value.image = urls[value.image_id];
+    }
+    Object.values(value).forEach(applyUrls);
+  };
+
+  applyUrls(window.SOULBOX_QUESTIONS_PART_1);
+  applyUrls(window.SOULBOX_QUESTIONS_PART_2);
+
+  const unresolved = [window.SOULBOX_QUESTIONS_PART_1, window.SOULBOX_QUESTIONS_PART_2]
+    .flatMap((part) => JSON.stringify(part || {}).match(/REPLACE_WITH_[A-Za-z0-9_]+_URL/g) || []);
+  window.SOULBOX_UNRESOLVED_IMAGE_PLACEHOLDERS = [...new Set(unresolved)];
+})();
+</script>

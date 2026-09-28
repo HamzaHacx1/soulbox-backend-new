@@ -1,0 +1,141 @@
+<section class="share-confirmation">
+  <style>
+    html,body{margin:0;min-height:100%;background:#1c255d;color:#f4f2ec;font-family:'Source Serif Pro',Georgia,serif}
+    *{box-sizing:border-box}
+    .share-confirmation{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:44px 22px;background:radial-gradient(circle at 50% 16%,rgba(77,96,170,.24),transparent 38%),linear-gradient(180deg,#222c68 0%,#141b43 100%);text-align:center}
+    .share-shell{width:min(100%,680px);padding:clamp(34px,7vw,52px) clamp(22px,6vw,44px);border:1px solid rgba(244,242,236,.24);border-radius:8px;background:rgba(255,255,255,.035);box-shadow:0 18px 48px rgba(0,0,0,.22)}
+    .share-shell h1{margin:0 0 24px;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(38px,8vw,58px);font-weight:500;line-height:1.05;letter-spacing:0}
+    .share-copy{max-width:570px;margin:0 auto 30px;font-size:clamp(16px,3vw,18px);line-height:1.62;color:rgba(244,242,236,.88)}
+    .share-copy p{margin:0 0 16px}
+    .share-copy p:last-child{margin-bottom:0}
+    .share-actions{width:min(100%,390px);margin:0 auto;display:grid;gap:13px}
+    .share-button{width:100%;min-height:52px;padding:13px 22px;border:1px solid #f4f2ec;border-radius:8px;background:#f4f2ec;color:#111a3e;font-family:'Source Serif Pro',Georgia,serif;font-size:17px;font-weight:700;line-height:1.3;cursor:pointer;transition:transform .18s ease,filter .18s ease}
+    .share-button:hover{transform:translateY(-2px);filter:brightness(1.05)}
+    .share-button:disabled{opacity:.58;cursor:wait;transform:none}
+    .share-button.secondary{display:none;background:transparent;color:#f4f2ec;border-color:rgba(244,242,236,.65);font-weight:600}
+    .share-button.secondary.is-visible{display:block}
+    .share-helper{max-width:470px;margin:22px auto 0;font-size:14px;line-height:1.5;font-style:italic;color:rgba(244,242,236,.68)}
+    .share-status{min-height:22px;margin:16px auto 0;font-size:14px;line-height:1.4;color:#d3af55}
+    @media(max-width:479px){.share-confirmation{align-items:flex-start;padding:38px 16px}.share-shell{padding:34px 20px}.share-shell h1{font-size:38px}.share-button{font-size:16px}}
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <div class="share-shell">
+    <h1>Thank You</h1>
+    <div class="share-copy">
+      <p>Your profile has been saved and your House journey has begun. Keep an eye on your inbox for your monthly House recommendation.</p>
+      <p>While you wait, share your results.</p>
+    </div>
+    <div class="share-actions">
+      <button class="share-button" id="share-results-button" type="button">Share My Results</button>
+    </div>
+    <div id="individual-cards" class="individual-cards" hidden></div><p class="share-helper">Posting your results? Keep the cards in order, add any audio you like, and tag SoulBox so we can see yours.</p>
+    <p class="share-status" id="share-status" aria-live="polite"></p>
+  </div>
+<script>window.SOULBOX_ASSETS={"download":{"story_texture_art_of_war.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d589bf647a4d8c636647_story_texture_art_of_war.png","soulcharacter_robin_hood.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d589d35448ef784f30de_soulcharacter_robin_hood.png","story_texture_threshold.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d589556f97c19ecac195_story_texture_threshold.png","soulcharacter_prospero.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d589489fca412d10b6a3_soulcharacter_prospero.png","soulcharacter_scheherazade.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d589864bddda3d8156ad_soulcharacter_scheherazade.png","story_texture_web.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58988df7d63eadc6422_story_texture_web.png","story_texture_the_novel.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d588489fca412d10b220_story_texture_the_novel.png","story_texture_gauntlet.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d588a25a7ca3e0973de3_story_texture_gauntlet.png","story_texture_inner.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d588a677752c97b0d631_story_texture_inner.png","soulcharacter_puss_in_boots.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5887e32879b4599f86f_soulcharacter_puss_in_boots.png","soulcharacter_sherlock_holmes.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5882d8a785370bca371_soulcharacter_sherlock_holmes.png","soulcharacter_winnie_the_pooh.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5884c7299bd3890d074_soulcharacter_winnie_the_pooh.png","soulcharacter_quasimodo.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5888bc0556737be8102_soulcharacter_quasimodo.png","soulcharacter_orpheus.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d588d472a995a49738c1_soulcharacter_orpheus.png","soulcharacter_nora_helmer.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58765165b0047785018_soulcharacter_nora_helmer.png","soulcharacter_persephone.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58771299af5fb0c09e5_soulcharacter_persephone.png","soulcharacter_odysseus.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d587bf647a4d8c635f4f_soulcharacter_odysseus.png","soulcharacter_mr_hyde.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5879f9e16c99ceeda35_soulcharacter_mr_hyde.png","soulcharacter_morgan_le_fay.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d587525e130282c99f61_soulcharacter_morgan_le_fay.png","soulcharacter_loki.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d587b4ebeb080b8b8a2b_soulcharacter_loki.png","soulcharacter_juliet.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5879f9e16c99ceeda23_soulcharacter_juliet.png","soulcharacter_mowgli.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58771299af5fb0c09c0_soulcharacter_mowgli.png","soulcharacter_merlin.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5874c7299bd3890d043_soulcharacter_merlin.png","soulcharacter_jean_valjean.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d586368357c6ba492b43_soulcharacter_jean_valjean.png","soulcharacter_jane_eyre.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58565165b0047784fcf_soulcharacter_jane_eyre.png","soulcharacter_icarus.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5858bc0556737be8091_soulcharacter_icarus.png","soulcharacter_macbeth.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d585babc2dcac3c20970_soulcharacter_macbeth.png","soulcharacter_guinevere.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5859f9e16c99ceed550_soulcharacter_guinevere.png","soulcharacter_hector.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58426dcf5fc158d8294_soulcharacter_hector.png","soulcharacter_hercules.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d584babc2dcac3c2095e_soulcharacter_hercules.png","soulcharacter_elizabeth_bennet.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d584a6e9cc7152731fe3_soulcharacter_elizabeth_bennet.png","soulcharacter_helen_of_troy.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d584a677752c97b0ca66_soulcharacter_helen_of_troy.png","soulcharacter_hamlet.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d584fd660243633d4ed4_soulcharacter_hamlet.png","soulcharacter_frankenstein.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5846dad3acf60cd043a_soulcharacter_frankenstein.png","soulcharacter_dorothy.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5832d1723dd3863ecb4_soulcharacter_dorothy.png","soulcharacter_don_quixote.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d583d472a995a497380c_soulcharacter_don_quixote.png","soulcharacter_dracula.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5834c7299bd3890c488_soulcharacter_dracula.png","soulcharacter_anne_shirley.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58279fdd6acfa7a7faf_soulcharacter_anne_shirley.png","soulcharacter_cleopatra.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5824c7299bd3890c475_soulcharacter_cleopatra.png","soulcharacter_cinderella.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d582a6e9cc7152731aa6_soulcharacter_cinderella.png","soulcharacter_antigone.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58281f333e43371f44c_soulcharacter_antigone.png","soulcharacter_athena.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d582d51743b8d39b44f1_soulcharacter_athena.png","soulcharacter_anna_karenina.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d582bdf94165b1a82284_soulcharacter_anna_karenina.png","soulcharacter_circe.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5829f9e16c99ceed4c8_soulcharacter_circe.png","soulcharacter_alice.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5814c7299bd3890c454_soulcharacter_alice.png","soulcharacter_aladdin.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d581babc2dcac3c2051e_soulcharacter_aladdin.png","soulcharacter_achilles.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d581489fca412d10ad36_soulcharacter_achilles.png","why_you_read_moral_clarification.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580525e130282c99a55_why_you_read_moral_clarification.png","why_you_read_wonder.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5808c3ad0a33b065ff7_why_you_read_wonder.png","why_you_read_shadow_integration.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580a677752c97b0c59c_why_you_read_shadow_integration.png","why_you_read_recognition.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5809f9e16c99ceed48e_why_you_read_recognition.png","why_you_read_justice_hunger.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5805fd04c4dc1c1527c_why_you_read_justice_hunger.png","why_you_read_repair.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5804c7299bd3890c415_why_you_read_repair.png","why_you_read_meaning_making.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580bc9469648f11d31e_why_you_read_meaning_making.png","story_texture_cunning.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580525e130282c999f8_story_texture_cunning.png","why_you_read_identity_rehearsal.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5807e32879b4599def1_why_you_read_identity_rehearsal.png","why_you_read_intensity_regulation.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580b4ebeb080b8b896f_why_you_read_intensity_regulation.png","why_you_read_controlled_confrontation.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d58065165b0047784edc_why_you_read_controlled_confrontation.png","story_texture_bond.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d580556f97c19ecac07e_story_texture_bond.png","story_texture_populace.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57fa6e9cc7152731a38_story_texture_populace.png","story_texture_hearth.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f88df7d63eadc5b03_story_texture_hearth.png","story_texture_surge.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57ffd660243633d44bf_story_texture_surge.png","why_you_read_cognitive_stimulation.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57ff43ea7c4e0282dde_why_you_read_cognitive_stimulation.png","story_texture_mythical.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f71299af5fb0c08a1_story_texture_mythical.png","why_you_read_belonging.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57fd51743b8d39b3c19_why_you_read_belonging.png","why_you_read_catharsis.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57ff20bcab37b0d193b_why_you_read_catharsis.png","reading_style_sprinter.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f88df7d63eadc56b1_reading_style_sprinter.png","story_texture_ache.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f695659c78286f3e4_story_texture_ache.png","reading_style_reader.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f6dad3acf60ccff29_reading_style_reader.png","reading_style_measured.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f2d8a785370bc8e61_reading_style_measured.png","story_texture_abyss.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f04b9aed0dcb3787f_story_texture_abyss.png","reading_style_devourer.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57fcc0f7e435f626bf2_reading_style_devourer.png","reading_style_lingerer.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57ff20bcab37b0d1929_reading_style_lingerer.png","reading_style_immersed.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f556f97c19ecac007_reading_style_immersed.png","house_of_mind.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57f04b9aed0dcb3786d_house_of_mind.png","pre_house_reveal.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e30b29a259b88205e_pre_house_reveal.png","house_of_body.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e26dcf5fc158d7bbd_house_of_body.png","reading_style_devoted.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e26dcf5fc158d7ba8_reading_style_devoted.png","reading_style_deep_runner.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e310af94e01ccd9c8_reading_style_deep_runner.png","house_of_soul.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e04b9aed0dcb3785a_house_of_soul.png","house_of_heart.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57e9f9e16c99ceed403_house_of_heart.png","reading_style_contemplative.png":"https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d57ed472a995a497329e_reading_style_contemplative.png"}};</script>
+<script>(function (global) {
+  'use strict';
+  var assets = global.SOULBOX_ASSETS;
+  var colours = { Body: '#271020', Heart: '#7F1006', Soul: '#041429', Mind: '#0C2A15' };
+  function slug(value) { return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, ''); }
+  function read(key) { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (_) { return null; } }
+  function write(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {} }
+  function currentResult() {
+    var quiz = read('quizState') || {}, final = read('finalSubmission') || {};
+    return quiz.result || read('soulboxResult') || final.result;
+  }
+  function whyName(result, display) {
+    var value = slug(result.why);
+    if (value === 'wonder_and_awe') value = 'wonder';
+    if (value === 'catharsis' && display) value = 'controlled_catharsis';
+    return 'why_you_read_' + value;
+  }
+  function resolve(kind, name) {
+    var url = assets[kind][name];
+    if (!url) throw new Error('Missing ' + kind + ' card: ' + name);
+    return { name: name, url: url };
+  }
+  function downloads(result) {
+    var character = result.images && result.images.soulCharacter
+      ? result.images.soulCharacter.split('/').pop().replace(/\.(jpg|jpeg|png)$/i, '')
+      : 'soulcharacter_' + slug(result.soulCharacter);
+    character = character.replace('frankensteins_creature', 'frankenstein');
+    return [character, 'story_texture_' + slug(result.texture), whyName(result, false),
+      'reading_style_' + slug(result.style), 'pre_house_reveal', 'house_of_' + slug(result.house)]
+      .map(function (name) { return resolve('download', name + '.png'); });
+  }
+  function displayCards(result) {
+    return ['story_texture_' + slug(result.texture), whyName(result, true),
+      'reading_style_' + slug(result.style), 'pre_house_reveal', 'house_of_' + slug(result.house),
+      'gradient_' + slug(result.house)].map(function (name) { return resolve('display', name + '.jpg'); });
+  }
+  function connectDownload(button, status, fallback, result, onTrigger, shareOnly) {
+    var items = downloads(result), files = null, pending = null, objectUrls = [];
+    function prepare() {
+      if (files) return Promise.resolve(files);
+      if (pending) return pending;
+      pending = Promise.all(items.map(async function (item) {
+        var response = await fetch(item.url);
+        if (!response.ok) throw new Error('Unable to load result card');
+        var blob = await response.blob();
+        return new File([blob], item.name, { type: 'image/png' });
+      })).then(function (loaded) { files = loaded; return files; })
+        .catch(function (error) { pending = null; throw error; });
+      return pending;
+    }
+    function individualLinks() {
+      fallback.replaceChildren();
+      files.forEach(function (file, index) {
+        var link = document.createElement('a');
+        var url = URL.createObjectURL(file); objectUrls.push(url);
+        link.href = url; link.download = file.name; link.className = 'individual-card';
+        link.textContent = 'Save ' + ['SoulCharacter', 'Story World', 'Why You Read', 'Reading Style', 'Four Houses', 'Your House'][index];
+        fallback.appendChild(link);
+      });
+      fallback.hidden = false;
+    }
+    function deliver() {
+      if (onTrigger) onTrigger();
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: files })) {
+        // Called directly from a click; awaited downloads would lose activation on mobile.
+        button.disabled = true;
+        navigator.share({ files: files, title: 'My SoulBox Results' })
+          .then(function () { status.textContent = 'Your cards are ready in your chosen app.'; })
+          .catch(function (error) {
+            if (error.name === 'AbortError') status.textContent = 'Sharing cancelled. Your cards are still here.';
+            else { individualLinks(); status.textContent = 'Save your cards individually below.'; }
+          }).finally(function () { button.disabled = false; });
+      } else {
+        individualLinks();
+        if (!shareOnly) fallback.querySelectorAll('a').forEach(function (link) { link.click(); });
+        status.textContent = 'If your browser blocks multiple downloads, save each card below.';
+      }
+    }
+    button.addEventListener('click', function () {
+      if (onTrigger) onTrigger();
+      if (files) { deliver(); return; }
+      button.disabled = true; status.textContent = 'Preparing your full-quality cards…';
+      prepare().then(function () {
+        status.textContent = 'Your cards are ready. Tap ' + button.textContent + ' to save or share.';
+      }).catch(function () {
+        status.textContent = 'We could not load your cards. Check your connection and try again.';
+      }).finally(function () { button.disabled = false; });
+    });
+    window.addEventListener('pagehide', function () { objectUrls.forEach(URL.revokeObjectURL); });
+    return { prepare: prepare };
+  }
+  global.SoulBoxCards = { colours: colours, read: read, write: write, slug: slug,
+    currentResult: currentResult, downloads: downloads, displayCards: displayCards, connectDownload: connectDownload };
+})(window);
+</script>
+<style>[hidden]{display:none!important}.individual-cards{display:grid;gap:10px;margin:20px auto;max-width:390px}.individual-card{color:#f4f2ec;padding:10px;border:1px solid rgba(244,242,236,.65);border-radius:6px;text-decoration:none;font-size:14px}</style>
+<script>
+(function(){
+  var button=document.getElementById('share-results-button'),status=document.getElementById('share-status');
+  try{
+    var cards=window.SoulBoxCards,result=cards.currentResult();
+    if(!result)throw new Error('Missing results');
+    cards.connectDownload(button,status,document.getElementById('individual-cards'),result,null,true).prepare().catch(function(){});
+  }catch(error){button.disabled=true;status.textContent='Your cards are unavailable. Please return to your results.';var link=document.createElement('a');link.href='/soul-glimpse';link.textContent='View your results';link.style.color='inherit';status.appendChild(document.createElement('br'));status.appendChild(link)}
+})();
+</script>
+</section>

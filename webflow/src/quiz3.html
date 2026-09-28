@@ -1,0 +1,884 @@
+<section class="section">
+  <div class="w-embed w-script">
+    <style>
+      body {
+        background: #1c255d;
+        color: white;
+        font-family: 'Source Serif Pro', serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-size: 16px;
+        overflow-x: hidden;
+      }
+      h1 {
+        font-family: 'Cormorant Garamond', serif;
+        text-align: center;
+        font-size: 28px;
+        margin: 0 0 24px 0;
+        line-height: 1.6;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+      }
+      .completion-screen h1 {
+        animation: textGlow 1.6s ease-in-out infinite;
+      }
+      .hidden {
+        display: none;
+      }
+      .progress {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .progress-line {
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.5);
+        position: relative;
+      }
+      .progress-milestone {
+        width: 12px;
+        height: 12px;
+        background: transparent;
+        border: 2px solid white;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all 0.24s ease-in-out;
+      }
+      .progress-milestone.glow {
+        background: white;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        animation: pulseGlow 1.5s ease-in-out infinite;
+      }
+      #milestone1 { left: 25%; }
+      #milestone2 { left: 50%; }
+      #milestone3 { left: 75%; }
+      .progress-start, .progress-end {
+        width: 10px;
+        height: 10px;
+        background: transparent;
+        border: 2px solid white;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .progress-start { left: 0; }
+      .progress-end { right: 0; }
+      @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 12px rgba(255, 255, 255, 0.8); }
+        50% { box-shadow: 0 0 18px rgba(255, 255, 255, 1); }
+      }
+      .quiz-container {
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+        min-height: 400px;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.24s ease-in-out;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .quiz-container.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 1;
+      }
+      .grid-2x2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(200px, 260px));
+        grid-template-rows: repeat(2, auto);
+        justify-content: center;
+        gap: 20px;
+        margin: 12px 0;
+        width: 100%;
+      }
+      .grid-2x1 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(200px, 260px));
+        justify-content: center;
+        gap: 20px;
+        margin: 24px 0;
+        width: 100%;
+      }
+      .subhead {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  color: #f4f2ec;
+  text-align: center;
+  margin-bottom: 24px;
+}
+      .scenario-button {
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+        color: white;
+        padding: 12px 32px;
+        font-family: 'Source Serif Pro', serif;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+        margin: 8px;
+        min-width: 200px;
+        max-width: 260px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .scenario-button:hover {
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 0 24px rgba(255, 255, 255, 0.4);
+        transform: translateY(-4px);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.2));
+      }
+      .scenario-button.selected {
+        border-color: white;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.3));
+      }
+      .scenario-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      .scenario-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+        transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      }
+      .scenario-button:hover::after {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .scenario-image {
+        max-width: 600px;
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin: 24px 0;
+      }
+      .option-text {
+        font-family: 'Source Serif Pro', serif;
+        font-size: 14px;
+        line-height: 1.4;
+        color: white;
+        text-align: center;
+        margin: 8px 0;
+        max-width: 260px;
+      }
+      .description {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 12px 0;
+        max-width: 600px;
+        line-height: 1.5;
+        text-align: center;
+        font-family: 'Source Serif Pro', serif;
+      }
+      .story-text {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 24px 0;
+        max-width: 600px;
+        line-height: 1.6;
+        text-align: center;
+        font-family: 'Cormorant Garamond', serif;
+      }
+      .error-message {
+        color: #ff6666;
+        font-size: 14px;
+        margin: 24px 0;
+        text-shadow: 0 0 4px rgba(255, 102, 102, 0.5);
+        text-align: center;
+        font-family: 'Source Serif Pro', serif;
+      }
+      .button {
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+        color: white;
+        padding: 12px 32px;
+        font-family: 'Source Serif Pro', serif;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+        margin: 12px auto;
+        min-width: 120px;
+        min-height: 48px;
+        position: relative;
+        overflow: hidden;
+        display: block;
+      }
+      .button:hover {
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 0 24px rgba(255, 255, 255, 0.4);
+        transform: translateY(-4px);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.2));
+      }
+      .button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+      .button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+        transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      }
+      .button:hover::after {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .image-tile {
+        position: relative;
+        min-height: 160px;
+        min-width: 200px;
+        max-width: 260px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .image-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.8;
+        border-radius: 8px;
+      }
+      .image-tile p {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4;
+        color: white;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        font-family: 'Source Serif Pro', serif;
+      }
+      .image-tile:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+      }
+      .image-tile.selected {
+        border-color: white;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+      }
+      .image-tile.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+      .story-background {
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.3;
+      }
+      .input-field {
+        width: 100%;
+        max-width: 400px;
+        padding: 12px;
+        margin: 12px 0;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        font-family: 'Source Serif Pro', serif;
+        font-size: 16px;
+      }
+      .input-field:focus {
+        outline: none;
+        border-color: white;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+      }
+      .checkbox-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 24px 0;
+        width: 100%;
+        max-width: 400px;
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-family: 'Source Serif Pro', serif;
+        text-align: left;
+      }
+      .checkbox-label input {
+        margin-right: 8px;
+      }
+      .completion-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+      }
+      @media (max-width: 479px) {
+        body { padding: 10px; }
+        h1 { font-size: 24px; }
+        .progress { margin-bottom: 16px; max-width: 90vw; }
+        .progress-line { height: 3px; }
+        .progress-milestone { width: 32px; height: 32px; }
+        .progress-milestone.glow { box-shadow: 0 0 12px white, 0 0 24px rgba(255, 255, 255, 0.5); }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 12px white, 0 0 24px rgba(255, 255, 255, 0.5); }
+          50% { box-shadow: 0 0 18px white, 0 0 36px rgba(255, 255, 255, 0.7); }
+        }
+        .progress-start, .progress-end { width: 12px; height: 12px; }
+       .grid-2x2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.image-tile {
+  min-width: 180px;
+  max-width: 300px;
+}
+.option-text {
+  max-width: 300px;
+}
+        .grid-2x1 {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+        }
+        
+        .scenario-button {
+          min-width: 180px;
+          max-width: 300px;
+          word-wrap: break-word;
+        }
+        .scenario-image { height: 220px; }
+        .button { padding: 10px 24px; min-width: 100px; }
+        .quiz-container { padding: 15px; min-height: 300px; }
+        .story-text { font-size: 16px; }
+        .input-field { max-width: 90%; }
+        .checkbox-container { max-width: 90%; }
+      }
+      @media (min-width: 480px) and (max-width: 767px) {
+        body { padding: 15px; }
+        .quiz-container { padding: 20px; }
+        .grid-2x2 {
+          grid-template-columns: repeat(2, minmax(110px, 140px));
+          width: 100%;
+          max-width: 100vw;
+        }
+        .grid-2x1 {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(200px, 260px));
+          justify-content: center;
+        }
+        .image-tile {
+          min-width: 110px;
+          max-width: 140px;
+          min-height: 110px;
+        }
+        .option-text {
+          min-width: 200px;
+          max-width: 260px;
+          word-wrap: break-word;
+        }
+        .scenario-button {
+          min-width: 200px;
+          max-width: 260px;
+          word-wrap: break-word;
+        }
+        .checkbox-container { max-width: 90%; }
+      }
+      @keyframes textGlow {
+        0%, 100% { text-shadow: 0 0 12px rgba(255, 255, 255, 0.8); }
+        50% { text-shadow: 0 0 18px rgba(255, 255, 255, 1); }
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68dbca0b6026142de1435a36_book%20cover.png" as="image">
+    <div class="progress active">
+      <div class="progress-start"></div>
+      <div class="progress-line">
+        <div class="progress-milestone glow" id="milestone1"></div>
+        <div class="progress-milestone glow" id="milestone2"></div>
+        <div class="progress-milestone" id="milestone3"></div>
+      </div>
+      <div class="progress-end"></div>
+    </div>
+    <div class="quiz-container active" id="quiz-container"></div>
+    <script>
+      const log = (message, data = {}) => {
+        console.log(`[Quiz-3] ${message}`, data);
+      };
+
+      window.history.pushState(null, null, window.location.href);
+      window.onpopstate = () => {
+        window.history.pushState(null, null, window.location.href);
+      };
+
+      let currentQuestion = 0;
+      let state = JSON.parse(localStorage.getItem('quizState')) || {
+        desire: {},
+        cultural_lens: {},
+        soul_climate: { temperature_primary: {}, temperature_secondary: {}, posture: { path: {} } },
+        yearning: {},
+        reader_context: {}
+      };
+      let selectedAnswer = null;
+
+      const questions = [
+        {
+          id: 'yearning.preface',
+          type: 'story',
+          prompt: '',
+          storyText: 'Months pass. Or years. You no longer know. You spend your days still, eyes fluttering open, then closed. For others, they stay closed. The sand burns against your back. Your bed, and home. The sun is blistering, and the water never comes. Your head turns, slow, heavy. Nothing. No one. Only bodies. You try to swallow, but it is dry — barren as the air. Your breaths are slow. Your dread is deep. And you close your eyes. Then — you see it. A flicker. An image, as if it were real. An image you have always wished to see.',
+          image: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb61f5279435800872f_q10_preface.jpg.jpg'
+        },
+        {
+          id: 'yearning.cluster_image',
+          type: 'grid',
+          gridType: 'grid-2x2',
+          prompt: '',
+          options: [
+            {
+              value: 'cluster_1',
+              label: 'A place of belonging',
+              text: 'You walk into the room. Faces turn, eyes soften, smiles spread wide — honest, true. A chair is pulled out for you. Hands reach, laughter opens. They are not smiling at the mask, not the act — they are smiling at you.',
+              imageId: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb567284d846e047521_q10a_01.jpg.jpg'
+            },
+            {
+              value: 'cluster_2',
+              label: 'A world of freedom',
+              text: 'You stand on the mountain’s peak. The horizon stretches wide, unbroken. Cliffs. Rivers. A world. The wind rushes into your chest, sharp and alive. Behind you, the old weight has fallen. Before you, everything begins again — and all of it waits for you.',
+              imageId: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6d46f27f86e902bb1_q10a_02.jpg.jpg'
+            },
+            {
+              value: 'cluster_3',
+              label: 'A moment of peace',
+              text: 'You sit on a worn bench by the sea. The tide rolls in and out, the dark past soon forgotten. A soft breeze brushes your skin. The noise is gone — outside, inside. For the first time, you exhale, and the weight does not return.',
+              imageId: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6ea33d4cf749a95a1_q10a_03.jpg.jpg'
+            },
+            {
+              value: 'cluster_4',
+              label: 'A legacy enduring',
+              text: 'You place the torch in a child’s hands. Their eyes shine as they lift it high. “Thank you,” the girl says. The flame catches, and the night glows bright around you. It is not lost — it endures, carried forward, alive because of you.',
+              imageId: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6a6bf20ffc4a8f593_q10a_04.jpg.jpg'
+            }
+          ]
+        },
+        {
+          id: 'yearning.final',
+          type: 'grid',
+          gridType: 'grid-2x2',
+          prompt: '',
+          image: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb65f04f871f0fdfe76_q10b_01.jpg.jpg',
+storyText: 'You smile. The setting sun drifts off, thirst squeezes your throat. But the image does not leave your mind.\nAnd then the words leave your lips.\nWords you never thought you would say. Words you always wished you had.',
+          dynamicOptions: {
+            'cluster_1': [
+              { value: 'To be loved', label: 'I am loved.', imageId: 'q10b_w_01' },
+              { value: 'To belong', label: 'I finally belong.', imageId: 'q10b_w_02' },
+              { value: 'To be seen', label: 'They see me.', imageId: 'q10b_w_03' },
+              { value: 'To feel worthy', label: 'I am enough.', imageId: 'q10b_w_04' }
+            ],
+            'cluster_2': [
+              { value: 'To be free', label: 'I am free.', imageId: 'q10b_w_05' },
+              { value: 'To change', label: 'Change is here.', imageId: 'q10b_w_06' },
+              { value: 'To discover', label: 'The world. For me to see.', imageId: 'q10b_w_07' }
+            ],
+            'cluster_3': [
+              { value: 'To feel peace', label: 'Peace. Finally, peace.', imageId: 'q10b_w_08' },
+              { value: 'To redeem', label: 'I made it right again.', imageId: 'q10b_w_09' }
+            ],
+            'cluster_4': [
+              { value: 'To preserve', label: 'The good will endure.', imageId: 'q10b_w_10' },
+              { value: 'To leave an impact', label: 'They will remember me.', imageId: 'q10b_w_11' }
+            ]
+          }
+        },
+     {
+  id: 'reader_context.reading_habits',
+  type: 'button',
+  prompt: 'How many books do you read in a year?',
+  image: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6f4c2fd3ccc989e77_q11.jpg.jpg',
+  options: [
+    { value: '1–10', label: '1–10' },
+    { value: '11–30', label: '11–30' },
+    { value: 'Countless', label: 'Countless' },
+    { value: "I'm still new!", label: "I'm still new!" }
+  ]
+},
+{
+  id: 'reader_context.favourite_book',
+  type: 'text',
+  prompt: "Which book you've read has spoken best to your taste?",
+  image: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb61ed1477b7bcacd3f_q12.jpg.jpg'
+},
+        {
+          id: 'reader_context.issues_struggles',
+          type: 'text',
+          prompt: 'If you could solve one issue — inside you, or in the world — what would it be?',
+          image: 'https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6ea33d4cf749a95b1_q13.jpg.jpg'
+        },
+        {
+          id: 'reader_context.heavy_triggers',
+          type: 'checkbox',
+          prompt: 'Are there any themes you cannot read? Triggers you must avoid? Your comfort and needs matter to us. So please, let us know.',
+          image: null,
+          options: [
+            { value: 'Death', label: 'Death' },
+            { value: 'Abuse', label: 'Abuse' },
+            { value: 'Sexual violence', label: 'Sexual violence' },
+            { value: 'Racism', label: 'Racism' },
+            { value: 'Homophobia', label: 'Homophobia' },
+            { value: 'Transphobia', label: 'Transphobia' },
+            { value: 'Mental illness', label: 'Mental illness' }
+          ]
+        }
+      ];
+
+      function renderQuestion() {
+        try {
+          log('Rendering question', { questionIndex: currentQuestion, questionId: questions[currentQuestion]?.id });
+          if (!questions[currentQuestion]) {
+            log('No question found', { questionIndex: currentQuestion });
+            console.error('No question found at index:', currentQuestion);
+            document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to load question. Please try again.</p>';
+            return;
+          }
+          const question = questions[currentQuestion];
+          let options = question.options;
+
+          if (question.type === 'story') {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = `
+              <img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">
+              <h1>${question.prompt}</h1>
+              <p class="story-text">${question.storyText}</p>
+              <button class="button" onclick="saveAnswer('continue')">Continue</button>
+            `;
+            container.classList.add('active');
+            log('Rendered story question', { questionId: question.id });
+            return;
+          }
+
+          if (question.type === 'text') {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = `
+              ${question.image ? `<img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">` : ''}
+              <h1>${question.prompt}</h1>
+              ${question.description ? `<p class="description">${question.description}</p>` : ''}
+              <input type="text" class="input-field" id="text-input" placeholder="Enter your response">
+              <button class="button" onclick="saveTextAnswer()">Submit</button>
+            `;
+            container.classList.add('active');
+            log('Rendered text question', { questionId: question.id });
+            return;
+          }
+
+          if (question.type === 'checkbox') {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = `
+              ${question.image ? `<img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">` : ''}
+              <h1>${question.prompt}</h1>
+              ${question.description ? `<p class="description">${question.description}</p>` : ''}
+              <div class="checkbox-container">
+                ${question.options.map(opt => `
+                  <label class="checkbox-label">
+                    <input type="checkbox" value="${opt.value}" data-label="${opt.label}">
+                    ${opt.label}
+                  </label>
+                `).join('')}
+              </div>
+              <button class="button" onclick="saveCheckboxAnswer()">Submit</button>
+            `;
+            container.classList.add('active');
+            log('Rendered checkbox question', { questionId: question.id });
+            return;
+          }
+if (question.type === 'button') {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = `
+    ${question.image ? `<img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">` : ''}
+    <h1>${question.prompt}</h1>
+    ${question.description ? `<p class="description">${question.description}</p>` : ''}
+    <div class="grid-2x2">
+      ${question.options.map(opt => `
+        <button class="scenario-button" onclick="saveAnswer('${opt.value}', '${opt.label}', '')">
+          ${opt.label}
+        </button>
+      `).join('')}
+    </div>
+  `;
+  container.classList.add('active');
+  log('Rendered button question', { questionId: question.id });
+  return;
+}
+          if (question.dynamicOptions) {
+            options = question.dynamicOptions[getStateValue('yearning.cluster_image')];
+            if (!options || options.length === 0) {
+              options = [{ value: 'error', label: 'Error: No options available', imageId: 'error', disabled: true }];
+            }
+            question.gridType = options.length === 2 ? 'grid-2x1' : 'grid-2x2';
+          }
+
+          const container = document.getElementById('quiz-container');
+          let imageHTML = '';
+          if (question.id === 'yearning.cluster_image') {
+            imageHTML = '';
+          } else if (question.id === 'yearning.final') {
+            imageHTML = question.image ? `<img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">` : '';
+          } else {
+            imageHTML = question.image ? `<img src="${question.image}" alt="Scenario Image" class="scenario-image" loading="lazy">` : '';
+          }
+
+          container.innerHTML = `
+            ${question.id === 'yearning.final' ? '<h1 class="subhead">Final Words.</h1>' : ''}
+            ${imageHTML}
+            <h1>${question.prompt}</h1>
+            ${question.description ? `<p class="description">${question.description}</p>` : ''}
+            ${question.storyText ? `<p class="story-text">${question.storyText}</p>` : ''}
+            ${question.id === 'yearning.cluster_image' ? '<h1 class="subhead">The Image.</h1>' : ''}
+            <div class="${question.gridType || 'grid-2x2'}">
+              ${options.map(opt => `
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  ${question.id === 'yearning.cluster_image' ? `
+                    <div class="image-tile" data-internal-value="${opt.value}" data-image-id="${opt.imageId || ''}" onclick="saveAnswer('${opt.value}', '${opt.label}', '${opt.imageId || ''}')">
+                      <img src="${opt.imageId}" alt="${opt.label}" loading="lazy">
+                    </div>
+                    <p class="option-text">${opt.text || opt.label || opt.value}</p>
+                  ` : `
+                    <button class="scenario-button ${opt.disabled ? 'disabled' : ''}" data-internal-value="${opt.value}" data-image-id="${opt.imageId || ''}" onclick="${opt.disabled ? '' : `saveAnswer('${opt.value}', '${opt.label}', '${opt.imageId || ''}')`}" ${opt.disabled ? 'disabled' : ''}>
+                      ${opt.label || opt.value}
+                    </button>
+                  `}
+                </div>
+              `).join('')}
+            </div>
+          `;
+          container.classList.add('active');
+          log('Rendered grid question', { questionId: question.id, gridType: question.gridType, options: options.map(opt => opt.value) });
+
+        } catch (error) {
+          log('Error rendering question', { error: error.message, questionIndex: currentQuestion });
+          console.error('Error rendering question:', error);
+          document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to load question. Please try again.</p>';
+        }
+      }
+
+      function showTransitionScreen() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+          <div class="completion-screen">
+            <h1>Final questions…</h1>
+          </div>
+        `;
+        log('Showing transition screen');
+        return new Promise(resolve => setTimeout(resolve, 1500));
+      }
+
+      async function saveAnswer(value, label = '', imageId = '') {
+        try {
+          if (!value && questions[currentQuestion].type !== 'story') {
+            log('No answer selected', { questionId: questions[currentQuestion].id });
+            document.getElementById('quiz-container').innerHTML += '<p class="error-message">Please select an option.</p>';
+            return;
+          }
+
+          const questionId = questions[currentQuestion].id;
+          if (questionId !== 'yearning.preface') {
+            const keys = questionId.split('.');
+            let target = state;
+            for (let i = 0; i < keys.length - 1; i++) {
+              target[keys[i]] = target[keys[i]] || {};
+              target = target[keys[i]];
+            }
+            target[keys[keys.length - 1]] = { value, label, imageId };
+            if (questionId === 'yearning.final') {
+              state.yearning.whisper_confirm = { value, label, imageId };
+              document.getElementById('milestone3').classList.add('glow');
+              log('Saved yearning.final answer and set milestone3 glow', { value, label, imageId });
+              await showTransitionScreen();
+            }
+            localStorage.setItem('quizState', JSON.stringify(state));
+            log('Saved answer', { questionId, value, label, imageId });
+          } else {
+            log('Skipped saving for story question', { questionId });
+          }
+
+          selectedAnswer = null;
+          setTimeout(async () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+              log('Advancing to next question', { nextQuestionIndex: currentQuestion, nextQuestionId: questions[currentQuestion]?.id });
+              renderQuestion();
+            } else {
+              log('Quiz completed, showing completion screen');
+              await showCompletionScreen();
+            }
+          }, 240);
+        } catch (error) {
+          log('Error saving answer', { error: error.message, questionId, value, label });
+          console.error('Error saving answer:', error);
+          document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to save answer. Please try again.</p>';
+        }
+      }
+
+      function saveTextAnswer() {
+        try {
+          const input = document.getElementById('text-input').value.trim();
+          if (!input) {
+            log('No text input provided', { questionId: questions[currentQuestion].id });
+            document.getElementById('quiz-container').innerHTML += '<p class="error-message">Please enter a response.</p>';
+            return;
+          }
+          const questionId = questions[currentQuestion].id;
+          const keys = questionId.split('.');
+          let target = state;
+          for (let i = 0; i < keys.length - 1; i++) {
+            target[keys[i]] = target[keys[i]] || {};
+            target = target[keys[i]];
+          }
+          target[keys[keys.length - 1]] = input;
+          localStorage.setItem('quizState', JSON.stringify(state));
+          log('Saved text answer', { questionId, input });
+
+          currentQuestion++;
+          if (currentQuestion < questions.length) {
+            log('Advancing to next question', { nextQuestionIndex: currentQuestion, nextQuestionId: questions[currentQuestion]?.id });
+            renderQuestion();
+          } else {
+            log('Quiz completed, showing completion screen');
+            showCompletionScreen();
+          }
+        } catch (error) {
+          log('Error saving text answer', { error: error.message, questionId });
+          console.error('Error saving text answer:', error);
+          document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to save answer. Please try again.</p>';
+        }
+      }
+
+      function saveCheckboxAnswer() {
+        try {
+          const selected = Array.from(document.querySelectorAll('.checkbox-container input:checked')).map(input => ({
+            value: input.value,
+            label: input.dataset.label
+          }));
+          const questionId = questions[currentQuestion].id;
+          const keys = questionId.split('.');
+          let target = state;
+          for (let i = 0; i < keys.length - 1; i++) {
+            target[keys[i]] = target[keys[i]] || {};
+            target = target[keys[i]];
+          }
+          target[keys[keys.length - 1]] = selected;
+          localStorage.setItem('quizState', JSON.stringify(state));
+          log('Saved checkbox answer', { questionId, selected });
+
+          currentQuestion++;
+          if (currentQuestion < questions.length) {
+            log('Advancing to next question', { nextQuestionIndex: currentQuestion, nextQuestionId: questions[currentQuestion]?.id });
+            renderQuestion();
+          } else {
+            log('Quiz completed, showing completion screen');
+            showCompletionScreen();
+          }
+        } catch (error) {
+          log('Error saving checkbox answer', { error: error.message, questionId });
+          console.error('Error saving checkbox answer:', error);
+          document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to save answer. Please try again.</p>';
+        }
+      }
+
+      async function showCompletionScreen() {
+        document.querySelector('.progress').classList.add('hidden');
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+          <div class="completion-screen">
+            <h1>Reading your story…</h1>
+          </div>
+        `;
+        log('Showing completion screen');
+        localStorage.setItem('quizState', JSON.stringify(state));
+        log('Navigating directly to /soul-glimpse');
+        setTimeout(() => {
+          window.location.assign('/soul-glimpse');
+        }, 5000);
+      }
+
+      function getStateValue(id) {
+        try {
+          const keys = id.split('.');
+          let target = state;
+          for (const key of keys) {
+            if (!target[key]) {
+              log('State value not found', { id, keys });
+              return null;
+            }
+            target = target[key];
+          }
+          const value = target.value || target;
+          log('Retrieved state value', { id, value });
+          return value;
+        } catch (error) {
+          log('Error in getStateValue', { error: error.message, id });
+          console.error('Error in getStateValue:', error);
+          return null;
+        }
+      }
+
+      try {
+        log('Initializing quiz-3', { state });
+        document.querySelector('.progress').classList.add('active');
+        document.getElementById('milestone1').classList.add('glow');
+        document.getElementById('milestone2').classList.add('glow');
+        renderQuestion();
+      } catch (error) {
+        log('Error initializing quiz', { error: error.message });
+        console.error('Error initializing quiz:', error);
+        document.getElementById('quiz-container').innerHTML = '<p class="error-message">Error: Unable to initialize quiz. Please try again.</p>';
+      }
+    </script>
+  </div>
+</section>

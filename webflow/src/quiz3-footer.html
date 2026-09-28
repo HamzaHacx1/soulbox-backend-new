@@ -1,0 +1,57 @@
+<script>
+window.SOULBOX_BACKEND_BASE = "https://soulbox-backend-new.vercel.app";
+(function () {
+  var oldBase = "https://soulbox-backend-api.vercel.app";
+  var newBase = window.SOULBOX_BACKEND_BASE;
+  if (window.__soulboxBackendFetchPatched) return;
+  window.__soulboxBackendFetchPatched = true;
+  var nativeFetch = window.fetch;
+  window.fetch = function (input, init) {
+    if (typeof input === "string" && input.indexOf(oldBase) === 0) {
+      input = input.replace(oldBase, newBase);
+    } else if (input && input.url && input.url.indexOf(oldBase) === 0) {
+      input = new Request(input.url.replace(oldBase, newBase), input);
+    }
+    return nativeFetch.call(this, input, init);
+  };
+})();
+</script>
+<style id="quiz-global-image-finish">
+#quiz-container .image-tile,
+.quiz-container .image-tile {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #F5E6D3 !important;
+  border-radius: 14px !important;
+}
+#quiz-container .image-tile::after,
+.quiz-container .image-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: rgba(15, 23, 70, .17);
+}
+#quiz-container .image-tile img,
+.quiz-container .image-tile img,
+#quiz-container .scenario-image,
+.quiz-container .scenario-image {
+  border-radius: 12px !important;
+}
+#quiz-container .image-tile p,
+.quiz-container .image-tile p {
+  position: relative;
+  z-index: 2;
+}
+#quiz-container .scenario-image,
+.quiz-container .scenario-image {
+  border: 2px solid #F5E6D3 !important;
+}
+</style>
+<style id="september-buttons">
+#quiz-container .button,#quiz-container .scenario-button,#continue-btn.button,.quiz-container .button{background:#f4f2ec!important;color:#161b42!important;border:1px solid #f4f2ec!important;box-shadow:none!important}
+#quiz-container .button:hover,#quiz-container .scenario-button:hover,#continue-btn.button:hover{background:#161b42!important;color:#f4f2ec!important}
+#quiz-container .button::after,#continue-btn.button::after{background:none!important}
+#quiz-container .scenario-button.selected,#quiz-container .scenario-button[aria-pressed="true"]{background:#161b42!important;color:#f4f2ec!important}
+</style>

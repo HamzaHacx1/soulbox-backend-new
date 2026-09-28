@@ -1,0 +1,117 @@
+<script>
+(function(){
+  document.body.innerHTML = `
+    <div class="sb-fullpage">
+      <section class="sb-section sb-hero" id="hero">
+        <div class="sb-container sb-hero-inner">
+          <img class="sb-logo" src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68fa4c15234e10fe5f9db120_NEW%20IMAGE%20SOULREPORT%20SALES%20PAGE%20HERO%20IMAGE%20(1).png" alt="SoulBox">
+          <h1 class="sb-hero-title">You are not a piece of data.</h1>
+          <p class="sb-hero-body">You are a human being, with emotions, taste, identity and desire.</p>
+          <p class="sb-hero-emphasis">The stories you read should recognise you.</p>
+          <h2 class="sb-hero-close">Let us find them for you.</h2>
+          <button class="sb-cta" type="button" data-open-ai>Begin Your Soul Reading</button>
+        </div>
+        <a class="sb-continue" href="#how-it-works">Find out more ↓</a>
+      </section>
+
+      <section class="sb-section sb-how" id="how-it-works">
+        <div class="sb-container">
+          <h2>How It Works</h2>
+          <div class="sb-steps">
+            <article><b>1</b><h3>The Soul Reading <em>Free</em></h3><p>A 10-minute reading designed with psychologists and bibliotherapists. We learn how you read, what you are carrying and what you are reaching for.</p></article>
+            <article><b>2</b><h3>Discover Your Reading House <em>Free</em></h3><p>Your Reading House is revealed, alongside your emotional Texture and Reading Style, a portrait of why you read and what you seek from stories.</p></article>
+            <article><b>3</b><h3>Enter Your House</h3><p>Your results place you in one of four Reading Houses. Save your profile, meet your House curator and receive monthly recommendations, book clubs and community.</p></article>
+            <article><b>4</b><h3>Go Deeper</h3><p>Choose the digital Soul Report or physical SoulBox. Both deepen your profile and include a book chosen specifically for you.</p></article>
+          </div>
+        </div>
+        <a class="sb-continue" href="#the-soulbox">Continue ↓</a>
+      </section>
+
+      <section class="sb-section sb-box" id="the-soulbox">
+        <div class="sb-container">
+          <h2>The SoulBox</h2>
+          <img class="sb-box-photo" src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/695d83b81a52ada39726d673_NEW%20HERO%20IMAGE%20(1).jpg" alt="SoulBox">
+          <h3>Made only for you.</h3>
+          <div class="sb-box-copy">
+            <p>Your curator studies your Soul Reading, chooses the story they believe belongs in your hands, and handwrites your full Soul Report and personal Soul Letter.</p>
+            <p>Inside your box, you’ll find your chosen story, Soul Report booklet, personal Soul Letter, archetype cards and Soul House emblems.</p>
+            <p class="sb-box-final"><em>Your reading journey truly begins.</em></p>
+          </div>
+        </div>
+        <a class="sb-continue" href="#curators">Continue ↓</a>
+      </section>
+
+      <section class="sb-section sb-curators" id="curators">
+        <div class="sb-container">
+          <h2>Meet Your Curators — Illustrated Photos</h2>
+          <p class="sb-identity-note"><em>(The following portraits are illustrated to protect the identities of our team.)</em></p>
+          <div class="sb-curator-row">
+            <article><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a6e9cc71527317df_Lucas.jpg" alt="Lucas"><h3>Lucas</h3><p>All Genres</p></article>
+            <article><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a677752c97b0c3d1_Claire%20(1).jpg" alt="Claire"><h3>Claire</h3><p>All Genres</p></article>
+            <article><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574e339f0ab7c6e40bb_Ahmed%20(1).jpg" alt="Ahmed"><h3>Ahmed</h3><p>Sci-Fi, Fantasy</p></article>
+            <article><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5742d1723dd3863d929_Rija%20(1).jpg" alt="Rija"><h3>Rija</h3><p>Romance, Literary</p></article>
+            <article><img src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e18bd624b7655ae86bf_Taniyah.jpg" alt="Taniyah"><h3>Taniyah</h3><p>Fantasy, Romance, Horror</p></article>
+            <article><img src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e181a9da04ec876c5a3_Sienna.jpg" alt="Sienna"><h3>Sienna</h3><p>All Genres</p></article>
+          </div>
+          <p class="sb-curator-copy">Each curator works closely with a small circle of readers. Your results place you in a Reading House, where your curator gets to know your reading life.</p>
+        </div>
+        <a class="sb-continue" href="#final-cta">Continue ↓</a>
+      </section>
+
+      <section class="sb-section sb-final" id="final-cta">
+        <div class="sb-container">
+          <h2>Begin Your Soul Reading</h2>
+          <p>Ten minutes. No payment. Answer slowly and honestly.</p>
+          <button class="sb-cta" type="button" data-open-ai>Start My Soul Reading</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="sb-ai-modal" id="sbAiModal" aria-hidden="true">
+      <div class="sb-ai-backdrop" data-close-ai></div>
+      <div class="sb-ai-card" role="dialog" aria-modal="true" aria-labelledby="sbAiTitle">
+        <button class="sb-ai-close" type="button" data-close-ai aria-label="Close AI Declaration">×</button>
+        <h2 id="sbAiTitle">AI Declaration</h2>
+        <p>42% of the visual imagery used throughout this experience was generated using artificial intelligence.</p>
+        <p>To accurately map our reader profiles, we required a level of visual precision that existing archival photography and human artwork could not cleanly replicate.</p>
+        <p>AI was used here strictly as a visual tool. It played absolutely no part in the human curation and judgment used to craft your SoulBox.</p>
+        <button class="sb-cta" type="button" data-continue-quiz>Continue</button>
+      </div>
+    </div>`;
+
+  var fontLink = document.createElement('link');
+  fontLink.rel = 'stylesheet';
+  fontLink.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Source+Serif+Pro:wght@400;600&display=swap';
+  document.head.appendChild(fontLink);
+
+  var style = document.createElement('style');
+  style.textContent = `
+    html,body{height:100%;margin:0;background:#1c255d;color:#f4f2ec;font-family:'Source Serif Pro',serif;overflow:hidden}
+    .sb-fullpage{height:100vh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;scrollbar-width:none}.sb-fullpage::-webkit-scrollbar{display:none}
+    .sb-section{min-height:100vh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;position:relative;box-sizing:border-box;padding:54px 6vw 64px;text-align:center;background:radial-gradient(circle at 50% 18%,#263276 0%,#1c255d 64%,#151d47 100%)}
+    .sb-container{width:100%;max-width:1040px;margin:0 auto}
+    .sb-hero{align-items:flex-start;padding-top:58px;padding-bottom:58px}.sb-hero-inner{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:auto}
+    .sb-logo{width:clamp(112px,12vw,138px);opacity:.86;margin:0 auto 24px;display:block}
+    .sb-hero-title{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(31px,4vw,38px);line-height:1.16;letter-spacing:0;margin:0 auto 22px;max-width:760px}
+    .sb-hero-body,.sb-hero-emphasis{font-family:'Source Serif Pro',serif;font-size:clamp(18px,2.1vw,20px);line-height:1.48;margin:0 auto 22px;max-width:700px;opacity:.92}.sb-hero-emphasis{font-style:italic}
+    .sb-hero-close{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(26px,3vw,31px);line-height:1.18;margin:0 auto;max-width:720px}
+    .sb-cta{margin-top:28px;font-family:'Source Serif Pro',serif;font-size:18px;line-height:1;padding:14px 30px;border:1.5px solid #f4f2ec;border-radius:8px;color:#f4f2ec;background:transparent;cursor:pointer;transition:background .18s ease,box-shadow .18s ease}.sb-cta:hover,.sb-cta:focus-visible{background:rgba(244,242,236,.1);box-shadow:0 0 20px rgba(244,242,236,.26);outline:none}
+    .sb-continue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);color:#f4f2ec;text-decoration:none;font-size:14px;opacity:.72;white-space:nowrap}
+    .sb-section h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(32px,4.5vw,54px);line-height:1.08;margin:0 0 22px}
+    .sb-how{background:linear-gradient(rgba(11,16,43,.7),rgba(11,16,43,.84)),url('https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69bab1330a40434acb8ab724_Monochrome%20Neutral%20Modern%20Moodboard%20Your%20Story.jpg') center/cover no-repeat}.sb-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-top:28px}.sb-steps article{padding:6px 8px}.sb-steps b{display:block;font-family:'Cormorant Garamond',serif;color:#d4af37;font-size:34px;line-height:1;margin-bottom:10px}.sb-steps h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;line-height:1.13;margin:0 0 10px}.sb-steps h3 em{display:block;font-size:.7em;opacity:.78;margin-top:4px}.sb-steps p{font-size:14px;line-height:1.45;margin:0;opacity:.84}
+    .sb-box{padding-top:34px;padding-bottom:58px}.sb-box .sb-container{transform:translateY(-2vh)}.sb-box h2{margin-bottom:14px}.sb-box-photo{width:min(78vw,360px);height:min(78vw,360px);max-height:42vh;object-fit:cover;object-position:center;border-radius:10px;border:1px solid rgba(244,242,236,.16);box-shadow:0 16px 42px rgba(0,0,0,.25);display:block;margin:14px auto 18px}.sb-box h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(27px,3.1vw,38px);line-height:1.12;margin:0 0 14px}.sb-box-copy{max-width:720px;margin:0 auto}.sb-box-copy p{font-size:clamp(14px,1.35vw,16px);line-height:1.48;margin:0 auto 12px;opacity:.86}.sb-box-copy p:last-child{margin-bottom:0;font-style:italic;opacity:.9}
+    .sb-curators h2{margin-bottom:8px}.sb-identity-note{font-size:12px;opacity:.62;margin:0 auto 22px}.sb-curator-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin:20px auto 22px}.sb-curator-row article{min-width:0}.sb-curator-row img{width:104px;height:104px;object-fit:cover;border-radius:50%;border:1px solid rgba(244,242,236,.2)}.sb-curator-row h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;line-height:1;margin:10px 0 5px}.sb-curator-row p{font-size:12px;line-height:1.25;margin:0;opacity:.72}.sb-curator-copy{font-size:16px;line-height:1.48;max-width:720px;margin:0 auto;opacity:.84}.sb-final p{font-size:18px;line-height:1.5;margin:0 auto;opacity:.82}
+    .sb-ai-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px}.sb-ai-modal.is-open{display:flex}.sb-ai-backdrop{position:absolute;inset:0;background:rgba(4,8,24,.78);backdrop-filter:blur(8px)}.sb-ai-card{position:relative;z-index:2;width:min(100%,620px);padding:40px 36px;border-radius:14px;border:1px solid rgba(244,242,236,.18);box-shadow:0 24px 80px rgba(0,0,0,.42);background:radial-gradient(circle at center,rgba(34,42,102,.98),rgba(22,27,66,.98) 72%);text-align:center;box-sizing:border-box}.sb-ai-card h2{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;margin:0 0 18px}.sb-ai-card p{font-size:15px;line-height:1.56;opacity:.86;margin:0 0 15px}.sb-ai-close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#f4f2ec;font-size:28px;cursor:pointer;opacity:.72}
+    @media(max-width:860px){.sb-section{padding:42px 5vw 58px}.sb-hero{padding-top:56px;padding-bottom:58px}.sb-logo{width:116px;margin-bottom:24px}.sb-hero-title{font-size:32px;line-height:1.15;margin-bottom:22px}.sb-hero-body,.sb-hero-emphasis{font-size:20px;line-height:1.44;margin-bottom:22px}.sb-hero-close{font-size:27px;line-height:1.16}.sb-cta{font-size:18px;margin-top:28px}.sb-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px;margin-top:20px}.sb-steps b{font-size:26px;margin-bottom:6px}.sb-steps h3{font-size:18px;margin-bottom:7px}.sb-steps p{font-size:12.5px;line-height:1.33}.sb-box{padding-top:34px}.sb-box .sb-container{transform:translateY(-1vh)}.sb-box-photo{width:min(78vw,300px);height:min(78vw,300px);max-height:34vh;margin:10px auto 14px}.sb-box h3{font-size:28px;margin-bottom:12px}.sb-box-copy{max-width:520px}.sb-box-copy p{font-size:14px;line-height:1.4;margin-bottom:10px}.sb-curator-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:18px -5vw 18px;padding:0 5vw 6px;scrollbar-width:none}.sb-curator-row::-webkit-scrollbar{display:none}.sb-curator-row article{flex:0 0 78%;scroll-snap-align:center;border:1px solid rgba(244,242,236,.18);border-radius:10px;padding:18px 16px;box-sizing:border-box;background:rgba(255,255,255,.035)}.sb-curator-row img{width:112px;height:112px}.sb-curator-copy{font-size:14px;line-height:1.42}.sb-identity-note{font-size:11px;margin-bottom:10px}.sb-section h2{font-size:clamp(29px,8vw,38px);margin-bottom:14px}.sb-continue{bottom:16px;font-size:13px}}
+    @media(max-width:420px){.sb-section{padding-top:34px;padding-bottom:50px}.sb-hero{padding-top:54px}.sb-logo{width:112px;margin-bottom:22px}.sb-hero-title{font-size:32px}.sb-hero-body,.sb-hero-emphasis{font-size:19px;line-height:1.42}.sb-hero-close{font-size:27px}.sb-cta{font-size:18px;padding:13px 23px;margin-top:26px}.sb-steps{gap:12px 10px}.sb-steps h3{font-size:16.5px}.sb-steps p{font-size:11.5px}.sb-box{padding-top:30px}.sb-box h3{font-size:26px}.sb-box-photo{width:min(76vw,270px);height:min(76vw,270px);max-height:31vh}.sb-box-copy p{font-size:13px;line-height:1.36}.sb-curator-row article{flex-basis:82%}.sb-final p{font-size:16px}}
+  `;
+  document.head.appendChild(style);
+
+  function openModal(){document.getElementById('sbAiModal').classList.add('is-open');document.getElementById('sbAiModal').setAttribute('aria-hidden','false');}
+  function closeModal(){document.getElementById('sbAiModal').classList.remove('is-open');document.getElementById('sbAiModal').setAttribute('aria-hidden','true');}
+  document.querySelectorAll('[data-open-ai]').forEach(function(btn){btn.addEventListener('click',openModal);});
+  document.querySelectorAll('[data-close-ai]').forEach(function(btn){btn.addEventListener('click',closeModal);});
+  document.querySelector('[data-continue-quiz]').addEventListener('click',function(){window.location.assign('/quiz');});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape') closeModal();});
+})();
+</script>

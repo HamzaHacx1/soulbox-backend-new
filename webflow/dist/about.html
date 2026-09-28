@@ -1,0 +1,390 @@
+<style>
+/* Meet Our Curators Section */
+.soulbox-curators-section {
+  background: radial-gradient(circle at center, #222a66 0%, #1a1f4d 72%);
+  color: #f4f2ec;
+  padding: 96px 6vw;
+  font-family: 'Source Serif Pro', serif;
+}
+
+.soulbox-curators-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.soulbox-curators-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.1;
+  font-weight: 400;
+  margin: 0 0 24px;
+  letter-spacing: 0.4px;
+}
+
+.soulbox-curators-intro {
+  max-width: 820px;
+  margin: 0 auto 64px;
+  font-size: 18px;
+  line-height: 1.65;
+  opacity: 0.86;
+}
+
+.soulbox-curators-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 42px;
+}
+
+.soulbox-curator-card {
+  text-align: center;
+}
+
+.soulbox-curator-image-wrap {
+  width: 210px;
+  height: 260px;
+  margin: 0 auto 24px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 242, 236, 0.18);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.soulbox-curator-image-wrap img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.soulbox-curator-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.soulbox-curator-copy {
+  max-width: 320px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.62;
+  opacity: 0.82;
+}
+
+.soulbox-curator-copy p {
+  margin: 0 0 14px;
+}
+
+.soulbox-curator-quote {
+  max-width: 320px;
+  margin: 22px auto 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  color: #f4f2ec;
+  opacity: 0.9;
+}
+
+.soulbox-curator-divider {
+  width: 72px;
+  height: 1px;
+  background: #d4af37;
+  opacity: 0.45;
+  margin: 18px auto 20px;
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .soulbox-curators-section {
+    padding: 80px 5vw;
+  }
+
+  .soulbox-curators-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 52px 32px;
+  }
+
+  .soulbox-curators-intro {
+    margin-bottom: 52px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .soulbox-curators-section {
+    padding: 64px 6vw;
+  }
+
+  .soulbox-curators-title {
+    font-size: 34px;
+  }
+
+  .soulbox-curators-intro {
+    font-size: 16px;
+    line-height: 1.58;
+    margin-bottom: 44px;
+  }
+
+  .soulbox-curators-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .soulbox-curator-image-wrap {
+    width: 190px;
+    height: 238px;
+    margin-bottom: 22px;
+  }
+
+  .soulbox-curator-name {
+    font-size: 28px;
+  }
+
+  .soulbox-curator-copy {
+    font-size: 14px;
+    line-height: 1.58;
+  }
+
+  .soulbox-curator-quote {
+    font-size: 15px;
+  }
+}
+</style>
+
+<section class="soulbox-curators-section">
+  <div class="soulbox-curators-container">
+
+    <h2 class="soulbox-curators-title">Meet Our Curators</h2>
+
+    <p class="soulbox-curators-intro">
+      Meet the minds behind your next favorite read. The SoulBox curation team is brought
+      to life on our site through unique illustrated portraits, keeping our focus exactly
+      where it belongs: on your bookshelf. Our real human experts collaborate daily to
+      match exceptional literature to your soul. You get the focused expertise of a true
+      boutique book team, wrapped in a classic literary style.
+    </p>
+
+    <div class="soulbox-curators-grid">
+
+      <!-- Rija -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5742d1723dd3863d929_Rija%20(1).jpg"
+            alt="Illustrated portrait of Rija"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Rija</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Rija reads like it's urgent. Not because she's racing through books — she's not — but
+            because she genuinely believes the right story at the right moment changes something in
+            you that can't be unchanged.
+          </p>
+
+          <p>
+            She's not interested in books that are merely good. She wants the ones that know things.
+            The ones that understand how it feels to be a person — specifically, how hard it is, and
+            how worth it.
+          </p>
+
+          <p>
+            If something's sitting heavy with you right now, she'll find it in your quiz. She always does.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “Fiction is the only place where other people's pain makes complete sense.”
+        </div>
+      </article>
+
+      <!-- Taniyah -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e18bd624b7655ae86bf_Taniyah.jpg"
+            alt="Illustrated portrait of Taniyah"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Taniyah</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Taniyah has strong opinions and she's not apologising for them. She thinks most people
+            play it too safe with books — reaching for comfort when what they actually need is to be
+            cracked open a little.
+          </p>
+
+          <p>
+            She'll pick you something that asks something of you. Not difficult for the sake of it.
+            Just — honest. Real. The kind of book you put down and then pick back up three minutes
+            later because you weren't done with it yet.
+          </p>
+
+          <p>
+            She's looking for the readers who are ready for that. Maybe that's you.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “I feel some books you finish and some books finish you. I'm looking for the second kind.”
+        </div>
+      </article>
+
+      <!-- Sienna -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e181a9da04ec876c5a3_Sienna.jpg"
+            alt="Illustrated portrait of Sienna"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Sienna</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Sienna is quieter than the others about what she loves, which is probably why she's so good
+            at finding it.
+          </p>
+
+          <p>
+            She reads slowly. She annotates. She has opinions about endings that she'll share only if
+            you ask, and then she won't stop. She thinks a book that asks nothing of you is essentially
+            just wallpaper — pretty, forgettable, not worth your time.
+          </p>
+
+          <p>
+            She suits readers who want to be taken seriously. Who don't just want a good read — they
+            want the right one.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “A book that asks nothing of you is a book that gives you nothing back.”
+        </div>
+      </article>
+
+      <!-- Claire -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a677752c97b0c3d1_Claire%20(1).jpg"
+            alt="Illustrated portrait of Claire"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Claire</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Claire will fight you about your favourite book and she means it affectionately.
+          </p>
+
+          <p>
+            She's the one who has a genuine theory about why certain people are drawn to certain
+            genres, and the theory is usually right, and it's usually a little uncomfortably specific.
+            She reads your quiz answers like they're telling her something you didn't quite mean to say.
+          </p>
+
+          <p>
+            She's warm. She's sharp. She won't send you something safe unless safe is genuinely what
+            you need.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “I've never trusted someone who says they don't have a favourite.”
+        </div>
+      </article>
+
+      <!-- Lucas -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a6e9cc71527317df_Lucas.jpg"
+            alt="Illustrated portrait of Lucas"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Lucas</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Lucas thinks timing is everything. The same book at 22 and 34 are two completely different
+            books — he'll tell you this unprompted and he's not wrong.
+          </p>
+
+          <p>
+            He reads across everything. Literary fiction, genre, translated stuff, things that are hard
+            to categorise. He's less interested in what you like and more interested in where you are
+            right now — what you're ready for, what you're not, what you need to sit with before you're
+            ready to move.
+          </p>
+
+          <p>
+            He's patient. His picks tend to stay with people.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “The right book at the wrong time is still the wrong book.”
+        </div>
+      </article>
+
+      <!-- Ahmed -->
+      <article class="soulbox-curator-card">
+        <div class="soulbox-curator-image-wrap">
+          <img
+            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574e339f0ab7c6e40bb_Ahmed%20(1).jpg"
+            alt="Illustrated portrait of Ahmed"
+            loading="lazy"
+          />
+        </div>
+
+        <h3 class="soulbox-curator-name">Ahmed</h3>
+        <div class="soulbox-curator-divider"></div>
+
+        <div class="soulbox-curator-copy">
+          <p>
+            Ahmed is the one who still gets genuinely excited. Not performatively — actually excited.
+            He'll finish something at 1am and want to tell someone immediately and there's no one to tell.
+          </p>
+
+          <p>
+            He believes books are magic and he doesn't care if that sounds ridiculous. He's not
+            interested in cynicism about reading, about fiction, about any of it. Life's too short and
+            there are too many extraordinary books.
+          </p>
+
+          <p>
+            His readers tend to come back. That probably says something.
+          </p>
+        </div>
+
+        <div class="soulbox-curator-quote">
+          “Stories are genuinely magic.”
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>

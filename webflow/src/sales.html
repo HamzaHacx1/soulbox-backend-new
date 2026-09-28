@@ -1,0 +1,32 @@
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;min-height:100%;background:#161b42;color:#f4f2ec;font-family:'Source Serif Pro',Georgia,serif}*{box-sizing:border-box}[hidden]{display:none!important}
+.sales-page{width:min(100%,700px);margin:auto;padding:56px 24px 48px;text-align:center}.sales-page>h1{font:500 clamp(30px,6vw,44px)/1.15 'Cormorant Garamond',Georgia,serif;margin:0 0 36px}.offer-label{font-size:14px;letter-spacing:.12em;margin:30px 0 12px}.offer{padding:32px clamp(22px,5vw,40px);border:1px solid rgba(244,242,236,.25);border-radius:12px;background:radial-gradient(circle at center,#222a66,#161b42)}.offer h2{font:500 clamp(34px,6vw,46px)/1.1 'Cormorant Garamond',Georgia,serif;margin:0 0 10px}.offer-price{font-size:26px;margin:0 0 24px}.offer ul{list-style:none;padding:0;margin:0 0 26px;text-align:left;display:grid;gap:20px;line-height:1.5}.offer li strong{display:block;font-weight:600}.offer li span{font-size:15px;opacity:.8}.offer-button,.not-now{font:600 17px 'Source Serif Pro',Georgia,serif;border:1px solid #f4f2ec;border-radius:8px;min-height:50px;padding:13px 26px;cursor:pointer;background:#f4f2ec;color:#161b42}.offer-button{width:100%}.offer-button:disabled{cursor:default;opacity:.6}.offer.is-unavailable{filter:grayscale(1);opacity:.55}.availability{font-size:14px;margin:16px 0 0}.not-now{display:inline-block;background:transparent;color:#f4f2ec;margin:28px auto 0;text-decoration:none;font-size:15px}.checkout-status{min-height:24px;font-size:14px;line-height:1.5}button:focus-visible,a:focus-visible{outline:2px solid white;outline-offset:4px}@media(max-width:420px){.sales-page{padding:36px 18px}.offer{padding:26px 22px}}
+</style>
+<main class="sales-page">
+<h1>Your House Desk has space for you.</h1>
+<p class="offer-label">The Digital</p>
+<article class="offer"><h2>The Soul Report</h2><p class="offer-price">£19</p><ul><li><strong>Your Reading Profile</strong><span>A deeper analysis of your reading identity.</span></li><li><strong>Your Curator Note</strong><span>A human-written interpretation of what your results mean.</span></li><li><strong>Your Soul Book</strong><span>The one book chosen for your soul (Not including physical book).</span></li></ul><button class="offer-button" data-plan="soul_report_september" type="button">Get My Soul Report</button></article>
+<p class="offer-label">The Physical</p>
+<article class="offer" id="physical-offer"><h2>The SoulBox</h2><p class="offer-price">£50</p><ul><li><strong>Your Printed Soul Report</strong><span>Your Curator written profile of your reading life.</span></li><li><strong>Your Soul Book</strong><span>The book chosen for your soul.</span></li><li><strong>Your Emblems</strong><span>Artefacts from your Reading House and more.</span></li></ul><button class="offer-button" data-plan="soulbox_september" type="button">Get My SoulBox</button><p class="availability" id="uk-availability" hidden>Currently available in the UK only.</p></article>
+<a class="not-now" href="/success">Not now</a><p class="checkout-status" id="checkout-status" aria-live="polite"></p>
+</main>
+<script>
+(function(){
+  function read(key){try{return JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(_){return {}}}
+  var submission=Object.assign({},read('finalSubmission'),read('quizState'));
+  var country=submission.country&&submission.country.value||submission.country||submission.region;
+  var isUK=['uk','gb','gbr','united kingdom','great britain'].indexOf(String(country||'').trim().toLowerCase())!==-1;
+  var physical=document.querySelector('[data-plan="soulbox_september"]');
+  if(country&&!isUK){physical.disabled=true;document.getElementById('physical-offer').classList.add('is-unavailable');document.getElementById('uk-availability').hidden=false}
+  document.querySelectorAll('[data-plan]').forEach(function(button){button.addEventListener('click',async function(){
+    var status=document.getElementById('checkout-status');button.disabled=true;status.textContent='Opening secure checkout…';
+    try{
+      var response=await fetch('https://soulbox-backend-new.vercel.app/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:button.dataset.plan,email:submission.email,submission:submission})});
+      var session=await response.json();if(!response.ok||!session.url)throw new Error(session.error||'Checkout is unavailable.');
+      var url=new URL(session.url);if(url.protocol!=='https:'||url.hostname!=='checkout.stripe.com')throw new Error('Invalid checkout destination');
+      window.location.assign(url.href);
+    }catch(error){status.textContent='We could not open checkout. Please try again shortly.';button.disabled=false;console.error(error)}
+  })});
+})();
+</script>

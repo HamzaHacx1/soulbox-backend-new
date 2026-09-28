@@ -1,0 +1,50 @@
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Source+Serif+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#101938;color:#f4f2ec;font-family:'Source Serif Pro',Georgia,serif;overflow:hidden}*{box-sizing:border-box}[hidden]{display:none!important}
+.results-experience{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:linear-gradient(160deg,#1c2852,#101938);scrollbar-width:none}.results-experience::-webkit-scrollbar{display:none}
+.results-panel{height:100dvh;width:100%;position:relative;scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px 20px 64px}
+.results-intro{width:min(100%,620px);padding:clamp(24px,5vw,44px);border:1px solid rgba(244,242,236,.25);border-radius:12px;background:radial-gradient(circle at center,#222a66,#161b42);line-height:1.6}
+.results-intro h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,6vw,48px);line-height:1.1;margin:0 0 24px}.results-intro p{font-size:clamp(16px,2vw,19px);margin:0 0 20px}.results-intro .character-note{font-size:14px;font-style:italic;opacity:.75;margin:0}
+.result-card{display:block;width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:4/5;object-fit:contain;border:1px solid #f4f2ec}
+.next-panel{position:absolute;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);padding:8px 16px;border:0;background:transparent;color:inherit;font:14px 'Source Serif Pro',Georgia,serif;cursor:pointer}
+.gradient-panel{padding:0;background:var(--house)}.gradient-panel img{width:100%;height:100%;object-fit:cover}.download-panel{background:var(--house);overflow-y:auto;display:block;padding-top:clamp(60px,25dvh,240px)}
+.download-actions{width:min(100%,360px);margin:auto;display:grid;gap:16px}.download-button,.individual-card{display:block;border:1px solid #f4f2ec;border-radius:8px;padding:15px 22px;background:#f4f2ec;color:#101938;font:600 17px 'Source Serif Pro',Georgia,serif;cursor:pointer;text-decoration:none}.download-button.secondary,.individual-card{background:transparent;color:#f4f2ec}.download-button:disabled{opacity:.6;cursor:wait}button:focus-visible,a:focus-visible{outline:2px solid white;outline-offset:4px}.download-status{max-width:430px;margin:20px auto;font-size:14px;line-height:1.5;min-height:22px}.individual-cards{display:grid;gap:10px;max-width:360px;margin:24px auto}.individual-card{font-size:14px;padding:10px}
+@media(prefers-reduced-motion:reduce){.results-experience{scroll-behavior:auto}}
+</style>
+<main class="results-experience" id="results-experience" aria-label="Your Soul results">
+<section class="results-panel"><div class="results-intro"><h1>YOUR SOUL RESULTS</h1><p>Swipe through to discover your Story World, Why You Read, Reading Style and House.</p><p class="character-note">(When you download your results, your personalised SoulCharacter card will also be included.)</p></div><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel"><img class="result-card" data-card="0" alt="Your Story World"><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel"><img class="result-card" data-card="1" alt="Why You Read"><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel"><img class="result-card" data-card="2" alt="Your Reading Style"><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel"><img class="result-card" data-card="3" alt="The four Reading Houses"><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel"><img class="result-card" data-card="4" alt="Your Reading House"><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel gradient-panel"><img data-card="5" alt=""><button class="next-panel" type="button">Next ↓</button></section>
+<section class="results-panel download-panel" id="download-panel"><div class="download-actions"><button class="download-button" id="download-cards" type="button" disabled>Download My Cards</button><a class="download-button secondary" id="enter-house" href="/choose-your-curator" hidden>Enter My House</a></div><p class="download-status" id="download-status" aria-live="polite"></p><div class="individual-cards" id="individual-cards" hidden></div></section>
+</main>
+<!-- CARDS_SCRIPT -->
+<script>
+(async function(){
+  var cards=window.SoulBoxCards,root=document.getElementById('results-experience');
+  try{
+    var quiz=cards.read('quizState')||{},result=cards.currentResult();
+    if(!result||!result.texture){
+      var response=await fetch('https://soulbox-backend-new.vercel.app/api/calculate-results',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(quiz)});
+      if(!response.ok)throw new Error('Unable to load results');
+      result=(await response.json()).result;
+    }
+    var images=cards.displayCards(result);cards.downloads(result);
+    quiz.result=result;cards.write('quizState',quiz);cards.write('soulboxResult',result);
+    // Replace stale share manifests so downloads and Thank You always use September PNGs.
+    cards.write('soulboxShareFiles',cards.downloads(result));
+    root.style.setProperty('--house',cards.colours[result.house]);
+    document.querySelectorAll('[data-card]').forEach(function(img){img.dataset.src=images[Number(img.dataset.card)].url;img.decoding='async'});
+    var loadObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(!entry.isIntersecting)return;entry.target.querySelectorAll('[data-src]').forEach(function(img){img.src=img.dataset.src;img.removeAttribute('data-src')});loadObserver.unobserve(entry.target)})},{root:root,rootMargin:'100% 0px'});
+    document.querySelectorAll('.results-panel').forEach(function(panel){loadObserver.observe(panel)});
+    document.querySelectorAll('.next-panel').forEach(function(button){button.addEventListener('click',function(){button.parentElement.nextElementSibling.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})})});
+    var button=document.getElementById('download-cards');button.disabled=false;
+    var flow=cards.connectDownload(button,document.getElementById('download-status'),document.getElementById('individual-cards'),result,function(){document.getElementById('enter-house').hidden=false},false);
+    var downloadObserver=new IntersectionObserver(function(entries){if(entries.some(function(e){return e.isIntersecting})){flow.prepare().catch(function(){});downloadObserver.disconnect()}},{root:root});
+    downloadObserver.observe(document.getElementById('download-panel'));
+  }catch(error){console.error(error);root.innerHTML='<section class="results-panel"><div class="results-intro"><h1>We could not load your results.</h1><p>Please return to the quiz and try again.</p><a class="download-button" href="/quiz">Return to quiz</a></div></section>'}
+})();
+</script>

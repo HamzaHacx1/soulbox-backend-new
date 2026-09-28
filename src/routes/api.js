@@ -3,6 +3,7 @@ const router = express.Router();
 require("dotenv").config();
 const submissionService = require("../services/submission");
 const { computeResults } = require("../services/results");
+const { buildSeptemberCheckout } = require("../services/september-checkout");
 const webflowService = require("../services/webflow");
 const createStripeClient = require("stripe");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
@@ -333,6 +334,12 @@ router.post("/create-checkout-session", async (req, res) => {
     }
 
     const { plan, email, submission } = req.body;
+
+    const septemberCheckout = buildSeptemberCheckout({ plan, email, submission, origin: req.headers.origin });
+    if (septemberCheckout) {
+      const session = await stripe.checkout.sessions.create(septemberCheckout);
+      return res.json({ id: session.id, url: session.url });
+    }
 
     if (!PLANS[plan]) {
       return res.status(400).json({ error: "Invalid plan" });

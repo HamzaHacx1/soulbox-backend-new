@@ -1,0 +1,434 @@
+<!-- =========================================================
+WEBFLOW EMBED 1 START: HTML SHELL + QUESTION DATA PART 1
+Paste from this comment down to "WEBFLOW EMBED 1 END" into the first Webflow Embed element.
+========================================================= -->
+<div class="progress active">
+  <div class="progress-start"></div>
+  <div class="progress-line">
+    <div class="progress-milestone" id="milestone1"></div>
+    <div class="progress-milestone" id="milestone2"></div>
+    <div class="progress-milestone" id="milestone3"></div>
+  </div>
+  <div class="progress-end"></div>
+</div>
+<div class="w-embed w-script">
+  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="preload"
+    href="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68dbca0b6026142de1435a36_book%20cover.png"
+    as="image"
+  />
+  <div class="quiz-container" id="quiz-container"></div>
+
+  <script>
+    let currentQuestion = 0;
+    let state = JSON.parse(localStorage.getItem("quizState")) || {
+      desire: {
+        genre_calling: {},
+        genre_cluster: {},
+        genre_flavour: {},
+        genre_subflavour: {},
+        genre_visual: {},
+        plot_engine: {},
+        genre_fluidity: {},
+        tone: {},
+        pacing: {},
+        literary_depth: {},
+        plot_bias: {},
+        sensitivity: {},
+      },
+      cultural_lens: {},
+      soul_climate: {
+        temperature_primary: {},
+        temperature_secondary: {},
+        posture: { path: {} },
+      },
+      yearning: {},
+      reader_context: {
+        age_stage: {},
+      },
+    };
+    let pastGate = false;
+    let selectedAnswer = null;
+
+    window.SOULBOX_QUESTIONS_PART_1 = [
+  {
+  id: "desire.genre_calling",
+  type: "image",
+  prompt: "Which door calls you forward?",
+  gridClass: "grid-3x2 with-strip",
+  options: [
+    {
+      value: "Fantasy",
+      label: "Fantasy",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e12195bff6050f9197_Section%200%20-%20Fantasy.jpg",
+      image_id: "q0_fantasy.jpg",
+    },
+    {
+      value: "Sci-Fi",
+      saveValue: "Science Fiction",
+      label: "Science Fiction",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1ccdf73a638a71fb8_Section%200%20-%20Science%20Fiction.jpg",
+      image_id: "q0_scifi.jpg",
+    },
+    {
+      value: "RomanceRoute",
+      label: "Romance",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1eb41c81f19c4fd42_Section%200%20-%20Romance.jpg",
+      image_id: "q0_romance.jpg",
+      routeOnly: true,
+    },
+    {
+      value: "Historical Fiction",
+      label: "Historical Fiction",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54daca4164caab75ab7073_NEWGENRE.HOSTORICALFICTION.jpg",
+      image_id: "NEWGENRE.HOSTORICALFICTION",
+    },
+    {
+      value: "Horror",
+      label: "Horror",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e14067954580d6b749_Section%200%20-%20Horror.jpg",
+      image_id: "q0_horror.jpg",
+    },
+    {
+      value: "Literary",
+      label: "The Literary",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1fe51da321b9d137e_Section%200%20-%20Literary.jpg",
+      image_id: "q0_literary.jpg",
+    },
+    {
+      value: "Contemporary",
+      label: "Contemporary",
+      image:
+        "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc16441e03bb80c27e3e_NEWGENRE.CONTEMPORARYSTRIP%20(1).jpg",
+      image_id: "NEWGENRE.CONTEMPORARYSTRIP",
+      isStrip: true,
+    },
+  ],
+},
+{
+  id: "desire.genre_calling",
+  type: "image",
+  prompt: "Love takes place where, for you?",
+  gridClass: "grid-2x1",
+  isRoutingQuestion: true,
+  options: [
+    {
+      value: "Romantasy",
+      label: "The Fantastical",
+      image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1737de371861510cd1_NEWROMANTASYROUTE.jpg",
+      image_id: "NEWROMANTASYROUTE",
+    },
+    {
+      value: "Romance",
+      label: "The Grounded",
+      image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dcbdc6600f35c0ff_NEWROMANCEROUTE.jpg",
+      image_id: "NEWROMANCEROUTE",
+    },
+  ],
+  conditional: true,
+  conditionType: "romance_intermediary",
+},
+      {
+        id: "desire.genre_flavour",
+        type: "image",
+        prompt: "Choose the image that feels like your world.",
+        gridClass: "grid-3x2",
+        options: [],
+        dynamicOptions: {
+            Horror: [
+  {
+    value: "horror_psychological",
+    label: "Psychological Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1718d9ee3bac5d2137_q1_horror_01.jpg",
+    image_id: "q1_horror_01.jpg",
+  },
+  {
+    value: "horror_supernatural",
+    label: "Supernatural Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1736e990a2e237c34d_q1_horror_02.jpg",
+    image_id: "q1_horror_02.jpg",
+  },
+  {
+    value: "horror_cosmic",
+    label: "Cosmic Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178740aaa736cd5c51_q1_horror_03.jpg",
+    image_id: "q1_horror_03.jpg",
+  },
+  {
+    value: "horror_body",
+    label: "Body Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17e80abd0572c47970_q1_horror_04.jpg",
+    image_id: "q1_horror_04.jpg",
+  },
+  {
+    value: "horror_folk",
+    label: "Folk Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc189790610aa319eacb_q1_horror_05.jpg",
+    image_id: "q1_horror_05.jpg",
+  },
+  {
+    value: "horror_predator",
+    label: "Predator Horror",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18dca040ee7c1ca058_q1_horror_06.jpg",
+    image_id: "q1_horror_06.jpg",
+  },
+],
+"Historical Fiction": [
+  {
+    value: "hist_ancient_world",
+    label: "Ancient World",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178a6d86fced830eac_q1_hist_01.jpg",
+    image_id: "q1_hist_01.jpg",
+  },
+  {
+    value: "hist_age_sword",
+    label: "Age of Sword",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17b662e7aa3848b388_q1_hist_02.jpg",
+    image_id: "q1_hist_02.jpg",
+  },
+  {
+    value: "hist_age_gunpowder",
+    label: "Age of Gunpowder",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ebc_q1_hist_03.jpg",
+    image_id: "q1_hist_03.jpg",
+  },
+  {
+    value: "hist_british",
+    label: "The British",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ec0_q1_hist_04.jpg",
+    image_id: "q1_hist_04.jpg",
+  },
+  {
+    value: "hist_recent_past",
+    label: "The Recent Past",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dc5aabbe1f669717_q1_hist_05.jpg",
+    image_id: "q1_hist_05.jpg",
+  },
+],Literary: [
+  {
+    value: "cont_family",
+    label: "Family",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56de_q1_cont_01.jpg",
+    image_id: "q1_cont_01.jpg",
+  },
+  {
+    value: "cont_love",
+    label: "Love",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d7ced48cb55c4ae8_q1_cont_02.jpg",
+    image_id: "q1_cont_02.jpg",
+  },
+  {
+    value: "cont_identity",
+    label: "Identity",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc177aad5170f4f2ad51_q1_cont_03.jpg",
+    image_id: "q1_cont_03.jpg",
+  },
+  {
+    value: "cont_mind",
+    label: "Mind",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17acbc5ce17ba73823_q1_cont_04.jpg",
+    image_id: "q1_cont_04.jpg",
+  },
+  {
+    value: "cont_society",
+    label: "Society",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d54e6bcacb505127_q1_cont_05.jpg",
+    image_id: "q1_cont_05.jpg",
+  },
+],
+
+Contemporary: [
+  {
+    value: "cont_family",
+    label: "Family",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56de_q1_cont_01.jpg",
+    image_id: "q1_cont_01.jpg",
+  },
+  {
+    value: "cont_love",
+    label: "Love",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d7ced48cb55c4ae8_q1_cont_02.jpg",
+    image_id: "q1_cont_02.jpg",
+  },
+  {
+    value: "cont_identity",
+    label: "Identity",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc177aad5170f4f2ad51_q1_cont_03.jpg",
+    image_id: "q1_cont_03.jpg",
+  },
+  {
+    value: "cont_mind",
+    label: "Mind",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17acbc5ce17ba73823_q1_cont_04.jpg",
+    image_id: "q1_cont_04.jpg",
+  },
+  {
+    value: "cont_society",
+    label: "Society",
+    image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d54e6bcacb505127_q1_cont_05.jpg",
+    image_id: "q1_cont_05.jpg",
+  },
+],
+          "Science Fiction": [
+            {
+              value: "sci_space_opera",
+              label: "Space Opera",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae79ba069b22957e83d_q1_scifi_01.jpg.jpg",
+              image_id: "q1_scifi_01.jpg",
+            },
+            {
+              value: "sci_cyber",
+              label: "Cyber",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7957bde17bd60445e_q1_scifi_02.jpg.jpg",
+              image_id: "q1_scifi_02.jpg",
+            },
+            {
+              value: "sci_science_heavy",
+              label: "Science Heavy",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae71b6339d16e6465ad_q1_scifi_03.jpg.jpg",
+              image_id: "q1_scifi_03.jpg",
+            },
+            {
+              value: "sci_afterworld",
+              label: "Afterworld",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae767882e58954b97f2_q1_scifi_04.jpg.jpg",
+              image_id: "q1_scifi_04.jpg",
+            },
+            {
+              value: "sci_first_contact",
+              label: "First Contact",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7e74d18cc1220e784_q1_scifi_05.jpg.jpg",
+              image_id: "q1_scifi_05.jpg",
+            },
+            {
+              value: "sci_strange",
+              label: "The Strange",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae799227bfe72e9052d_q1_scifi_06.jpg.jpg",
+              image_id: "q1_scifi_06.jpg",
+            },
+          ],
+          Fantasy: [
+            {
+              value: "fantasy_grand_adventure",
+              label: "Grand Adventure",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7d5a4e43a01b7e651_q1_fantasy_01.jpg.jpg",
+              image_id: "q1_fantasy_01.jpg",
+            },
+            {
+              value: "fantasy_survive",
+              label: "Survive",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc183f3896cc582d28b3_q1_fantasy_02.jpg.jpg",
+              image_id: "q1_fantasy_02.jpg",
+            },
+            {
+              value: "fantasy_heart_home",
+              label: "Heart & Home",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae760ce9b7902770a0b_q1_fantasy_03.jpg.jpg",
+              image_id: "q1_fantasy_03.jpg",
+            },
+            {
+              value: "fantasy_sacred_strange",
+              label: "Sacred or Strange",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70de9c8a091acd587_q1_fantasy_04.jpg.jpg",
+              image_id: "q1_fantasy_04.jpg",
+            },
+            {
+              value: "fantasy_schemes_politics",
+              label: "Schemes & Politics",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7f8f7174269e5c75c_q1_fantasy_05.jpg.jpg",
+              image_id: "q1_fantasy_05.jpg",
+            },
+            {
+              value: "fantasy_modern_magic",
+              label: "Modern Magic",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc15f66f79789ea55f6f_q1_fantasy_06.jpg.jpg",
+              image_id: "q1_fantasy_06.jpg",
+            },
+          ],
+          Romantasy: [
+            {
+              value: "rom_conflict_dynamic",
+              label: "Conflict Dynamic",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70ed342eba35114ac_q1_rom_01.jpg.jpg",
+              image_id: "q1_rom_01.jpg",
+            },
+            {
+              value: "rom_outsider_dynamic",
+              label: "Outsider Dynamic",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7ec6f84eedbfdb588_q1_rom_02.jpg.jpg",
+              image_id: "q1_rom_02.jpg",
+            },
+            {
+              value: "rom_bond_dynamic",
+              label: "Bond Dynamic",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7607c6dc7efabed5d_q1_rom_03.jpg.jpg",
+              image_id: "q1_rom_03.jpg",
+            },
+            {
+              value: "rom_sanctuary_dynamic",
+              label: "Sanctuary Dynamic",
+              image:
+                "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7a30d3242d40a1b2d_q1_rom_04.jpg.jpg",
+              image_id: "q1_rom_04.jpg",
+            },
+          ],
+          Romance: [
+            {
+              value: "rce_conflict_dynamic",
+              label: "Conflict Dynamic",
+              image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70ed342eba35114ac_q1_rom_01.jpg.jpg",
+              image_id: "q1_rce_01.jpg",
+            },
+            {
+              value: "rce_outsider_dynamic",
+              label: "Outsider Dynamic",
+              image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7ec6f84eedbfdb588_q1_rom_02.jpg.jpg",
+              image_id: "q1_rce_02.jpg",
+            },
+            {
+              value: "rce_bond_dynamic",
+              label: "Bond Dynamic",
+              image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7607c6dc7efabed5d_q1_rom_03.jpg.jpg",
+              image_id: "q1_rce_03.jpg",
+            },
+            {
+              value: "rce_sanctuary_dynamic",
+              label: "Sanctuary Dynamic",
+              image: "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7a30d3242d40a1b2d_q1_rom_04.jpg.jpg",
+              image_id: "q1_rce_04.jpg",
+            },
+          ],
+        },
+      },
+    ];
+  </script>
+</div>
+<!-- =========================================================
+WEBFLOW EMBED 1 END: HTML SHELL + QUESTION DATA PART 1
+========================================================= -->

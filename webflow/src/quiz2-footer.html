@@ -1,0 +1,51 @@
+<style>
+/* Quiet-mind screen: clean square button grid without collisions. */
+.q8b-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 220px)) !important;
+  gap: 14px !important;
+  width: min(100%, 720px) !important;
+  margin: 20px auto 0 !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+}
+.q8b-grid .scenario-button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  white-space: normal !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 767px) {
+  .q8b-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    width: min(100%, 92vw) !important;
+    gap: 10px !important;
+    margin-top: 16px !important;
+  }
+  .q8b-grid .scenario-button {
+    min-height: 0 !important;
+    padding: 12px 14px !important;
+  }
+  .q8b-grid .scenario-button:last-child:nth-child(odd) {
+    grid-column: 1 / -1 !important;
+    width: calc((100% - 10px) / 2) !important;
+    justify-self: center !important;
+  }
+}
+</style>
+<style id="september-buttons">
+#quiz-container .button,#quiz-container .scenario-button,#continue-btn.button,.quiz-container .button{background:#f4f2ec!important;color:#161b42!important;border:1px solid #f4f2ec!important;box-shadow:none!important}
+#quiz-container .button:hover,#quiz-container .scenario-button:hover,#continue-btn.button:hover{background:#161b42!important;color:#f4f2ec!important}
+#quiz-container .button::after,#continue-btn.button::after{background:none!important}
+#quiz-container .scenario-button.selected,#quiz-container .scenario-button[aria-pressed="true"]{background:#161b42!important;color:#f4f2ec!important}
+</style>

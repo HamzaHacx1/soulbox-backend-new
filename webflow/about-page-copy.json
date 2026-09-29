@@ -1,0 +1,102 @@
+{
+  "copy": [
+    "About SoulBox",
+    "The Story",
+    "SoulBox is a human-led book curation service founded in West London in 2025 by our young Founder, Ahmed Farah. His belief was simple: Stories can change us. But only stories that match our internal self.",
+    "[Insert image: About Us_Ahmed]",
+    "Though when Ahmed looked for his next read, he hit a wall. Recommendation systems showed him books similar to what he'd read. Friends recommended books they loved. Algorithms gave him what was popular. No one asked what he needed.",
+    "So he built SoulBox. A place where humans match humans to stories. Not just based on your taste, but based on soul.",
+    "Though the journey was not easy. Creating a system that understood readers at that level, then matching them to the right books from tens of thousands in our database, required more than intuition. It required perspective and a lot of testing. So with the help of hundreds of readers, we tested, refined and validated what actually worked.",
+    "The result: a reading system that doesn't just analyse your preferences, but actually sees you.",
+    "Every Soul Report features letters written personally by your curator. Every SoulBox is packed in our signature navy blue box and hand-selected with care. We take our time because we're not just sending you books. We're sending you mirrors, comfort, and transformation.",
+    "This is what we do. We see you. And we find the stories you were born to read.",
+    "The Four Curation Desks",
+    "Only humans can curate for other humans. The minds behind your next favourite read follow the philosophies of their respective desks. Each House describes a way of connecting with stories and gives its curation desk a lens for finding them. It is a starting point, not a limit on what someone can enjoy.",
+    "House of Soul",
+    "[Replace Rija\u2019s image with About Us_Soul]",
+    "House of Soul connect through immersion. A story moves these readers when it carries them on a journey that feels larger than everyday life. Curators at this desk look for possibility, mythos and that larger-than-life feeling, in other words, the sense of having truly gone somewhere. That is where connection lies for these readers.",
+    "House of Heart",
+    "[Replace Taniyah\u2019s image with About Us_Heart]",
+    "For other readers, such as those of the House of Heart, well they connect through people. The bond between characters is what makes the story matter: what they want from one another, what they risk, and what they cannot say. Curators at this desk look for books where those connections reach beyond the page and move the reader.",
+    "House of Mind",
+    "[Replace Sienna\u2019s image with About Us_Mind]",
+    "Next, we have the House of Mind readers, who we believe connect through thought. A story takes hold when an idea, question or revelation draws the reader into an intellectual journey. Curators at this desk look for books that stimulate the mind and keep working on it until after the final page.",
+    "House of Body",
+    "[Replace Claire\u2019s image with About Us_Body]",
+    "And last but never least, comes the House of Body, who connect through the felt experience of a story. Tension, desire, fear, relief and catharsis make the book matter in the moment of reading it. Curators at this desk look for stories that bring those feelings close enough to be lived, not just observed.",
+    "How It Works",
+    "1. Reading",
+    "You take our expertly crafted 15-question Soul Reading \u2014 designed to understand not just your preferences, but your emotional state, your yearnings, and what stories call to you right now.",
+    "2. Assign",
+    "Based on your results, we assign you to the House best suited to see you \u2014 whether it's the scale of Soul, the depth of Heart, the catharsis of Body or the stimulation of Mind.",
+    "3. Curating",
+    "Now the magic begins. Your curator reads your quiz results like a story, then uses our system to search through tens of thousands of books in our database \u2014 finding the story written for your soul.",
+    "4. Sending",
+    "We pack your Soul Book in our signature navy SoulBox and ship it to your door. Alongside it: your printed Soul Report, personal letters from your curator and the physical artefacts of your House.",
+    "5. Other Ways to Begin",
+    "If a SoulBox isn't available where you live, or you'd like to begin with something smaller, you can still take the Soul Reading for free and join your House's email list. You can also choose a digital Soul Report or join the monthly membership for ongoing recommendations from a human curator.",
+    "Our Final Word",
+    "Our mission is to help every reader find a story that feels written for them. The only way to do that is to understand them deeply \u2014 not just their preferences, but who they are as a person. The right book can change your life."
+  ],
+  "nativeUpdates": [
+    {
+      "element": "bd6bee93-f272-2416-6f81-fb07a6d64456",
+      "text": "SoulBox is a human-led book curation service founded in West London in 2025 by our young Founder, Ahmed Farah. His belief was simple: Stories can change us. But only stories that match our internal self."
+    },
+    {
+      "element": "0e67cf65-7988-4b77-f5ce-af0ac4c07812",
+      "text": "Though when Ahmed looked for his next read, he hit a wall. Recommendation systems showed him books similar to what he'd read. Friends recommended books they loved. Algorithms gave him what was popular. No one asked what he needed."
+    },
+    {
+      "element": "d2b48efa-b037-bfc9-3045-f6eed10e5fd4",
+      "text": "So he built SoulBox. A place where humans match humans to stories. Not just based on your taste, but based on soul."
+    },
+    {
+      "element": "fd1ebf4a-3e2b-39ba-6731-0118719c7c40",
+      "text": "Though the journey was not easy. Creating a system that understood readers at that level, then matching them to the right books from tens of thousands in our database, required more than intuition. It required perspective and a lot of testing. So with the help of hundreds of readers, we tested, refined and validated what actually worked."
+    },
+    {
+      "element": "c8f34b6e-8f70-1bb0-0f12-05c02dbb7191",
+      "text": "The result: a reading system that doesn't just analyse your preferences, but actually sees you."
+    },
+    {
+      "element": "5d1711df-c697-4ee8-e0f2-4cc23a30c428",
+      "text": "Every Soul Report features letters written personally by your curator. Every SoulBox is packed in our signature navy blue box and hand-selected with care. We take our time because we're not just sending you books. We're sending you mirrors, comfort, and transformation."
+    },
+    {
+      "element": "fb348466-73f0-9800-a3ac-a5f635198b60",
+      "text": "You take our expertly crafted 15-question Soul Reading \u2014 designed to understand not just your preferences, but your emotional state, your yearnings, and what stories call to you right now."
+    },
+    {
+      "element": "0780e40f-6718-402a-05ee-807a4c6cc8bf",
+      "text": "Based on your results, we assign you to the House best suited to see you \u2014 whether it's the scale of Soul, the depth of Heart, the catharsis of Body or the stimulation of Mind."
+    },
+    {
+      "element": "a0bc5996-0440-3076-3760-0116212c5e23",
+      "text": "Now the magic begins. Your curator reads your quiz results like a story, then uses our system to search through tens of thousands of books in our database \u2014 finding the story written for your soul."
+    },
+    {
+      "element": "16ffe977-34f3-769d-d5ae-cdb4249d35b1",
+      "text": "We pack your Soul Book in our signature navy SoulBox and ship it to your door. Alongside it: your printed Soul Report, personal letters from your curator and the physical artefacts of your House."
+    },
+    {
+      "element": "783dded2-f50e-6825-808d-fa96eaacaa4e",
+      "text": "Our Final Word"
+    },
+    {
+      "element": "3ad10129-5abe-e387-6e14-27d677ff3cc5",
+      "text": "Our mission is to help every reader find a story that feels written for them. The only way to do that is to understand them deeply \u2014 not just their preferences, but who they are as a person. The right book can change your life."
+    }
+  ],
+  "pendingImages": [],
+  "founderImage": {
+    "element": "d6736b17-e0ca-2aa3-dbd2-fd06984a6900",
+    "assetId": "6abb9e979fadca78bb30d5d1",
+    "afterElement": "bd6bee93-f272-2416-6f81-fb07a6d64456",
+    "domId": "about-founder-image"
+  },
+  "step5": {
+    "headingElement": "bb75af18-3698-66bb-05e0-68eede38701e",
+    "paragraphElement": "8b250a19-69ba-11be-d75b-11c9de6b84f6"
+  }
+}

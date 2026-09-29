@@ -1,4 +1,7 @@
 <style>
+#about-founder-image{display:block;width:min(100%,480px);height:auto;margin:24px auto 40px;border-radius:18px;}
+/* Keep the lower sections readable without a scroll-animation dependency. */
+.body-11 .container-4,.body-11 .section-4{opacity:1!important}
 /* Meet Our Curators Section */
 .soulbox-curators-section {
   background: radial-gradient(circle at center, #222a66 0%, #1a1f4d 72%);
@@ -32,7 +35,7 @@
 
 .soulbox-curators-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 56px 42px;
 }
 
@@ -55,7 +58,7 @@
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center center;
 }
 
@@ -154,237 +157,7 @@
   }
 }
 </style>
-
-<section class="soulbox-curators-section">
-  <div class="soulbox-curators-container">
-
-    <h2 class="soulbox-curators-title">Meet Our Curators</h2>
-
-    <p class="soulbox-curators-intro">
-      Meet the minds behind your next favorite read. The SoulBox curation team is brought
-      to life on our site through unique illustrated portraits, keeping our focus exactly
-      where it belongs: on your bookshelf. Our real human experts collaborate daily to
-      match exceptional literature to your soul. You get the focused expertise of a true
-      boutique book team, wrapped in a classic literary style.
-    </p>
-
-    <div class="soulbox-curators-grid">
-
-      <!-- Rija -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d5742d1723dd3863d929_Rija%20(1).jpg"
-            alt="Illustrated portrait of Rija"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Rija</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Rija reads like it's urgent. Not because she's racing through books — she's not — but
-            because she genuinely believes the right story at the right moment changes something in
-            you that can't be unchanged.
-          </p>
-
-          <p>
-            She's not interested in books that are merely good. She wants the ones that know things.
-            The ones that understand how it feels to be a person — specifically, how hard it is, and
-            how worth it.
-          </p>
-
-          <p>
-            If something's sitting heavy with you right now, she'll find it in your quiz. She always does.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “Fiction is the only place where other people's pain makes complete sense.”
-        </div>
-      </article>
-
-      <!-- Taniyah -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e18bd624b7655ae86bf_Taniyah.jpg"
-            alt="Illustrated portrait of Taniyah"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Taniyah</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Taniyah has strong opinions and she's not apologising for them. She thinks most people
-            play it too safe with books — reaching for comfort when what they actually need is to be
-            cracked open a little.
-          </p>
-
-          <p>
-            She'll pick you something that asks something of you. Not difficult for the sake of it.
-            Just — honest. Real. The kind of book you put down and then pick back up three minutes
-            later because you weren't done with it yet.
-          </p>
-
-          <p>
-            She's looking for the readers who are ready for that. Maybe that's you.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “I feel some books you finish and some books finish you. I'm looking for the second kind.”
-        </div>
-      </article>
-
-      <!-- Sienna -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a120e181a9da04ec876c5a3_Sienna.jpg"
-            alt="Illustrated portrait of Sienna"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Sienna</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Sienna is quieter than the others about what she loves, which is probably why she's so good
-            at finding it.
-          </p>
-
-          <p>
-            She reads slowly. She annotates. She has opinions about endings that she'll share only if
-            you ask, and then she won't stop. She thinks a book that asks nothing of you is essentially
-            just wallpaper — pretty, forgettable, not worth your time.
-          </p>
-
-          <p>
-            She suits readers who want to be taken seriously. Who don't just want a good read — they
-            want the right one.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “A book that asks nothing of you is a book that gives you nothing back.”
-        </div>
-      </article>
-
-      <!-- Claire -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a677752c97b0c3d1_Claire%20(1).jpg"
-            alt="Illustrated portrait of Claire"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Claire</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Claire will fight you about your favourite book and she means it affectionately.
-          </p>
-
-          <p>
-            She's the one who has a genuine theory about why certain people are drawn to certain
-            genres, and the theory is usually right, and it's usually a little uncomfortably specific.
-            She reads your quiz answers like they're telling her something you didn't quite mean to say.
-          </p>
-
-          <p>
-            She's warm. She's sharp. She won't send you something safe unless safe is genuinely what
-            you need.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “I've never trusted someone who says they don't have a favourite.”
-        </div>
-      </article>
-
-      <!-- Lucas -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574a6e9cc71527317df_Lucas.jpg"
-            alt="Illustrated portrait of Lucas"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Lucas</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Lucas thinks timing is everything. The same book at 22 and 34 are two completely different
-            books — he'll tell you this unprompted and he's not wrong.
-          </p>
-
-          <p>
-            He reads across everything. Literary fiction, genre, translated stuff, things that are hard
-            to categorise. He's less interested in what you like and more interested in where you are
-            right now — what you're ready for, what you're not, what you need to sit with before you're
-            ready to move.
-          </p>
-
-          <p>
-            He's patient. His picks tend to stay with people.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “The right book at the wrong time is still the wrong book.”
-        </div>
-      </article>
-
-      <!-- Ahmed -->
-      <article class="soulbox-curator-card">
-        <div class="soulbox-curator-image-wrap">
-          <img
-            src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6ab9d574e339f0ab7c6e40bb_Ahmed%20(1).jpg"
-            alt="Illustrated portrait of Ahmed"
-            loading="lazy"
-          />
-        </div>
-
-        <h3 class="soulbox-curator-name">Ahmed</h3>
-        <div class="soulbox-curator-divider"></div>
-
-        <div class="soulbox-curator-copy">
-          <p>
-            Ahmed is the one who still gets genuinely excited. Not performatively — actually excited.
-            He'll finish something at 1am and want to tell someone immediately and there's no one to tell.
-          </p>
-
-          <p>
-            He believes books are magic and he doesn't care if that sounds ridiculous. He's not
-            interested in cynicism about reading, about fiction, about any of it. Life's too short and
-            there are too many extraordinary books.
-          </p>
-
-          <p>
-            His readers tend to come back. That probably says something.
-          </p>
-        </div>
-
-        <div class="soulbox-curator-quote">
-          “Stories are genuinely magic.”
-        </div>
-      </article>
-
-    </div>
-
-  </div>
-</section>
+<section class="soulbox-curators-section"><div class="soulbox-curators-container"><h2 class="soulbox-curators-title">The Four Curation Desks</h2><p class="soulbox-curators-intro">Only humans can curate for other humans. The minds behind your next favourite read follow the philosophies of their respective desks. Each House describes a way of connecting with stories and gives its curation desk a lens for finding them. It is a starting point, not a limit on what someone can enjoy.</p><div class="soulbox-curators-grid"><article class="soulbox-curator-card"><div class="soulbox-curator-image-wrap"><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6abb9e97910212b270613bb1_aboutus_soul.jpg" alt="House of Soul emblem" loading="lazy"></div><h3 class="soulbox-curator-name">House of Soul</h3><div class="soulbox-curator-divider"></div><div class="soulbox-curator-copy"><p>House of Soul connect through immersion. A story moves these readers when it carries them on a journey that feels larger than everyday life. Curators at this desk look for possibility, mythos and that larger-than-life feeling, in other words, the sense of having truly gone somewhere. That is where connection lies for these readers.</p></div></article>
+<article class="soulbox-curator-card"><div class="soulbox-curator-image-wrap"><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6abb9e97910212b270613b9e_aboutus_heart.jpg" alt="House of Heart emblem" loading="lazy"></div><h3 class="soulbox-curator-name">House of Heart</h3><div class="soulbox-curator-divider"></div><div class="soulbox-curator-copy"><p>For other readers, such as those of the House of Heart, well they connect through people. The bond between characters is what makes the story matter: what they want from one another, what they risk, and what they cannot say. Curators at this desk look for books where those connections reach beyond the page and move the reader.</p></div></article>
+<article class="soulbox-curator-card"><div class="soulbox-curator-image-wrap"><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6abb9e97e0d40ecd39dda075_aboutus_mind.jpg" alt="House of Mind emblem" loading="lazy"></div><h3 class="soulbox-curator-name">House of Mind</h3><div class="soulbox-curator-divider"></div><div class="soulbox-curator-copy"><p>Next, we have the House of Mind readers, who we believe connect through thought. A story takes hold when an idea, question or revelation draws the reader into an intellectual journey. Curators at this desk look for books that stimulate the mind and keep working on it until after the final page.</p></div></article>
+<article class="soulbox-curator-card"><div class="soulbox-curator-image-wrap"><img src="https://s3.amazonaws.com/webflow-prod-assets/68d100639551287fadcf87e3/6abb9e97d6bed6b6ae5f025b_aboutus_body.jpg" alt="House of Body emblem" loading="lazy"></div><h3 class="soulbox-curator-name">House of Body</h3><div class="soulbox-curator-divider"></div><div class="soulbox-curator-copy"><p>And last but never least, comes the House of Body, who connect through the felt experience of a story. Tension, desire, fear, relief and catharsis make the book matter in the moment of reading it. Curators at this desk look for stories that bring those feelings close enough to be lived, not just observed.</p></div></article></div></div></section>

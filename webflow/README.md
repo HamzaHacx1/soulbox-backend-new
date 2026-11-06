@@ -16,7 +16,15 @@ Verified on staging: a labelled real profile submission returned success and nav
 
 ## November 2026: Gift Flow
 
-`src/gift.html` is the whole Gift Flow (Build Brief Part A) in one embed: Screens 0–11, the checkout card and the thank-you screen. Run `node webflow/build.js` and paste `dist/gift.html` into an Embed on a Webflow page at **/gift**. The "For another" buttons link to `/gift`.
+`src/gift.html` is the whole Gift Flow (Build Brief Part A): Screens 0–11, the checkout card and the thank-you screen. `node webflow/build.js` turns it into `src/generated/gift-app.js`, which the backend serves at `GET /api/gift-app.js`. The Webflow page **/gift** (draft until launch) holds only this loader in its footer custom code, so changes go live with a backend deploy and Webflow never needs re-pasting:
+
+```html
+<style>html,body{margin:0;min-height:100%;background:#8C1C2E!important}</style>
+<div id="soulbox-gift"></div>
+<script src="https://soulbox-backend-new.vercel.app/api/gift-app.js" defer></script>
+```
+
+`dist/gift.html` is the same page as one self-contained embed, if it ever needs to be pasted instead. The "For another" buttons link to `/gift`.
 
 - **Images:** `gift-assets.json` maps each brief file name to its hosted URL. Empty entries show a labelled placeholder, so files can be added one by one. Rebuild after editing.
 - **Settings at the top of the script:** `CHRISTMAS_ORDER_BY` (empty hides the Christmas line), `SHOW_PRODUCT_IMAGE`.

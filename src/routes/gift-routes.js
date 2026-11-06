@@ -18,6 +18,17 @@ function fail(res, error) {
 // JSON routes, mounted under /api (after express.json()).
 const router = express.Router();
 
+// The Gift Flow app itself, loaded by the /gift page in Webflow. Cached at the edge for
+// 5 minutes, so a deploy reaches visitors within minutes.
+router.get("/gift-app.js", (req, res) => {
+  res.set({
+    "Content-Type": "application/javascript; charset=utf-8",
+    "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
+    "Access-Control-Allow-Origin": "*",
+  });
+  res.send(require("../generated/gift-app.js"));
+});
+
 // Screen 0: "I'm in the UK". The browser generates gift_id so the call can be retried safely.
 router.post("/gift", async (req, res) => {
   try {

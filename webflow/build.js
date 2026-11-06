@@ -14,6 +14,10 @@ for(const name of ['results','success','curator','home','about','sales','gift'])
  // Only files with a hosted URL are included; the rest show a labelled placeholder.
  const hosted=Object.fromEntries(Object.entries(giftImages).filter(([,url])=>url));
  html=html.replace('<!-- GIFT_IMAGES -->','<script>window.SOULBOX_GIFT_IMAGES='+JSON.stringify(hosted)+';</script>');
+ // The Gift Flow is the largest embed: drop indentation, blank lines and full-line
+ // `//` comments so it stays under Webflow's 50,000-character custom code limit.
+ // (Safe because gift.html and tracking.js contain no multi-line template strings.)
+ if(name==='gift')html=html.split('\n').map((line)=>line.trim()).filter((line)=>line&&!line.startsWith('//')).join('\n');
  fs.writeFileSync(path.join(root,'dist',name+'.html'),html);
  console.log(name,html.length);
 }

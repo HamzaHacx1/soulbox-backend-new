@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const apiRoutes = require("./routes/api");
+const giftRoutes = require("./routes/gift-routes");
 
 // Load .env from project root
 dotenv.config({ path: __dirname + "/../.env" });
@@ -22,7 +23,11 @@ app.use(
   })
 );
 
-app.use(express.json());
+// Stripe webhooks need the raw body for signature checks, so this comes before express.json().
+app.post("/api/stripe-webhook", express.raw({ type: "application/json" }), giftRoutes.stripeWebhook);
+
+app.use(express.json({ limit: "200kb" }));
+app.use("/api", giftRoutes.router);
 app.use("/api", apiRoutes);
 
 app.listen(port, () => {

@@ -50,23 +50,25 @@ Edit this source file, then run `node webflow/build.js`.
   textarea.gift-field.is-short{min-height:calc(1.5em * 3 + 28px)}
   .gift-words{margin:8px 2px 0;font-size:14px;font-style:italic;text-align:left;opacity:.8;transition:opacity .2s ease,color .2s ease}
   .gift-words.is-good{opacity:1;color:var(--beige)}
-  /* Sized so "Begin" stays above the fold on a phone. */
-  .gift-hero{width:min(100%,220px,34vh);margin:0 auto 16px}
+  /* Welcome screen: the photo is the hero (about 90% width, 4:5). */
+  .gift-hero{width:90%;margin:4px auto 22px}
+  .gift-hero .gift-media{aspect-ratio:4/5}
+  .gift-hero .gift-media img{object-fit:cover}
+  .gift-welcome-title{font-size:clamp(28px,8.4vw,40px);line-height:1.15;margin:0 0 14px}
+  .gift-welcome-title span{display:block;white-space:nowrap}
+  .gift-includes{margin:0 0 14px;font-size:14px;line-height:1.6;opacity:.85;text-wrap:balance}
+  .gift-includes span{white-space:nowrap}
+  .gift-price{margin:0 0 22px;color:var(--gold);font-size:16px;font-weight:600;letter-spacing:.02em}
+  .gift-btn--nowrap{white-space:nowrap}
+  .gift-uk-note{margin:12px 0 0;font-size:14px;font-style:italic;opacity:.8}
+  .gift-home-link{display:inline-block;min-height:44px;padding:12px;margin:2px auto 0;color:var(--cream);font-size:15px;text-decoration:underline;opacity:.85}
+  .gift-app.is-welcome .gift-top{display:none}
   /* Header images sit above the question, small enough that the form and Continue stay on screen. */
   .gift-header{width:min(100%,200px,26vh);margin:0 auto 16px}
   .gift-media.is-auto{aspect-ratio:16/9}
   .gift-media.is-auto:not(.is-loading){aspect-ratio:auto}
   .gift-media.is-auto:not(.is-loading) img{position:static;height:auto}
-  .gift-welcome-copy{margin-bottom:12px}
-  /* Short phones (e.g. iPhone SE): tighten the welcome screen so "Begin" stays visible. */
-  @media(max-height:640px){
-    .gift-hero{width:min(100%,150px,24vh);margin-bottom:10px}
-    .gift-screen.is-centred .gift-title{font-size:25px;margin-bottom:6px}
-    .gift-screen.is-centred .gift-copy{font-size:16px;line-height:1.5}
-    .gift-screen.is-centred .gift-sub{font-size:14px;margin-bottom:12px}
-    .gift-screen.is-centred .gift-actions{margin-top:12px;gap:10px}
-    .gift-top{margin-bottom:8px}
-  }
+  .gift-welcome-copy{margin-bottom:14px;text-wrap:balance}
   .gift-tick-other{margin-top:2px}
   .gift-error{margin:6px 2px 0;font-size:14px;font-style:italic;color:var(--cream);text-align:left}
   .gift-card{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;padding:12px 18px;border:1.5px solid var(--beige);border-radius:8px;background:rgba(255,255,255,.05);color:var(--cream);font:400 16px/1.4 'Source Serif Pro',Georgia,serif;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
@@ -424,6 +426,8 @@ Edit this source file, then run `node webflow/build.js`.
     $('gift-progress-fill').style.width = pct + '%';
     $('gift-progress').setAttribute('aria-valuenow', String(pct));
     $('gift-progress').classList.toggle('is-hidden', screen === 'thank_you');
+    // The welcome screen sells: no progress bar there.
+    $('gift-app').classList.toggle('is-welcome', screen === 'uk');
   }
 
   function viewed(screen) {
@@ -453,16 +457,16 @@ Edit this source file, then run `node webflow/build.js`.
 
   // Screen 0: welcome (also the UK notice).
   screens.uk = function (root) {
-    root.classList.add('is-centred');
     root.innerHTML =
       '<div class="gift-hero">' + media('gift_box_product.jpg', 'The SoulBox Gift Box', { index: 0 }) + '</div>' +
-      '<h1 class="gift-title" tabindex="-1">A book chosen for someone you love.</h1>' +
-      '<p class="gift-copy gift-welcome-copy">Tell us about them, and our curator will choose their book, write them a personal letter, and wrap it all in a sealed red box.</p>' +
-      '<p class="gift-sub">For now, Gift Boxes can only be delivered within the UK.</p>' +
-      '<div class="gift-actions is-row">' +
-      '<button class="gift-btn gift-btn--main" id="gift-uk-yes" type="button">Begin: I\'m in the UK</button>' +
-      '<a class="gift-btn gift-btn--outline" href="/">Back to homepage</a>' +
-      '</div>';
+      // Two balanced lines, never one word alone on the second.
+      '<h1 class="gift-title gift-welcome-title" tabindex="-1"><span>A book chosen for</span> <span>someone you love.</span></h1>' +
+      '<p class="gift-copy gift-welcome-copy">Tell us about them. Our curator chooses their book and writes them a letter, from your words.</p>' +
+      '<p class="gift-includes">' + ['The book', 'A personal letter', 'Memory cards', 'A keepsake', 'A treat'].map(function (item) { return '<span>' + item + '</span>'; }).join(' · ') + '</p>' +
+      '<p class="gift-price">£45' + (CHRISTMAS_ORDER_BY ? ' · Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas' : '') + '</p>' +
+      '<button class="gift-btn gift-btn--main gift-btn--nowrap" id="gift-uk-yes" type="button">Start their gift</button>' +
+      '<p class="gift-uk-note">UK delivery only</p>' +
+      '<a class="gift-home-link" href="/">Back to homepage</a>';
     $('gift-uk-yes').addEventListener('click', function () {
       if (!state.gift_id) {
         state.gift_id = uuid();

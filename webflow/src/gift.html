@@ -52,15 +52,14 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-words.is-good{opacity:1;color:var(--beige)}
   /* Welcome screen: a landscape hero photo, sized with the screen height so the
      whole screen fits without scrolling on phones and desktop. */
-  .gift-hero{width:min(100%,calc(30vh * 1.6),420px);margin:0 auto 14px}
-  .gift-hero .gift-media{aspect-ratio:16/10}
+  .gift-hero{width:min(100%,calc(28vh * 778 / 596),420px);margin:0 auto 28px}
+  .gift-hero .gift-media{aspect-ratio:778/596}
   .gift-hero .gift-media img{object-fit:cover}
-  .gift-welcome-title{font-size:clamp(23px,6.4vw,30px);line-height:1.15;margin:0 0 10px}
+  .gift-welcome-title{font-size:clamp(23px,6.4vw,30px);line-height:1.15;margin:0 0 20px}
   .gift-welcome-title span{display:block;white-space:nowrap}
-  .gift-includes{margin:0 0 10px;font-size:13px;line-height:1.55;opacity:.85;text-wrap:balance}
-  .gift-includes span{white-space:nowrap}
-  .gift-price{margin:0 0 16px;color:var(--gold);font-size:15px;font-weight:600;letter-spacing:.02em}
+  .gift-price{margin:0 0 10px;color:var(--cream);font-size:14px;font-style:italic;opacity:.9}
   .gift-btn--nowrap{white-space:nowrap}
+  .gift-btn--welcome{width:70%;margin:0 auto}
   .gift-uk-note{margin:10px 0 0;font-size:13px;font-style:italic;opacity:.8}
   .gift-home-link{display:inline-block;min-height:44px;padding:10px 12px;margin:0 auto;color:var(--cream);font-size:15px;text-decoration:underline;opacity:.85}
   .gift-app.is-welcome .gift-top{display:none}
@@ -69,14 +68,13 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-media.is-auto{aspect-ratio:16/9}
   .gift-media.is-auto:not(.is-loading){aspect-ratio:auto}
   .gift-media.is-auto:not(.is-loading) img{position:static;height:auto}
-  .gift-welcome-copy{margin-bottom:10px;font-size:16px;line-height:1.5;text-wrap:balance}
+  .gift-welcome-copy{margin-bottom:28px;font-size:16px;line-height:1.5;text-wrap:balance}
   .gift-app.is-welcome{padding-top:14px;padding-bottom:14px}
   .gift-app.is-welcome .gift-foot{display:none}
   @media(max-height:600px){
-    .gift-hero{width:min(100%,calc(26vh * 1.6));margin-bottom:10px}
-    .gift-welcome-copy{font-size:15px;margin-bottom:8px}
-    .gift-includes{margin-bottom:8px}
-    .gift-price{margin-bottom:12px}
+    .gift-hero{width:min(100%,calc(24vh * 778 / 596));margin-bottom:20px}
+    .gift-welcome-title{margin-bottom:14px}
+    .gift-welcome-copy{font-size:15px;margin-bottom:20px}
     .gift-uk-note{margin-top:6px}
   }
   .gift-tick-other{margin-top:2px}
@@ -473,9 +471,8 @@ Edit this source file, then run `node webflow/build.js`.
       // Two balanced lines, never one word alone on the second.
       '<h1 class="gift-title gift-welcome-title" tabindex="-1"><span>A book chosen for</span> <span>someone you love.</span></h1>' +
       '<p class="gift-copy gift-welcome-copy">Tell us about them. Our curator chooses their book and writes them a letter, from your words.</p>' +
-      '<p class="gift-includes">' + ['The book', 'A personal letter', 'Memory cards', 'A keepsake', 'A treat'].map(function (item) { return '<span>' + item + '</span>'; }).join(' · ') + '</p>' +
       '<p class="gift-price">£45' + (CHRISTMAS_ORDER_BY ? ' · Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas' : '') + '</p>' +
-      '<button class="gift-btn gift-btn--main gift-btn--nowrap" id="gift-uk-yes" type="button">Start their gift</button>' +
+      '<button class="gift-btn gift-btn--welcome gift-btn--nowrap" id="gift-uk-yes" type="button">Start their gift</button>' +
       '<p class="gift-uk-note">UK delivery only</p>' +
       '<a class="gift-home-link" href="/">Back to homepage</a>';
     $('gift-uk-yes').addEventListener('click', function () {

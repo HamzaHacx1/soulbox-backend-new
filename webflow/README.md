@@ -24,7 +24,7 @@ Verified on staging: a labelled real profile submission returned success and nav
 <script src="https://soulbox-backend-new.vercel.app/api/gift-app.js" defer></script>
 ```
 
-`dist/gift.html` is the same page as one self-contained embed, if it ever needs to be pasted instead. The "For another" buttons link to `/gift`.
+`dist/gift.html` is that loader snippet. The "For another" buttons link to `/gift`.
 
 - **Images:** `gift-assets.json` maps each brief file name to its hosted URL. Empty entries show a labelled placeholder, so files can be added one by one. Rebuild after editing.
 - **Settings at the top of the script:** `CHRISTMAS_ORDER_BY` (empty hides the Christmas line), `SHOW_PRODUCT_IMAGE`.

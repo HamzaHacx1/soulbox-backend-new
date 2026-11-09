@@ -39,3 +39,16 @@ test('public results expose only results, deck and link', () => {
   assert.equal(out.swipe_deck.length, 12);
   assert.ok(!JSON.stringify(out).includes('secret@') && !JSON.stringify(out).includes('private answer'));
 });
+
+test('the Readers Sheet keeps the curator columns last, so the mirror never overwrites them', () => {
+  const cols = readers.SHEET_COLUMNS;
+  assert.deepEqual(cols.slice(-5), readers.CURATOR_COLUMNS);
+  assert.equal(cols[0], 'reader_id');
+  for (const c of ['final_archetype', 'soul_character', 'purchase', 'swipe_12', 'desire.tone', 'wounds']) assert.ok(cols.includes(c), c);
+});
+
+test('a paid Soul Report or SoulBox is recognised for the reader; other sessions are ignored', async () => {
+  assert.deepEqual(await readers.markReaderPurchase({ metadata: { plan: 'gift_box', gift_id: 'x' } }), { handled: false });
+  assert.deepEqual(await readers.markReaderPurchase({ metadata: { plan: 'soulbox_september', submissionId: 'local' } }), { handled: false });
+  assert.deepEqual(await readers.markReaderPurchase({ metadata: { plan: 'soul_report_september', submissionId: '3b241101-e2bb-4255-8caf-4136c566a962' }, payment_status: 'unpaid' }), { handled: true, paid: false });
+});

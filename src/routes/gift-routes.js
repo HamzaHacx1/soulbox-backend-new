@@ -104,6 +104,8 @@ async function stripeWebhook(req, res) {
   try {
     if (["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event.type)) {
       await gifts.markGiftPaid(event.data.object);
+      // Soul Report / SoulBox bought from the quiz's sales page: record it on the reader.
+      await require("../services/reader").markReaderPurchase(event.data.object);
     }
     res.json({ received: true });
   } catch (error) {

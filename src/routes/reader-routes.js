@@ -58,4 +58,14 @@ router.get("/reader/:readerId", async (req, res) => {
   } catch (error) { fail(res, error); }
 });
 
+// Catch-up Sheet mirror for readers. Call on a schedule with Authorization: Bearer $CRON_SECRET.
+router.all("/reader-sync-sheet", async (req, res) => {
+  try {
+    if (!process.env.CRON_SECRET || req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+      return res.status(401).json({ ok: false, error: "Unauthorized" });
+    }
+    res.json({ ok: true, results: await readers.syncPendingReaders() });
+  } catch (error) { fail(res, error); }
+});
+
 module.exports = { router };

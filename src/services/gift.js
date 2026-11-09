@@ -13,7 +13,8 @@ const MOOD_FIELDS = [
   "mood_hitchhikers", "mood_gatsby", "mood_ove", "mood_acotar",
 ];
 const MOOD_VALUES = ["Loved it", "Maybe", "Not them"];
-const HARD_NOS = ["No heavy trauma or grief", "No explicit spice", "No gore or horror", "No preachy self-help"];
+const HARD_NOS = ["No heavy trauma or grief", "No explicit spice", "No gore or horror", "No preachy self-help", "Something else"];
+const HARD_NOS_OTHER = "Something else"; // its text is saved as hard_nos_other
 const LIFE_CHAPTERS = ["Running on empty", "Starting something new", "Thriving", "Craving excitement", "Steady as ever"];
 const READING_FUELS = ["Shortbread", "Dark Chocolate", "Candy Kittens", "Fudge"];
 const SCREENS = [
@@ -71,6 +72,7 @@ const FIELD_RULES = {
     if (unknown.length) throw new Error(`unknown options: ${unknown.join(", ")}`);
     return HARD_NOS.filter((item) => value.includes(item));
   },
+  hard_nos_other: text(500),
   life_chapter: oneOf(LIFE_CHAPTERS),
   specific_details: longText(LONG_TEXT),
   what_they_mean: longText(LONG_TEXT),
@@ -103,6 +105,8 @@ function sanitizeGiftPatch(patch) {
   }
   // Choosing "Skip for now" on memory cards clears anything typed earlier.
   if (clean.memory_cards === "No") Object.assign(clean, { memory_place: null, memory_joke: null, memory_tribute: null });
+  // Unticking "Something else" discards its text.
+  if (clean.hard_nos && !clean.hard_nos.includes(HARD_NOS_OTHER)) clean.hard_nos_other = null;
   return clean;
 }
 
@@ -258,7 +262,7 @@ async function recordMilestone(gift, milestone, { posthog = false } = {}) {
 // ── Google Sheet mirror ("Gifts" tab) ───────────────────────────────────────
 const SHEET_COLUMNS = [
   "gift_id", "created_at", "source_ref", "ab_variant", "gifter_name", "recipient_name", "relationship", "occasion",
-  ...MOOD_FIELDS, "loved_book", "hard_nos", "life_chapter", "specific_details", "what_they_mean",
+  ...MOOD_FIELDS, "loved_book", "hard_nos", "hard_nos_other", "life_chapter", "specific_details", "what_they_mean",
   "memory_cards", "memory_place", "memory_joke", "memory_tribute", "reading_fuel", "last_screen_reached",
   "payment_status", "stripe_order_id", "paid_at", "gifter_email", "shipping_name", "shipping_phone", "shipping_address",
 ];

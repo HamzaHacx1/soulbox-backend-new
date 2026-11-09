@@ -26,6 +26,12 @@ test('long answers are kept exactly as typed', () => {
   assert.equal(gifts.sanitizeGiftPatch({ what_they_mean: text }).what_they_mean, text);
 });
 
+test('"Something else" keeps its text, and unticking it discards the text', () => {
+  assert.deepEqual(gifts.sanitizeGiftPatch({ hard_nos: ['Something else'], hard_nos_other: '  Cats dying  ' }), { hard_nos: ['Something else'], hard_nos_other: 'Cats dying' });
+  assert.deepEqual(gifts.sanitizeGiftPatch({ hard_nos: ['No explicit spice'], hard_nos_other: 'left over' }), { hard_nos: ['No explicit spice'], hard_nos_other: null });
+  assert.ok(gifts.SHEET_COLUMNS.includes('hard_nos_other'));
+});
+
 test('skipping memory cards clears the three memory answers', () => {
   assert.deepEqual(gifts.sanitizeGiftPatch({ memory_cards: 'No' }), { memory_cards: 'No', memory_place: null, memory_joke: null, memory_tribute: null });
 });

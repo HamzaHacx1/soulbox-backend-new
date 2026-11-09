@@ -6,6 +6,7 @@ const giftImages=JSON.parse(fs.readFileSync(path.join(root,'gift-assets.json'),'
 const cards=fs.readFileSync(path.join(root,'src/cards.js'),'utf8');
 const tracking=fs.readFileSync(path.join(root,'src/tracking.js'),'utf8');
 fs.mkdirSync(path.join(root,'dist'),{recursive:true});
+let giftHtml='';
 for(const name of ['results','success','curator','home','about','sales','gift']){
  let html=fs.readFileSync(path.join(root,'src',name+'.html'),'utf8');
  const selected=name==='success'?{download:assets.download}:assets;
@@ -14,18 +15,16 @@ for(const name of ['results','success','curator','home','about','sales','gift'])
  // Only files with a hosted URL are included; the rest show a labelled placeholder.
  const hosted=Object.fromEntries(Object.entries(giftImages).filter(([,url])=>url));
  html=html.replace('<!-- GIFT_IMAGES -->','<script>window.SOULBOX_GIFT_IMAGES='+JSON.stringify(hosted)+';</script>');
- // The Gift Flow is the largest embed: drop indentation, blank lines and full-line
- // `//` comments so it stays under Webflow's 50,000-character custom code limit.
- // (Safe because gift.html and tracking.js contain no multi-line template strings.)
- if(name==='gift')html=html.split('\n').map((line)=>line.trim()).filter((line)=>line&&!line.startsWith('//')).join('\n');
+ if(name==='gift'){giftHtml=html;continue;}
  fs.writeFileSync(path.join(root,'dist',name+'.html'),html);
  console.log(name,html.length);
 }
 
-// The Gift Flow is also served as one script from the backend (GET /api/gift-app.js),
-// so the Webflow page only holds a small loader and never needs re-pasting.
+// The Gift Flow is served as one script from the backend (GET /api/gift-app.js).
+// The Webflow /gift page holds only the small loader in dist/gift.html (page footer code),
+// so changes go live with a backend deploy and Webflow never needs re-pasting.
 {
- const html=fs.readFileSync(path.join(root,'dist','gift.html'),'utf8');
+ const html=giftHtml;
  const fonts=(html.match(/<link [^>]*fonts\.googleapis[^>]*>/)||[''])[0].match(/href="([^"]+)"/)[1];
  const css=html.match(/<style>([\s\S]*?)<\/style>/)[1];
  const markup=html.slice(html.indexOf('</style>')+8,html.indexOf('<script>')).replace(/<!--[\s\S]*?-->/g,'').trim();
@@ -44,4 +43,14 @@ for(const name of ['results','success','curator','home','about','sales','gift'])
  fs.mkdirSync(path.join(__dirname,'..','src','generated'),{recursive:true});
  fs.writeFileSync(path.join(__dirname,'..','src','generated','gift-app.js'),'module.exports = '+JSON.stringify(app)+';\n');
  console.log('gift-app.js',app.length);
+ const loader=[
+  '<!-- SoulBox Gift Flow. The app is served by the backend: edit webflow/src/gift.html in soulbox-backend-new, not here. -->',
+  '<style>html,body{margin:0;min-height:100%;background:#8C1C2E!important}</style>',
+  '<div id="soulbox-gift"></div>',
+  '<noscript><p style="color:#f4f2ec;font-family:Georgia,serif;text-align:center;padding:40px 20px">Please turn on JavaScript to send a Gift Box.</p></noscript>',
+  '<script src="https://soulbox-backend-new.vercel.app/api/gift-app.js" defer></script>',
+  '',
+ ].join('\n');
+ fs.writeFileSync(path.join(root,'dist','gift.html'),loader);
+ console.log('gift (Webflow loader)',loader.length);
 }

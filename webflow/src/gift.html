@@ -47,6 +47,27 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-field:focus{outline:none;border-color:var(--gold);box-shadow:0 0 10px rgba(184,144,46,.45)}
   textarea.gift-field{resize:none;overflow-y:auto;min-height:calc(1.5em * 5 + 28px)}
   textarea.gift-field.is-tall{min-height:calc(1.5em * 7 + 28px)}
+  textarea.gift-field.is-short{min-height:calc(1.5em * 3 + 28px)}
+  .gift-words{margin:8px 2px 0;font-size:14px;font-style:italic;text-align:left;opacity:.8;transition:opacity .2s ease,color .2s ease}
+  .gift-words.is-good{opacity:1;color:var(--beige)}
+  /* Sized so "Begin" stays above the fold on a phone. */
+  .gift-hero{width:min(100%,220px,34vh);margin:0 auto 16px}
+  /* Header images sit above the question, small enough that the form and Continue stay on screen. */
+  .gift-header{width:min(100%,200px,26vh);margin:0 auto 16px}
+  .gift-media.is-auto{aspect-ratio:16/9}
+  .gift-media.is-auto:not(.is-loading){aspect-ratio:auto}
+  .gift-media.is-auto:not(.is-loading) img{position:static;height:auto}
+  .gift-welcome-copy{margin-bottom:12px}
+  /* Short phones (e.g. iPhone SE): tighten the welcome screen so "Begin" stays visible. */
+  @media(max-height:640px){
+    .gift-hero{width:min(100%,150px,24vh);margin-bottom:10px}
+    .gift-screen.is-centred .gift-title{font-size:25px;margin-bottom:6px}
+    .gift-screen.is-centred .gift-copy{font-size:16px;line-height:1.5}
+    .gift-screen.is-centred .gift-sub{font-size:14px;margin-bottom:12px}
+    .gift-screen.is-centred .gift-actions{margin-top:12px;gap:10px}
+    .gift-top{margin-bottom:8px}
+  }
+  .gift-tick-other{margin-top:2px}
   .gift-error{margin:6px 2px 0;font-size:14px;font-style:italic;color:var(--cream);text-align:left}
   .gift-card{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;padding:12px 18px;border:1.5px solid var(--beige);border-radius:8px;background:rgba(255,255,255,.05);color:var(--cream);font:400 16px/1.4 'Source Serif Pro',Georgia,serif;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
   .gift-card:hover{background:rgba(255,255,255,.1)}
@@ -150,16 +171,23 @@ Edit this source file, then run `node webflow/build.js`.
     ['mood_acotar', 'A Court of Thorns and Roses', 'Romantic fantasy & obsession', 'gift_mood_acotar.jpg']
   ];
   var MOOD_CHOICES = ['Loved it', 'Maybe', 'Not them'];
-  var HARD_NOS = ['No heavy trauma or grief', 'No explicit spice', 'No gore or horror', 'No preachy self-help'];
-  var LIFE_CHAPTERS = ['Running on empty', 'Starting something new', 'Thriving', 'Craving excitement', 'Steady as ever'];
+  var HARD_NOS = ['No heavy trauma or grief', 'No explicit spice', 'No gore or horror', 'No preachy self-help', 'Something else'];
+  var HARD_NOS_OTHER = 'Something else'; // ticking it shows a text box, saved as hard_nos_other
+  var LIFE_CHAPTERS = [
+    ['Running on empty', 'gift_life_runningonempty.jpg'], ['Starting something new', 'gift_life_startingnew.jpg'],
+    ['Thriving', 'gift_life_thriving.jpg'], ['Craving excitement', 'gift_life_cravingexcitement.jpg'],
+    ['Steady as ever', 'gift_life_steady.jpg']
+  ];
+  var MEANING_MIN_WORDS = 20;
+  var MEANING_GOOD_WORDS = 50;
   var FUELS = [
     ['Shortbread', 'gift_fuel_shortbread.jpg'], ['Dark Chocolate', 'gift_fuel_darkchocolate.jpg'],
     ['Candy Kittens', 'gift_fuel_candykittens.jpg'], ['Fudge', 'gift_fuel_fudge.jpg']
   ];
   var MEMORY_SCREENS = {
-    memory_place: { title: 'A place only the two of you would remember.', field: 'memory_place' },
-    memory_joke: { title: 'A running joke you share.', field: 'memory_joke' },
-    memory_tribute: { title: '"If the world gets too loud, you are the person who…"', field: 'memory_tribute' }
+    memory_place: { title: 'A place only the two of you would remember, and why.', field: 'memory_place', placeholder: 'e.g. The café where we stayed until closing, the night everything changed…' },
+    memory_joke: { title: 'A running joke you share.', field: 'memory_joke', placeholder: 'Tell us the joke, and how it started.' },
+    memory_tribute: { title: '"If the world gets too loud, you are the person who…"', field: 'memory_tribute', placeholder: 'Finish the sentence in your own words.' }
   };
 
   // Screen id → tracking screen name (Logic & Data Spec 8.2).
@@ -193,7 +221,7 @@ Edit this source file, then run `node webflow/build.js`.
   function media(file, alt, opts) {
     opts = opts || {};
     var url = IMAGES[file];
-    var frame = 'gift-media' + (opts.portrait ? ' is-portrait' : '');
+    var frame = 'gift-media' + (opts.portrait ? ' is-portrait' : '') + (opts.auto ? ' is-auto' : '');
     if (!url) return '<span class="' + frame + '"><span class="gift-placeholder" role="img" aria-label="' + esc(alt) + '">' + esc(file) + '</span></span>';
     var eager = (opts.index || 0) < 4;
     return '<span class="' + frame + ' is-loading"><img src="' + esc(url) + '" alt="' + esc(alt) + '" decoding="async"' +
@@ -423,12 +451,16 @@ Edit this source file, then run `node webflow/build.js`.
   // ── Screens ──────────────────────────────────────────────────────────────
   var screens = {};
 
+  // Screen 0: welcome (also the UK notice).
   screens.uk = function (root) {
     root.classList.add('is-centred');
     root.innerHTML =
-      '<p class="gift-copy">The Gift Box is currently only available in the United Kingdom.</p>' +
+      '<div class="gift-hero">' + media('gift_box_product.jpg', 'The SoulBox Gift Box', { index: 0 }) + '</div>' +
+      '<h1 class="gift-title" tabindex="-1">A book chosen for someone you love.</h1>' +
+      '<p class="gift-copy gift-welcome-copy">Tell us about them, and our curator will choose their book, write them a personal letter, and wrap it all in a sealed red box.</p>' +
+      '<p class="gift-sub">For now, Gift Boxes can only be delivered within the UK.</p>' +
       '<div class="gift-actions is-row">' +
-      '<button class="gift-btn gift-btn--main" id="gift-uk-yes" type="button">I\'m in the UK</button>' +
+      '<button class="gift-btn gift-btn--main" id="gift-uk-yes" type="button">Begin: I\'m in the UK</button>' +
       '<a class="gift-btn gift-btn--outline" href="/">Back to homepage</a>' +
       '</div>';
     $('gift-uk-yes').addEventListener('click', function () {
@@ -443,33 +475,62 @@ Edit this source file, then run `node webflow/build.js`.
     });
   };
 
+  function wordCount(text) { return (String(text || '').trim().match(/\S+/g) || []).length; }
+  // Live word-count message for a field with minWords (e.g. "What they mean").
+  function wordMessage(count, min) {
+    if (count < min) return 'Tell us a little more: at least ' + min + ' words.';
+    if (count < MEANING_GOOD_WORDS) return 'Good, keep going if you can.';
+    return 'Beautiful. This will make their letter.';
+  }
+
   function textScreen(root, opts) {
     root.innerHTML =
+      (opts.header ? '<div class="gift-header">' + media(opts.header, '', { auto: true }) + '</div>' : '') +
       '<h1 class="gift-title" tabindex="-1">' + esc(opts.title) + '</h1>' +
       (opts.sub ? '<p class="gift-sub">' + esc(opts.sub) + '</p>' : '') +
       '<div class="gift-stack">' + opts.fields.map(function (f, i) {
         var value = esc(state.answers[f.field] || '');
+        var size = f.tall ? ' is-tall' : f.short ? ' is-short' : '';
         var input = f.multi
-          ? '<textarea class="gift-field' + (f.tall ? ' is-tall' : '') + '" id="gift-f' + i + '" aria-label="' + esc(f.label || opts.title) + '"' + (f.placeholder ? ' placeholder="' + esc(f.placeholder) + '"' : '') + '>' + value + '</textarea>'
+          ? '<textarea class="gift-field' + size + '" id="gift-f' + i + '" aria-label="' + esc(f.label || opts.title) + '"' + (f.placeholder ? ' placeholder="' + esc(f.placeholder) + '"' : '') + (f.minWords ? ' aria-describedby="gift-w' + i + '"' : '') + '>' + value + '</textarea>'
           : '<input class="gift-field" id="gift-f' + i + '" type="text" autocomplete="off" aria-label="' + esc(f.label || f.placeholder) + '" placeholder="' + esc(f.placeholder || '') + '" value="' + value + '">';
-        return '<div>' + input + '<p class="gift-error" id="gift-e' + i + '" hidden>Please fill this in.</p></div>';
+        return '<div>' + input +
+          (f.minWords ? '<p class="gift-words" id="gift-w' + i + '" aria-live="polite"></p>' : '') +
+          '<p class="gift-error" id="gift-e' + i + '" hidden>Please fill this in.</p></div>';
       }).join('') + '</div>' +
       '<div class="gift-actions"><button class="gift-btn" id="gift-continue" type="button">Continue</button></div>' +
       (opts.skip ? '<button class="gift-link" id="gift-skip" type="button">Skip</button>' : '');
+
+    // Fields with a minimum word count keep Continue disabled until they reach it.
+    function updateWords() {
+      var allEnough = true;
+      opts.fields.forEach(function (f, i) {
+        if (!f.minWords) return;
+        var count = wordCount($('gift-f' + i).value);
+        var line = $('gift-w' + i);
+        line.textContent = wordMessage(count, f.minWords);
+        line.classList.toggle('is-good', count >= f.minWords);
+        if (count < f.minWords) allEnough = false;
+      });
+      $('gift-continue').disabled = !allEnough;
+    }
 
     opts.fields.forEach(function (f, i) {
       $('gift-f' + i).addEventListener('input', function (event) {
         state.answers[f.field] = event.target.value; persist();
         if (event.target.value.trim()) showError($('gift-e' + i), false);
+        if (f.minWords) updateWords();
       });
     });
+    if (opts.fields.some(function (f) { return f.minWords; })) updateWords();
+
     function submit(skipping) {
       if (locked) return;
       var answers = {}; var firstBad = null;
       opts.fields.forEach(function (f, i) {
         var value = skipping ? '' : $('gift-f' + i).value.trim();
-        var bad = f.required && !value;
-        showError($('gift-e' + i), bad);
+        var bad = f.required && !value || f.minWords && wordCount(value) < f.minWords;
+        showError($('gift-e' + i), f.required && !value);
         if (bad && firstBad === null) firstBad = i;
         answers[f.field] = value || null;
       });
@@ -515,7 +576,7 @@ Edit this source file, then run `node webflow/build.js`.
   }
 
   screens.names = function (root) {
-    textScreen(root, { title: "Who's this gift from, and who's it for?", fields: [
+    textScreen(root, { header: 'gift_names_header.jpg', title: "Who's this gift from, and who's it for?", fields: [
       { field: 'gifter_name', placeholder: 'Your name (the gifter)', required: true },
       { field: 'recipient_name', placeholder: 'Their name (the recipient)', required: true }
     ] });
@@ -569,7 +630,7 @@ Edit this source file, then run `node webflow/build.js`.
   };
 
   screens.loved_book = function (root) {
-    textScreen(root, { title: "A book they've loved?", skip: true, fields: [{ field: 'loved_book', placeholder: 'Title or author' }] });
+    textScreen(root, { title: "And do you know a book they've loved?", skip: true, fields: [{ field: 'loved_book', placeholder: 'Title or author' }] });
   };
 
   screens.hard_nos = function (root) {
@@ -580,28 +641,47 @@ Edit this source file, then run `node webflow/build.js`.
       '<div class="gift-ticks">' + HARD_NOS.map(function (value, i) {
         var checked = chosen.indexOf(value) !== -1;
         return '<label class="gift-tick' + (checked ? ' is-checked' : '') + '"><input type="checkbox" id="gift-t' + i + '" value="' + esc(value) + '"' + (checked ? ' checked' : '') + '><span>' + esc(value) + '</span></label>';
-      }).join('') + '</div>' +
+      }).join('') +
+      '<input class="gift-field gift-tick-other" id="gift-other" type="text" autocomplete="off" aria-label="What would they avoid?" placeholder="Tell us what they\'d avoid." value="' + esc(state.answers.hard_nos_other || '') + '"' + (chosen.indexOf(HARD_NOS_OTHER) === -1 ? ' hidden' : '') + '>' +
+      '</div>' +
       '<div class="gift-actions"><button class="gift-btn" id="gift-continue" type="button">Continue</button></div>';
+    var otherIndex = HARD_NOS.indexOf(HARD_NOS_OTHER);
     function current() { return HARD_NOS.filter(function (_, i) { return $('gift-t' + i).checked; }); }
     HARD_NOS.forEach(function (_, i) {
       $('gift-t' + i).addEventListener('change', function (event) {
         event.target.parentNode.classList.toggle('is-checked', event.target.checked);
+        if (i === otherIndex) {
+          // Unticking "Something else" hides the box and discards what was typed.
+          $('gift-other').hidden = !event.target.checked;
+          if (event.target.checked) $('gift-other').focus();
+          else { $('gift-other').value = ''; state.answers.hard_nos_other = null; }
+        }
         state.answers.hard_nos = current(); persist();
       });
     });
+    $('gift-other').addEventListener('input', function (event) { state.answers.hard_nos_other = event.target.value; persist(); });
     $('gift-continue').addEventListener('click', function () {
       if (locked) return; locked = true;
-      complete({ hard_nos: current() });
+      var list = current();
+      var other = list.indexOf(HARD_NOS_OTHER) !== -1 ? $('gift-other').value.trim() : '';
+      complete({ hard_nos: list, hard_nos_other: other || null });
     });
   };
 
-  screens.life_chapter = function (root) { cardScreen(root, { title: 'Where are they in life right now?', field: 'life_chapter', options: LIFE_CHAPTERS }); };
+  screens.life_chapter = function (root) { imageScreen(root, { title: 'Where are they in life right now?', field: 'life_chapter', options: LIFE_CHAPTERS }); };
 
   screens.details = function (root) {
-    textScreen(root, { title: 'Give us some oddly specific details about them.', fields: [{ field: 'specific_details', multi: true, required: true }] });
+    textScreen(root, { title: 'Give us some oddly specific details about them.', fields: [{ field: 'specific_details', multi: true, short: true, required: true }] });
   };
   screens.meaning = function (root) {
-    textScreen(root, { title: 'In your own words, what does this person mean to you?', fields: [{ field: 'what_they_mean', multi: true, tall: true, required: true }] });
+    textScreen(root, {
+      title: 'In your own words, what does this person mean to you?',
+      sub: 'This is the heart of their letter. Our curator writes from your words, so take a moment.',
+      fields: [{
+        field: 'what_they_mean', multi: true, tall: true, required: true, minWords: MEANING_MIN_WORDS,
+        placeholder: 'What do they mean to you? What do you admire most about them? What do you wish they knew?'
+      }]
+    });
   };
 
   screens.memory_choice = function (root) {
@@ -621,7 +701,7 @@ Edit this source file, then run `node webflow/build.js`.
   Object.keys(MEMORY_SCREENS).forEach(function (id) {
     screens[id] = function (root) {
       var s = MEMORY_SCREENS[id];
-      textScreen(root, { title: s.title, fields: [{ field: s.field, multi: true, required: true }] });
+      textScreen(root, { title: s.title, fields: [{ field: s.field, multi: true, required: true, placeholder: s.placeholder }] });
     };
   });
 
@@ -684,7 +764,9 @@ Edit this source file, then run `node webflow/build.js`.
 
   // Images used by each screen, for background preloading.
   var SCREEN_IMAGES = {
+    names: ['gift_names_header.jpg'],
     relationship: RELATIONSHIPS.map(function (r) { return r[1]; }),
+    life_chapter: LIFE_CHAPTERS.map(function (l) { return l[1]; }),
     occasion: OCCASIONS.map(function (o) { return o[1]; }),
     moods: MOODS.map(function (m) { return m[3]; }),
     fuel: FUELS.map(function (f) { return f[1]; }),

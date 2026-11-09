@@ -1,0 +1,834 @@
+<!-- =========================================================
+SOULBOX QUIZ: NOVEMBER 2026 (Build Brief Parts C to M)
+Built by webflow/build.js into src/generated/quiz-app.js and served at /api/quiz-app.js.
+The Webflow page holds only the loader in webflow/dist/quiz.html.
+========================================================= -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1c255d;--navy-deep:#141b43;--navy-light:#26306f;--cream:#f4f2ec;--beige:#F5E6D3;--gold:#B8902E}
+  html,body{margin:0;min-height:100%;background:var(--navy)!important;color:var(--cream)}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  .q-app{width:min(100%,560px);margin:0 auto;min-height:100dvh;padding:18px 18px 40px;display:flex;flex-direction:column;font-family:'Source Serif Pro',Georgia,serif;color:var(--cream)}
+  .q-app.is-wide{width:min(100%,780px)}
+  .q-top{display:flex;align-items:center;min-height:44px;padding:0 6px;margin-bottom:16px}
+  .q-progress{position:relative;flex:1;height:2px;background:rgba(244,242,236,.35)}
+  .q-progress::before,.q-progress::after{content:"";position:absolute;top:50%;width:10px;height:10px;border:2px solid var(--cream);border-radius:50%;transform:translateY(-50%);background:var(--navy)}
+  .q-progress::before{left:-5px}.q-progress::after{right:-5px}
+  .q-progress-fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--cream);box-shadow:0 0 10px rgba(244,242,236,.6);transition:width .35s ease}
+  .q-progress.is-hidden,.q-back.is-hidden{visibility:hidden}
+  .q-foot{position:sticky;bottom:max(14px,env(safe-area-inset-bottom));z-index:5;display:flex;justify-content:center;min-height:44px;margin-top:26px;pointer-events:none}
+  .q-back{pointer-events:auto;min-height:44px;padding:10px 20px;border:1px solid rgba(245,230,211,.35);border-radius:22px;background:rgba(20,27,67,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,.25);color:var(--cream);font:400 15px 'Source Serif Pro',Georgia,serif;cursor:pointer;opacity:.92}
+  .q-screen{flex:1;display:flex;flex-direction:column;text-align:center;animation:qEnter .5s cubic-bezier(.2,.7,.2,1) both}
+  .q-screen.is-leaving{opacity:0;transform:translateY(-8px);transition:opacity .18s ease,transform .18s ease;animation:none}
+  .q-screen.is-back{animation-name:qEnterBack}
+  .q-screen.is-centred{justify-content:center}
+  .q-rise{animation:qRise .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 45ms + 80ms)}
+  @keyframes qEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes qEnterBack{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+  @keyframes qRise{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes qPick{0%{transform:scale(1)}40%{transform:scale(.96)}75%{transform:scale(1.025)}100%{transform:scale(1)}}
+  .q-label{margin:0 0 10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+  .q-title{font:500 30px/1.25 'Cormorant Garamond',Georgia,serif;margin:6px 0 10px;text-shadow:0 0 8px rgba(255,255,255,.2);outline:none}
+  .q-title.is-large{font-size:clamp(36px,9vw,48px)}
+  .q-title.is-question{font:400 20px/1.5 'Source Serif Pro',Georgia,serif;text-shadow:none}
+  .q-sub{font-style:italic;font-size:16px;line-height:1.5;margin:0 0 20px;opacity:.85}
+  .q-note{margin:12px 0 0;font-size:14px;font-style:italic;opacity:.65}
+  .q-stack{display:grid;gap:12px;margin:14px 0 6px}
+  .q-actions{display:grid;gap:12px;margin-top:24px}
+  .q-btn{display:block;width:100%;min-height:50px;padding:12px 24px;border:2px solid rgba(255,255,255,.7);border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.1));color:var(--cream);font:400 16px 'Source Serif Pro',Georgia,serif;cursor:pointer;text-decoration:none;text-align:center;transition:box-shadow .2s ease,transform .2s ease}
+  .q-btn:hover{box-shadow:0 0 12px rgba(255,255,255,.55);transform:translateY(-2px)}
+  .q-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+  .q-btn--main{background:var(--cream);border-color:var(--cream);color:var(--navy);font-weight:700}
+  .q-card{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;padding:12px 18px;border:1.5px solid var(--beige);border-radius:8px;background:rgba(255,255,255,.05);color:var(--cream);font:400 16px/1.45 'Source Serif Pro',Georgia,serif;cursor:pointer;text-align:center;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+  .q-card:hover{background:rgba(255,255,255,.1)}
+  .q-card.is-selected{border-color:var(--gold);box-shadow:0 0 14px rgba(184,144,46,.55);background:rgba(184,144,46,.12);animation:qPick .35s ease both}
+  .q-card.is-split{justify-content:space-between;text-align:left}
+  .q-card.is-split em{font-size:14px;opacity:.8}
+  .q-card.is-passage{display:block;padding:20px 22px;text-align:left;line-height:1.65;background:rgba(255,255,255,.07)}
+  .q-passage{margin:6px 0 16px;padding:22px;border:1.5px solid var(--beige);border-radius:10px;background:rgba(255,255,255,.07);font-size:17px;line-height:1.7;text-align:left}
+  .q-question{margin:0 0 6px;font-size:16px;line-height:1.5}
+  .q-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;margin:14px 0 6px}
+  .q-grid>.is-odd-last{grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}
+  .q-grid.is-doors{gap:14px}
+  @media(min-width:768px){.q-grid.is-doors{grid-template-columns:repeat(4,1fr)}}
+  .q-grid.is-3{grid-template-columns:repeat(3,1fr)}
+  .q-tile{display:flex;flex-direction:column;gap:8px;padding:0;border:0;background:none;color:var(--cream);cursor:pointer;font:inherit;text-align:center}
+  .q-tile-title{font-size:15px;line-height:1.35}
+  .q-tile-caption{font-size:13px;font-style:italic;line-height:1.45;opacity:.8}
+  .q-media{position:relative;display:block;width:100%;aspect-ratio:1/1;border:2px solid var(--beige);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.06);transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}
+  .q-media.is-portrait{aspect-ratio:2/3}
+  .q-media.is-landscape{aspect-ratio:3/2}
+  .q-media.is-tint::after{content:"";position:absolute;inset:0;pointer-events:none;background:rgba(15,23,70,.17)}
+  .q-media::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 30%,rgba(245,230,211,.14) 50%,transparent 70%);background-size:220% 100%;opacity:0;transition:opacity .3s ease}
+  .q-media.is-loading::before{opacity:1;animation:qShimmer 1.3s ease-in-out infinite}
+  @keyframes qShimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+  .q-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:12px;transition:opacity .55s ease,transform .7s cubic-bezier(.2,.7,.2,1),filter .55s ease}
+  .q-media.is-cover img{object-fit:cover}
+  .q-media.is-loading img{opacity:0;transform:scale(1.04);filter:blur(10px)}
+  .q-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:10px;font-size:11px;line-height:1.3;word-break:break-all;opacity:.55;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 10px,rgba(255,255,255,.08) 10px 20px)}
+  .q-tile:hover .q-media{transform:translateY(-2px)}
+  .q-tile.is-selected .q-media{border-color:var(--gold);box-shadow:0 0 16px rgba(184,144,46,.7);animation:qPick .35s ease both}
+  .q-story{margin:16px 0 4px;font-size:17px;line-height:1.7;white-space:pre-line}
+  .q-story-extra{margin:18px 0 0;font:500 24px/1.35 'Cormorant Garamond',Georgia,serif}
+  .q-story-question{margin:18px 0 0;font-weight:700;line-height:1.5}
+  .q-field{display:block;width:100%;margin:0;padding:13px 14px;border:1px solid var(--beige);border-radius:8px;background:rgba(255,255,255,.06);color:var(--cream);font:400 16px/1.5 'Source Serif Pro',Georgia,serif;text-align:left}
+  .q-field::placeholder{color:rgba(244,242,236,.6)}
+  .q-field:focus{outline:none;border-color:var(--gold);box-shadow:0 0 10px rgba(184,144,46,.45)}
+  textarea.q-field{resize:none;min-height:calc(1.5em * 6 + 28px)}
+  .q-error{margin:6px 2px 0;font-size:14px;font-style:italic;text-align:left}
+  .q-ticks{display:grid;gap:12px;margin:14px 0 6px;text-align:left}
+  .q-tick{display:flex;align-items:center;gap:14px;min-height:54px;padding:12px 16px;border:1.5px solid var(--beige);border-radius:8px;background:rgba(255,255,255,.05);cursor:pointer;font-size:16px;line-height:1.4}
+  .q-tick input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--gold)}
+  .q-tick.is-checked{border-color:var(--gold)}
+  .q-slider{margin:34px 4px 8px}
+  .q-slider input{width:100%;accent-color:var(--gold)}
+  .q-slider-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:15px}
+  .q-slider-labels span.is-on{color:var(--gold);font-weight:700}
+  .q-hero{width:min(100%,360px);margin:0 auto 8px}
+  .q-book{width:min(60%,280px);margin:4px auto 14px}
+  .q-book-title{margin:0;font-weight:700;font-size:19px}
+  .q-book-author{margin:4px 0 0;font-size:15px}
+  .q-book-hook{margin:10px 0 0;font-style:italic;font-size:15px;line-height:1.5;opacity:.8}
+  .q-swipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+  .q-counter{margin:0 0 8px;font-size:14px;opacity:.7}
+  .q-screen.is-swipe-out{animation:qSwipeOut .28s ease-in both}
+  .q-screen.is-swipe-in{animation:qSwipeIn .36s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes qSwipeOut{to{opacity:0;transform:translateX(-60px)}}
+  @keyframes qSwipeIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+  .q-loading{font-style:italic;font-size:22px;animation:qFade 2.4s ease-in-out infinite}
+  @keyframes qFade{0%,100%{opacity:.35}50%{opacity:1}}
+  .q-status{min-height:22px;margin:14px 0 0;font-size:14px}
+  .q-copy{font-size:18px;line-height:1.6}
+
+  /* ── Results (Part J): full-screen snap panels, sharp 4:5 card over a blurred copy ── */
+  .r-experience{position:fixed;inset:0;z-index:10;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;background:#101938;color:var(--cream);font-family:'Source Serif Pro',Georgia,serif;scrollbar-width:none}
+  .r-experience::-webkit-scrollbar{display:none}
+  .r-panel{position:relative;min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;padding:28px 18px 70px;overflow:hidden;opacity:0;transition:opacity .8s ease}
+  .r-panel.is-visible{opacity:1}
+  .r-bg{position:absolute;inset:-60px;background:center/cover no-repeat;filter:blur(34px);transform:scale(1.1)}
+  .r-bg::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.3)}
+  .r-content{position:relative;width:min(100%,430px);display:flex;justify-content:center}
+  .r-card{display:block;width:100%;aspect-ratio:4/5;object-fit:contain;border:1.5px solid var(--beige);border-radius:6px;opacity:0;transition:opacity .8s ease}
+  .r-card.is-in{opacity:1}
+  .r-card--placeholder{opacity:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;background:radial-gradient(circle at center,#26306f,#141b43);text-align:center}
+  .r-card--placeholder span{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+  .r-card--placeholder strong{font:500 34px/1.15 'Cormorant Garamond',Georgia,serif}
+  .r-card--placeholder em{font-size:11px;opacity:.45}
+  .r-intro{width:min(100%,430px);padding:40px 28px;border:1px solid rgba(244,242,236,.25);border-radius:12px;background:radial-gradient(circle at center,#222a66,#161b42);text-align:center;line-height:1.6}
+  .r-intro h1{font:500 clamp(32px,8vw,44px)/1.1 'Cormorant Garamond',Georgia,serif;margin:0 0 20px;letter-spacing:.04em}
+  .r-intro p{margin:0;font-style:italic;font-size:17px}
+  .r-next{position:absolute;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);min-height:44px;padding:8px 16px;border:0;background:transparent;color:inherit;font:14px 'Source Serif Pro',Georgia,serif;cursor:pointer;opacity:.85}
+  .r-gradient{padding:0;background:var(--house)}
+  .r-gradient img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  /* Part K: House colour, scrolls normally */
+  .r-house{display:block;background:var(--house);padding:40px 18px 60px;scroll-snap-stop:normal}
+  .r-house-inner,.r-sales-inner{width:min(100%,430px);margin:0 auto;text-align:center}
+  .r-emblem{width:40%;margin:34px auto 16px}
+  .r-welcome{font:500 clamp(30px,7vw,40px)/1.2 'Cormorant Garamond',Georgia,serif;margin:0 0 28px;text-wrap:balance}
+  .r-benefits{display:grid;gap:22px;margin:0 0 34px;line-height:1.5}
+  .r-benefits strong{display:block;font-weight:700;margin-bottom:4px}
+  .r-form{display:grid;gap:12px;padding:26px 22px;border:1px solid rgba(244,242,236,.3);border-radius:12px;background:rgba(0,0,0,.18);text-align:left}
+  .r-form h3{margin:0 0 6px;text-align:center;font:500 30px 'Cormorant Garamond',Georgia,serif}
+  .r-form label{display:grid;gap:6px;font-size:14px}
+  .r-form select.q-field{appearance:auto}
+  .r-form select option{color:#111}
+  .r-small{margin:4px 0 0;font-size:13px;font-style:italic;text-align:center;opacity:.8}
+  .r-skip{display:inline-block;min-height:44px;margin:22px auto 0;padding:10px;border:0;background:none;color:var(--cream);font:400 15px 'Source Serif Pro',Georgia,serif;text-decoration:underline;cursor:pointer}
+  .r-links{display:grid;gap:8px;margin:10px 0}
+  .r-links a{color:var(--cream);font-size:14px}
+  /* Part L: sales */
+  .r-sales{display:block;background:#161b42;padding:48px 18px 60px;scroll-snap-stop:normal}
+  .r-sales h1{font:500 clamp(30px,6vw,40px)/1.15 'Cormorant Garamond',Georgia,serif;margin:0 0 30px}
+  .r-offer-label{font-size:14px;letter-spacing:.12em;margin:28px 0 12px}
+  .r-offer{padding:30px 24px;border:1px solid rgba(244,242,236,.25);border-radius:12px;background:radial-gradient(circle at center,#222a66,#161b42)}
+  .r-offer h2{font:500 clamp(32px,6vw,42px)/1.1 'Cormorant Garamond',Georgia,serif;margin:0 0 10px}
+  .r-price{font-size:26px;margin:0 0 22px}
+  .r-offer ul{list-style:none;padding:0;margin:0 0 24px;text-align:left;display:grid;gap:18px;line-height:1.5}
+  .r-offer li strong{display:block;font-weight:600}
+  .r-offer li span{font-size:15px;opacity:.8}
+  .r-coming{display:flex;align-items:center;justify-content:center;min-height:50px;margin:0;border:1px solid rgba(244,242,236,.45);border-radius:8px;opacity:.55;cursor:default}
+  .r-not-now{display:inline-block;min-height:44px;margin:26px auto 0;padding:12px 26px;border:1px solid var(--cream);border-radius:8px;color:var(--cream);text-decoration:none;font-size:15px}
+  button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="q-app" id="q-app">
+  <div class="q-top"><div class="q-progress" id="q-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="q-progress-fill" id="q-progress-fill"></div></div></div>
+  <main class="q-screen" id="q-screen"></main>
+  <nav class="q-foot" aria-label="Quiz steps"><button class="q-back is-hidden" id="q-back" type="button" aria-label="Go back one screen">← Back</button></nav>
+</div>
+
+<!-- TRACKING_SCRIPT -->
+<!-- QUIZ_DATA -->
+<script>
+(function () {
+  'use strict';
+
+  // ── Settings ─────────────────────────────────────────────────────────────
+  var API = 'https://soulbox-backend-new.vercel.app/api';
+  var STATE_KEY = 'soulboxReading';
+  var QUEUE_KEY = 'soulboxReadingQueue';
+  var RESUME_HOURS = 72;
+  var DATA = window.SOULBOX_QUIZ_DATA || {};
+  var LEGACY = DATA.legacy || {};
+  var IMG = DATA.images || {};
+  var L = window.SoulBoxLogic;
+
+  // ── Content: Build Brief Parts C to I ────────────────────────────────────
+  var DOORS = [
+    { label: 'Fantasy', genre: 'Fantasy', legacy: 'Fantasy', file: 'door_fantasy.jpg' },
+    { label: 'Science Fiction', genre: 'Science Fiction', legacy: 'Science Fiction', file: 'door_sciencefiction.jpg' },
+    { label: 'Romance', genre: null, legacy: 'RomanceRoute', file: 'door_romance.jpg' },
+    { label: 'Historical', genre: 'Historical', legacy: 'Historical Fiction', file: 'door_historical.jpg' },
+    { label: 'Horror', genre: 'Horror', legacy: 'Horror', file: 'door_horror.jpg' },
+    { label: 'Mystery', genre: 'Mystery', legacy: 'Mystery', file: 'door_mystery.jpg' },
+    { label: 'The Literary', genre: 'The Literary', legacy: 'Literary', file: 'door_literary.jpg' },
+    { label: 'Contemporary', genre: 'Contemporary', legacy: 'Contemporary', file: 'door_contemporary.jpg' }
+  ];
+  // Older quiz labels → canonical flavour names (Logic & Data Spec 1.2).
+  var FLAVOUR_ALIASES = {
+    'Cosy Realms': 'Cozy Realms', 'Whispers & Wonders': 'Whispers & Wonder', 'Urban Frontline': 'Urban Frontlines',
+    'Science Heavy': 'Science-Heavy', 'Caregiving & Kinship': 'When It Falls To You',
+    'Race, Culture & Belonging': 'Caught Between Worlds'
+  };
+  var MYSTERY = [
+    ['Cozy', 'mystery_cozy.jpg'], ['Who?!', 'mystery_who.jpg'], ['Noir', 'mystery_noir.jpg'],
+    ['Evidence', 'mystery_evidence.jpg'], ['Psychological', 'mystery_psychological.jpg'], ['Action', 'mystery_action.jpg']
+  ];
+  var GATE_2 = {
+    'The love': [['Falling in love', 'gate_love_fallinginlove.jpg'], ['Feeling at home', 'gate_love_feelingathome.jpg']],
+    'The guilty pleasure': [['The heat', 'gate_guilty_heat.jpg'], ['The drama', 'gate_guilty_drama.jpg'], ['The dark', 'gate_guilty_dark.jpg']],
+    'The story': [['The rush', 'gate_story_rush.jpg'], ['The hero', 'gate_story_hero.jpg'], ['The twists and turns', 'gate_story_twists.jpg'],
+      ['The adventure', 'gate_story_adventure.jpg'], ['The world', 'gate_story_world.jpg'], ['The meaning', 'gate_story_meaning.jpg']]
+  };
+  // Snob Olympics. value = what is saved (never the option text, because options are shuffled).
+  var OLYMPICS = [
+    { label: 'Question 1 of 5 · Read the room',
+      passage: '"How brave of you," Eleanor said, turning the novel over in her hands, "to publish something like this under your actual name."',
+      options: [['Eleanor admires the author\'s willingness to expose herself to criticism.', 'decoy'],
+        ['Eleanor disguises a devastating insult as a compliment.', 'correct'],
+        ['I\'d rather read the terms and conditions of my mortgage.', 'optout']] },
+    { label: 'Question 2 of 5 · Count them, darling',
+      passage: 'The city was a held breath, every streetlight a question no one dared to ask.',
+      question: 'How many metaphors are in this sentence?',
+      options: [['One.', 'decoy'], ['Two.', 'correct'], ['Metaphors? In this economy?', 'optout']] },
+    { label: 'Question 3 of 5 · Who\'s actually speaking?',
+      passage: 'Martin entered the party in his plum-coloured velvet jacket. Naturally, every eye must have turned towards him. These people had probably never encountered genuine elegance in their miserable lives. Behind him, somebody snorted into their champagne.',
+      options: [['The narrator slips into Martin\'s self-flattering perspective without directly quoting his thoughts.', 'correct'],
+        ['The omniscient narrator is describing Martin\'s superiority while mocking the other guests.', 'decoy'],
+        ['Martin sounds fucking exhausting. Next.', 'optout']] },
+    { label: 'Question 4 of 5 · A little vocabulary, darling',
+      passage: 'The hotel\'s meretricious splendour was everywhere: golden pillars, plastic orchids, crystal chandeliers and a fountain that smelled faintly of bleach.',
+      question: 'What does meretricious mean here?',
+      options: [['Extravagantly luxurious, with an underlying sense of decay.', 'decoy'],
+        ['Superficially attractive, but ultimately tawdry and without genuine value.', 'correct'],
+        ['Please seek the assistance of a dictionary, thanks.', 'optout']] },
+    { label: 'Question 5 of 5 · The same moment. Which do you prefer?', passages: true,
+      options: [['The door was open. She never left it open. She grabbed her phone, stepped inside, and heard it. Footsteps. Upstairs. Coming down.', 'commercial'],
+        ['The door was open, and for one second she believed he\'d come home. He\'d be in the kitchen, burning toast, sorry for everything. Then she saw his keys on the floor, and her heart knew before she did.', 'upmarket'],
+        ['The door stood open the way a mouth does after the word has already been said, and the hallway kept its long, held composure, as if the house had decided, without consulting her, what she would be allowed to know.', 'literary']] }
+  ];
+  var MASKS = {
+    prologue: { image: 'masks_prologue.jpg', text: 'One night, under the desert sky, three riders come into your village. The Silver, the Gold and the Black. Your father picks you up and hides you behind the hut. He tells you to be calm. Slowly, he approaches them. The sword is swift. Your father is dead.' },
+    silver: { image: 'masks_silver.jpg', field: 'masks_silver', text: 'It takes you eleven years to track him down. The Silver is a farmer now. He swears he had nothing to do with it. That he only did it for the money. That the Gold and the Black were behind it all. In the distance, his son is watching.',
+      options: ['Spare him.', 'Cut him across the face, so he never forgets.', 'Finish it.'] },
+    gold: { image: 'masks_gold.jpg', field: 'masks_gold', text: 'By the time you reach the Gold, he is an old man. He lies in his hut. His livestock are dead. He has no one and nothing, only his wife, sitting peacefully beside him. He doesn\'t remember a thing. She has no idea what he once did. She offers you a drink.',
+      options: ['Take the drink. Let her keep her peace.', 'Tell her who he really was.', 'Finish it.'] },
+    black: { image: 'masks_black.jpg', field: 'masks_black', text: 'It takes fifteen years to find the black mask, and longer to believe it. Behind it is your brother. Your mother screams. Your sister begs.',
+      options: ['Lower the blade. He\'s still your brother.', 'Let him live, but cast him out of the family forever.', 'Finish it.'] }
+  };
+  var SWIPE_ANSWERS = [['Loved it', 'Didn\'t like it'], ['Want to read', 'Not interested']];
+  var EDEN = {
+    prologue: { image: 'eden_prologue.jpg', text: 'The sickness took the world in a single winter. Cities went quiet. Screens went dark. Two hundred of you reached the last island with clean water: a scrap of green in a grey sea. For three days, everyone argued over who should lead. On the fourth morning, the arguing stopped. They turned, and looked at you.', extra: 'Congratulations, you are now its dictator.' },
+    first_law: { image: 'eden_firstlaw.jpg', field: 'eden_first_law', text: 'Your first morning. No laws, no history, no one above you. Two hundred people stand on the sand, waiting to learn what kind of place this will be. You have the hands and materials for one thing before anything else: one law, or one thing built.', question: 'What is it, and why that?' },
+    shortage: { image: 'eden_shortage.jpg', field: 'eden_shortage', text: 'The first winter is hard. The stores will feed a hundred and fifty. There are two hundred of you. The builders say they should eat first; the island depends on them. The mothers point to their children. The old remind you they gave up their places on the boats. And late at night, your closest friend on the island asks you, quietly, to look after them.', question: 'How do you decide who eats? Tell us exactly what you do.' },
+    betrayal: { image: 'eden_betrayal.jpg', field: 'eden_betrayal', text: 'Spring. At the great fire, Ash, your right hand and the one person you told everything, stands and turns to the crowd. Ash repeats what you said in private, twisted into something ugly. People laugh. Some believe it. Not one person speaks up for you. By morning, forty islanders have followed Ash to the far shore.', extra: 'A month later, Ash is brought before you. Alone.', question: 'What do you do with Ash? And what hurt the most?' },
+    epilogue: { image: 'eden_epilogue.jpg', text: 'Years pass, as years do. One evening you lie down on the sand, and the sea goes quiet, and you close your eyes. And you see it: the image you\'ve always wished to see.' }
+  };
+  var EDEN_MIN_WORDS = 10;
+  var FINAL = {
+    final_mirror: 'Name one fictional character you genuinely saw yourself in. What was the specific scene or habit of theirs that made you think, "Wow, that\'s me"?',
+    final_ghost: 'What is a book you finished months or years ago that still pops into your head while you\'re doing the dishes or staring out a window? Why won\'t it leave you alone?',
+    final_rejection: 'What is a wildly popular, critically acclaimed or beloved book that made you genuinely angry, annoyed or disgusted enough that you wanted to throw it across the room?'
+  };
+  var TRIGGERS_OTHER = 'Other';
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  var track = window.SoulBoxTrack || { sourceRef: null, abVariant: null, visitorId: null, register: noop, screenView: noop, screenComplete: noop, milestone: noop };
+  function noop() {}
+  function $(id) { return document.getElementById(id); }
+  function esc(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+  }
+  function read(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (_) { return null; } }
+  function write(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {} }
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
+  }
+  function shuffle(list) {
+    var a = list.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function wordCount(text) { return (String(text || '').trim().match(/\S+/g) || []).length; }
+  function imageUrl(file) { return IMG[file] || (/^https?:/.test(file || '') ? file : ''); }
+  // An image in a fixed-shape frame. shape: square | portrait | landscape.
+  function media(file, alt, opts) {
+    opts = opts || {};
+    var url = imageUrl(file);
+    var cls = 'q-media' + (opts.shape === 'portrait' ? ' is-portrait' : opts.shape === 'landscape' ? ' is-landscape' : '') + (opts.tint ? ' is-tint' : '') + (opts.cover ? ' is-cover' : '');
+    if (!url) return '<span class="' + cls + '"><span class="q-placeholder" role="img" aria-label="' + esc(alt) + '">' + esc(file || alt) + '</span></span>';
+    var eager = (opts.index || 0) < 4;
+    return '<span class="' + cls + ' is-loading"><img src="' + esc(url) + '" alt="' + esc(alt) + '" decoding="async"' + (eager ? ' loading="eager"' : ' loading="lazy"') + '></span>';
+  }
+  function revealImages(root) {
+    root.querySelectorAll('.q-media.is-loading img').forEach(function (img) {
+      var frame = img.parentNode; function done() { frame.classList.remove('is-loading'); }
+      if (img.complete && img.naturalWidth) done(); else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+    });
+  }
+  var preloaded = {};
+  function preload(files) { files.forEach(function (f) { var u = imageUrl(f); if (u && !preloaded[u]) { preloaded[u] = new Image(); preloaded[u].src = u; } }); }
+
+  // ── State ────────────────────────────────────────────────────────────────
+  function freshState() {
+    return { v: 1, reader_id: null, a: {}, legacy: {}, screen: 'choice', history: [], results: null, deck: null, seen: {}, updatedAt: Date.now() };
+  }
+  var state = read(STATE_KEY);
+  if (!state || state.v !== 1 || Date.now() - (state.updatedAt || 0) > RESUME_HOURS * 3600 * 1000) state = freshState();
+  function persist() { state.updatedAt = Date.now(); write(STATE_KEY, state); }
+
+  // ── Save queue (answers wait in the browser until the server has them) ────
+  var queue = read(QUEUE_KEY) || [];
+  var flushing = null, retryTimer = null, failures = 0;
+  function persistQueue() { write(QUEUE_KEY, queue); }
+  function enqueue(item) {
+    var last = queue[queue.length - 1];
+    if (item.kind === 'update' && last && last.kind === 'update' && last.reader_id === item.reader_id && !(flushing && queue.length === 1)) Object.assign(last.answers, item.answers);
+    else queue.push(item);
+    persistQueue(); flush();
+  }
+  function send(item) {
+    var url = item.kind === 'create' ? API + '/reader' : API + '/reader/' + encodeURIComponent(item.reader_id);
+    return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(item.kind === 'create' ? item.body : { answers: item.answers }), keepalive: true })
+      .then(function (r) { if (!r.ok) { var e = new Error('Save failed (' + r.status + ')'); e.status = r.status; throw e; } });
+  }
+  function flush() {
+    if (flushing) return flushing;
+    clearTimeout(retryTimer);
+    flushing = (function next() {
+      if (!queue.length) return Promise.resolve();
+      var item = queue[0];
+      return send(item).then(function () { queue.shift(); persistQueue(); failures = 0; return next(); }, function (error) {
+        if (error.status === 404 && item.kind === 'update') { queue.unshift(createItem(item.reader_id, state.a.reading_type)); persistQueue(); return next(); }
+        if (error.status === 400) { console.error('[SoulBox quiz] dropped a save the server refused', item); queue.shift(); persistQueue(); return next(); }
+        failures += 1; retryTimer = setTimeout(flush, Math.min(1000 * Math.pow(2, failures - 1), 15000)); throw error;
+      });
+    })().then(function () { flushing = null; }, function (e) { flushing = null; throw e; });
+    flushing.catch(noop);
+    return flushing;
+  }
+  function flushAll(attempts) {
+    attempts = attempts || 0;
+    return flush().then(function () { if (queue.length) return flushAll(attempts); }, function (error) {
+      if (attempts >= 3) throw error;
+      return new Promise(function (r) { setTimeout(r, 1000 * (attempts + 1)); }).then(function () { return flushAll(attempts + 1); });
+    });
+  }
+  window.addEventListener('online', flush);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') flush(); });
+  function createItem(id, type) {
+    return { kind: 'create', reader_id: id, body: { reader_id: id, reading_type: type || null, source_ref: track.sourceRef, ab_variant: track.abVariant, session_id: track.visitorId } };
+  }
+  // Save answers: columns as they are, and existing questions inside `answers` under their old ids.
+  function save(columns, legacyAnswers) {
+    if (legacyAnswers) Object.assign(state.legacy, legacyAnswers);
+    Object.assign(state.a, columns || {});
+    persist();
+    if (!state.reader_id) return;
+    var answers = Object.assign({}, columns || {});
+    if (legacyAnswers) answers.answers = Object.assign({}, state.legacy);
+    enqueue({ kind: 'update', reader_id: state.reader_id, answers: answers });
+  }
+
+  // ── Screens and flow ─────────────────────────────────────────────────────
+  // Each screen: { id, name (tracking), when(), render(root) }. The flow is the visible screens in order.
+  var S = {};
+  var ORDER = [];
+  function screen(id, def) { def.id = id; S[id] = def; ORDER.push(id); }
+  function a() { return state.a; }
+  function isRomanceRoute() { return state.legacy['desire.genre_calling'] === 'RomanceRoute' || a().genre_calling === 'Romance' || a().genre_calling === 'Romantasy'; }
+  function legacyGenreKey() { // the key the old quiz used for its option sets
+    var g = a().genre_calling;
+    return { 'Science Fiction': 'Science Fiction', 'Historical': 'Historical Fiction', 'The Literary': 'Literary' }[g] || g;
+  }
+  function flavourOptions() { return (LEGACY.genre_flavour && LEGACY.genre_flavour.dynamicOptions[legacyGenreKey()]) || []; }
+  function subflavourOptions() { var v = state.legacy['desire.genre_flavour']; return (v && LEGACY.genre_subflavour.dynamicOptions[v]) || []; }
+  function visualOptions() {
+    var g = a().genre_calling;
+    if (g === 'The Literary') return LEGACY.genre_visual.dynamicOptions[state.legacy['desire.genre_visual_route']] || [];
+    return LEGACY.genre_visual.dynamicOptions[g] || [];
+  }
+  function canonicalFlavour(label) {
+    var clean = String(label || '').replace(/ Horror$/, '');
+    return FLAVOUR_ALIASES[clean] || clean;
+  }
+  function routeNumber(id) { // fantasy_route_1, fantasy_route_2… for tracking (8.2)
+    var route = ['romance_route', 'flavour', 'subflavour', 'novel_as', 'visual'].filter(function (s) { return S[s].when(); });
+    var genre = (a().genre_calling || 'romance').toLowerCase().replace(/^the /, '').replace(/ /g, '_');
+    return genre + '_route_' + (route.indexOf(id) + 1);
+  }
+  function flow() { return ORDER.filter(function (id) { return !S[id].when || S[id].when(); }); }
+  function nextAfter(id) { var f = flow(); var i = f.indexOf(id); return f[i + 1] || null; }
+  function screenName(id) { var s = S[id]; return typeof s.name === 'function' ? s.name() : (s.name || id); }
+
+  // Part C
+  screen('choice', { name: 'choice_screen', render: function (root) {
+    root.classList.add('is-centred');
+    root.innerHTML = '<h1 class="q-title is-large" tabindex="-1">Choose your reading</h1>' +
+      '<div class="q-stack">' +
+      '<button class="q-card is-split" type="button" data-type="quick"><span>Quick Reading</span><em>3 minutes</em></button>' +
+      '<button class="q-card is-split" type="button" data-type="full"><span>Full Reading</span><em>8 minutes</em></button>' +
+      '</div><p class="q-note">*Your curator uses the Full Reading to choose your SoulBox.</p>';
+    markSelected(root, '[data-type]', a().reading_type, 'type');
+    root.querySelectorAll('[data-type]').forEach(function (b) { b.addEventListener('click', function () {
+      var type = b.getAttribute('data-type');
+      choose(b, function () {
+        if (!state.reader_id) { state.reader_id = uuid(); enqueue(createItem(state.reader_id, type)); track.register({ reader_id: state.reader_id }); }
+        track.register({ reading_type: type });
+        track.milestone('type_chosen', { reading_type: type });
+        save({ reading_type: type });
+      });
+    }); });
+  } });
+
+  // Part D1: genre doors
+  screen('doors', { name: 'genre_doors', wide: true, render: function (root) {
+    root.innerHTML = '<h1 class="q-title" tabindex="-1">Which door calls you forward?</h1><div class="q-grid is-doors">' +
+      DOORS.map(function (d, i) {
+        return '<button class="q-tile" type="button" data-door="' + i + '" aria-label="' + esc(d.label) + '">' + media(d.file, d.label, { shape: 'portrait', index: i }) + '</button>';
+      }).join('') + '</div>';
+    var chosen = state.legacy['desire.genre_calling'];
+    DOORS.forEach(function (d, i) { if (chosen === d.legacy) root.querySelector('[data-door="' + i + '"]').classList.add('is-selected'); });
+    root.querySelectorAll('[data-door]').forEach(function (b) { b.addEventListener('click', function () {
+      var d = DOORS[+b.getAttribute('data-door')];
+      choose(b, function () {
+        // Changing door clears the old route's answers.
+        ['desire.genre_flavour', 'desire.genre_subflavour', 'desire.genre_visual_route', 'desire.genre_visual'].forEach(function (k) { delete state.legacy[k]; });
+        save({ genre_calling: d.genre, genre_flavour: null }, { 'desire.genre_calling': d.legacy });
+      });
+    }); });
+  } });
+
+  // Part D2: existing routes (unchanged), minus Plot Engine
+  function legacyImageScreen(root, title, options, opts) {
+    imageChoice(root, { title: title, options: options.map(function (o) { return { label: o.label, value: o.value, file: o.image }; }),
+      selected: opts.selected, shape: opts.shape, onPick: opts.onPick, showLabels: true });
+  }
+  screen('romance_route', { name: function () { return routeNumber('romance_route'); }, when: function () { return state.legacy['desire.genre_calling'] === 'RomanceRoute'; }, render: function (root) {
+    var q = LEGACY.romance_route;
+    legacyImageScreen(root, q.prompt, q.options, { selected: a().genre_calling, onPick: function (o) {
+      ['desire.genre_flavour', 'desire.genre_subflavour', 'desire.genre_visual'].forEach(function (k) { delete state.legacy[k]; });
+      save({ genre_calling: o.value, genre_flavour: null });
+    } });
+  } });
+  screen('flavour', { name: function () { return routeNumber('flavour'); }, when: function () { return !!a().genre_calling && a().genre_calling !== 'Mystery' && flavourOptions().length > 0; }, render: function (root) {
+    legacyImageScreen(root, LEGACY.genre_flavour.prompt, flavourOptions(), { selected: state.legacy['desire.genre_flavour'], onPick: function (o) {
+      delete state.legacy['desire.genre_subflavour'];
+      save({ genre_flavour: canonicalFlavour(o.label) }, { 'desire.genre_flavour': o.value });
+    } });
+  } });
+  screen('subflavour', { name: function () { return routeNumber('subflavour'); }, when: function () { return S.flavour.when() && subflavourOptions().length > 0; }, render: function (root) {
+    legacyImageScreen(root, LEGACY.genre_subflavour.prompt, subflavourOptions(), { selected: state.legacy['desire.genre_subflavour'], onPick: function (o) {
+      save({ genre_flavour: canonicalFlavour(o.label) }, { 'desire.genre_subflavour': o.value });
+    } });
+  } });
+  screen('novel_as', { name: function () { return routeNumber('novel_as'); }, when: function () { return a().genre_calling === 'The Literary'; }, render: function (root) {
+    var q = LEGACY.genre_visual_route;
+    legacyImageScreen(root, q.prompt, q.options, { selected: state.legacy['desire.genre_visual_route'], onPick: function (o) {
+      delete state.legacy['desire.genre_visual']; save(null, { 'desire.genre_visual_route': o.value });
+    } });
+  } });
+  screen('visual', { name: function () { return routeNumber('visual'); }, when: function () { return ['The Literary', 'Romance', 'Romantasy'].indexOf(a().genre_calling) !== -1 && visualOptions().length > 0; }, render: function (root) {
+    legacyImageScreen(root, LEGACY.genre_visual.prompt, visualOptions(), { selected: state.legacy['desire.genre_visual'], onPick: function (o) {
+      save(null, { 'desire.genre_visual': o.value });
+    } });
+  } });
+  // D2.3 Mystery route
+  screen('mystery', { name: 'mystery_flavour', when: function () { return a().genre_calling === 'Mystery'; }, render: function (root) {
+    imageChoice(root, { title: 'Choose your mystery.', options: MYSTERY.map(function (m) { return { label: m[0], value: m[0], file: m[1] }; }),
+      selected: a().genre_flavour, shape: 'portrait', showLabels: true, onPick: function (o) { save({ genre_flavour: o.value }); } });
+  } });
+
+  // D3 and D4: the archetype gates
+  screen('gate_1', { name: 'gate_1', render: function (root) {
+    textChoice(root, { title: 'I read for…', options: L.GATE_1.map(function (g) { return [g, g]; }), selected: a().gate_1, onPick: function (value) {
+      save({ gate_1: value, gate_2: value === 'The writing' ? null : (GATE_2[value] || []).some(function (o) { return o[0] === a().gate_2; }) ? a().gate_2 : null });
+    } });
+  } });
+  screen('gate_2', { name: 'gate_2', when: function () { return !!a().gate_1 && a().gate_1 !== 'The writing'; }, render: function (root) {
+    imageChoice(root, { title: 'What exactly?', options: (GATE_2[a().gate_1] || []).map(function (o) { return { label: o[0], value: o[0], file: o[1] }; }),
+      selected: a().gate_2, showLabels: true, onPick: function (o) { save({ gate_2: o.value }); } });
+  } });
+
+  // D5 and D6: existing, unchanged
+  screen('storytellers', { name: 'storytellers', render: function (root) { legacyButtons(root, LEGACY.storytellers); } });
+  screen('slider', { name: 'slider', render: function (root) {
+    var q = LEGACY.darkness, options = q.options, current = Math.max(0, options.indexOf(a().darkness));
+    root.innerHTML = '<h1 class="q-title" tabindex="-1">' + esc(q.prompt) + '</h1>' +
+      '<div class="q-slider"><input id="q-slide" type="range" min="0" max="' + (options.length - 1) + '" step="1" value="' + current + '" aria-label="' + esc(q.prompt) + '">' +
+      '<div class="q-slider-labels">' + options.map(function (o, i) { return '<span data-i="' + i + '">' + esc(o) + '</span>'; }).join('') + '</div></div>' +
+      '<div class="q-actions"><button class="q-btn" id="q-continue" type="button">Continue</button></div>';
+    function paint() { var v = +$('q-slide').value; root.querySelectorAll('.q-slider-labels span').forEach(function (s) { s.classList.toggle('is-on', +s.getAttribute('data-i') === v); }); }
+    $('q-slide').addEventListener('input', paint); paint();
+    $('q-continue').addEventListener('click', function () {
+      var value = options[+$('q-slide').value];
+      complete(function () { save({ darkness: value }, { 'desire.sensitivity': value }); track.milestone('part1_complete'); });
+    });
+  } });
+
+  // Part E: the Literary Snob Olympics
+  screen('olympics_intro', { name: 'olympics_intro', render: function (root) { intro(root, 'Part Two', 'The Literary Snob Olympics', 'How much of a snob are you?'); } });
+  OLYMPICS.forEach(function (q, n) {
+    var field = 'olympics_q' + (n + 1);
+    screen(field, { name: field, render: function (root) {
+      var options = shuffle(q.options);
+      root.innerHTML = '<p class="q-label">' + esc(q.label) + '</p>' +
+        (q.passage ? '<div class="q-passage">' + esc(q.passage) + '</div>' : '') +
+        (q.question ? '<p class="q-question">' + esc(q.question) + '</p>' : '') +
+        '<div class="q-stack">' + options.map(function (o) { return '<button class="q-card' + (q.passages ? ' is-passage' : '') + '" type="button" data-value="' + o[1] + '">' + esc(o[0]) + '</button>'; }).join('') + '</div>';
+      markSelected(root, '[data-value]', a()[field], 'value');
+      root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () {
+        choose(b, function () { var c = {}; c[field] = b.getAttribute('data-value'); save(c); if (n === 4) track.milestone('part2_complete'); });
+      }); });
+    } });
+  });
+
+  // Part F: the Three Masks
+  screen('masks_intro', { name: 'masks_intro', render: function (root) { intro(root, 'Part Three', 'The Three Masks'); } });
+  ['prologue', 'silver', 'gold', 'black'].forEach(function (key) {
+    screen('masks_' + key, { name: 'masks_' + key, render: function (root) {
+      var m = MASKS[key];
+      story(root, { image: m.image, text: m.text, options: m.options && m.options.map(function (label, i) { return [label, String(i + 1)]; }),
+        selected: m.field && a()[m.field] != null ? String(a()[m.field]) : null,
+        onPick: m.field && function (value) { var c = {}; c[m.field] = +value; save(c); } });
+    } });
+  });
+  // F3: calculate the results while "Reading your soul…" shows
+  screen('loading', { name: 'loading', render: function (root) {
+    root.classList.add('is-centred');
+    root.innerHTML = '<p class="q-loading" role="status">Reading your soul…</p>';
+    var started = Date.now();
+    track.milestone('part3_complete');
+    fetchResults().then(function () {
+      var wait = Math.max(0, 1500 - (Date.now() - started));
+      var first = state.results && imageUrl(state.results.files.character);
+      return Promise.all([new Promise(function (r) { setTimeout(r, wait); }), first ? new Promise(function (r) { var i = new Image(); i.onload = i.onerror = r; i.src = first; }) : null]);
+    }).then(function () {
+      preload((state.deck || []).slice(0, 3).map(function (b) { return b.image; }));
+      go(a().reading_type === 'full' ? 'full1_intro' : 'results', { replace: true });
+    }, function () {
+      root.innerHTML = '<p class="q-copy">We could not reach the server to read your results.</p><div class="q-actions"><button class="q-btn" id="q-retry" type="button">Try again</button></div>';
+      $('q-retry').addEventListener('click', function () { render(); });
+    });
+  } });
+
+  // Part G: Full Reading, Part One
+  function isFull() { return a().reading_type === 'full'; }
+  screen('full1_intro', { name: 'full1_intro', when: isFull, render: function (root) { intro(root, 'The Full Reading · Part One', 'Your Reading Life', 'Your curator needs to know your shelf.'); } });
+  for (var b = 0; b < 12; b++) (function (n) {
+    var field = 'swipe_' + (n < 9 ? '0' : '') + (n + 1);
+    screen(field, { name: field, when: isFull, render: function (root) { swipeScreen(root, n, field); } });
+  })(b);
+  screen('tone', { name: 'tone', when: isFull, render: function (root) {
+    var q = LEGACY.tone;
+    legacyImageScreen(root, q.prompt, q.options, { selected: state.legacy['desire.tone'], onPick: function (o) { save(null, { 'desire.tone': o.value }); } });
+  } });
+  screen('triggers', { name: 'triggers', when: isFull, render: function (root) { triggersScreen(root); } });
+
+  // Part H: The Reader Behind the Books
+  screen('full2_intro', { name: 'full2_intro', when: isFull, render: function (root) {
+    intro(root, 'The Full Reading · Part Two', 'The Reader Behind the Books', 'Now, the part no algorithm can see. There are no right answers. The more honest you are, the truer your box.');
+  } });
+  screen('whisper', { name: 'whisper', when: isFull, render: function (root) {
+    var q = LEGACY.whisper;
+    textChoice(root, { title: q.prompt, options: q.options.map(function (o) { return [o.text || o.label, o.value]; }), selected: state.legacy[q.id],
+      onPick: function (value) { var l = {}; l[q.id] = value; save(null, l); } });
+  } });
+  screen('one_issue', { name: 'one_issue', when: isFull, render: function (root) {
+    var q = LEGACY.one_issue;
+    writeScreen(root, { image: q.image, title: q.prompt, value: state.legacy[q.id], multi: false, placeholder: q.placeholder || '',
+      onDone: function (value) { var l = {}; l[q.id] = value; save(null, l); } });
+  } });
+  screen('childhood', { name: 'childhood', when: isFull, render: function (root) { legacyButtons(root, LEGACY.childhood); } });
+  ['prologue', 'first_law', 'shortage', 'betrayal', 'epilogue'].forEach(function (key) {
+    screen('eden_' + key, { name: 'eden_' + key, when: isFull, render: function (root) {
+      var e = EDEN[key];
+      story(root, { image: e.image, text: e.text, extra: e.extra, question: e.question,
+        write: e.field && { value: a()[e.field], minWords: EDEN_MIN_WORDS, placeholder: 'Write what you\'d actually do. There\'s no right answer.',
+          onDone: function (value) { var c = {}; c[e.field] = value; save(c); } } });
+    } });
+  });
+  // H4: The Image (four visions) and last words, unchanged
+  screen('image', { name: 'image', when: isFull, render: function (root) {
+    var q = LEGACY.image;
+    imageChoice(root, { title: q.prompt || '', options: q.options.map(function (o) { return { label: o.label, value: o.value, file: o.imageId, caption: o.text }; }),
+      selected: state.legacy[q.id], shape: 'landscape', showLabels: true, onPick: function (o) { var l = {}; l[q.id] = o.value; delete state.legacy[LEGACY.last_words.id]; save(null, l); } });
+  } });
+  screen('last_words', { name: 'last_words', when: isFull, render: function (root) {
+    var q = LEGACY.last_words, cluster = state.legacy[LEGACY.image.id];
+    story(root, { image: q.image, text: q.storyText, options: (q.dynamicOptions[cluster] || []).map(function (o) { return [o.label, o.value]; }),
+      selected: state.legacy[q.id], onPick: function (value) { var l = {}; l[q.id] = value; save(null, l); track.milestone('full2_complete'); } });
+  } });
+
+  // Part I: Three Last Questions
+  screen('final_intro', { name: 'final_intro', when: isFull, render: function (root) { intro(root, null, 'Three Last Questions', 'And your curator will truly know you.'); } });
+  Object.keys(FINAL).forEach(function (field, n) {
+    screen(field, { name: field, when: isFull, render: function (root) {
+      writeScreen(root, { title: FINAL[field], question: true, value: a()[field], multi: true, placeholder: 'Take your time.', onDone: function (value) {
+        var c = {}; c[field] = value;
+        if (n === 2) { c.full_reading_completed = 'yes'; track.milestone('full_reading_complete'); }
+        save(c);
+      } });
+    } });
+  });
+
+  // Results and everything after them (Parts J to L)
+  screen('results', { name: 'results_intro', render: function (root) {
+    if (window.SoulBoxResults) window.SoulBoxResults.render(root);
+    else root.innerHTML = '<p class="q-copy">Your results are ready.</p>';
+  } });
+
+  // ── Screen building blocks ───────────────────────────────────────────────
+  function markSelected(root, selector, value, attr) {
+    if (value == null) return;
+    root.querySelectorAll(selector).forEach(function (el) { if (el.getAttribute('data-' + attr) === String(value)) el.classList.add('is-selected'); });
+  }
+  function intro(root, label, headline, line) {
+    root.classList.add('is-centred');
+    root.innerHTML = (label ? '<p class="q-label">' + esc(label) + '</p>' : '') + '<h1 class="q-title is-large" tabindex="-1">' + esc(headline) + '</h1>' +
+      (line ? '<p class="q-sub">' + esc(line) + '</p>' : '') + '<div class="q-actions"><button class="q-btn" id="q-continue" type="button">Continue</button></div>';
+    $('q-continue').addEventListener('click', function () { complete(noop); });
+  }
+  function textChoice(root, opts) {
+    root.innerHTML = '<h1 class="q-title" tabindex="-1">' + esc(opts.title) + '</h1><div class="q-stack">' +
+      opts.options.map(function (o) { return '<button class="q-card" type="button" data-value="' + esc(o[1]) + '">' + esc(o[0]) + '</button>'; }).join('') + '</div>';
+    markSelected(root, '[data-value]', opts.selected, 'value');
+    root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () { choose(b, function () { opts.onPick(b.getAttribute('data-value')); }); }); });
+  }
+  function imageChoice(root, opts) {
+    var count = opts.options.length;
+    root.innerHTML = (opts.title ? '<h1 class="q-title" tabindex="-1">' + esc(opts.title) + '</h1>' : '') + '<div class="q-grid">' +
+      opts.options.map(function (o, i) {
+        var odd = count % 2 === 1 && i === count - 1;
+        return '<button class="q-tile' + (odd ? ' is-odd-last' : '') + '" type="button" data-value="' + esc(o.value) + '" aria-label="' + esc(o.label) + '">' +
+          media(o.file, o.label, { shape: opts.shape, index: i, tint: true }) +
+          (opts.showLabels ? '<span class="q-tile-title">' + esc(o.label) + '</span>' : '') +
+          (o.caption ? '<span class="q-tile-caption">' + esc(o.caption) + '</span>' : '') + '</button>';
+      }).join('') + '</div>';
+    markSelected(root, '[data-value]', opts.selected, 'value');
+    root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () {
+      var value = b.getAttribute('data-value'), option = opts.options.filter(function (o) { return String(o.value) === value; })[0];
+      choose(b, function () { opts.onPick(option); });
+    }); });
+  }
+  // Existing "button" questions (storytellers, childhood): image, prompt, text cards.
+  function legacyButtons(root, q) {
+    root.innerHTML = (q.image ? '<div class="q-hero">' + media(q.image, '', { shape: 'landscape', cover: true }) + '</div>' : '') +
+      '<h1 class="q-title" tabindex="-1">' + esc(q.prompt) + '</h1><div class="q-stack">' +
+      q.buttons.map(function (o) { return '<button class="q-card" type="button" data-value="' + esc(o.value) + '">' + esc(o.label) + '</button>'; }).join('') + '</div>';
+    markSelected(root, '[data-value]', state.legacy[q.id], 'value');
+    root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () {
+      choose(b, function () { var l = {}; l[q.id] = b.getAttribute('data-value'); save(null, l); });
+    }); });
+  }
+  // Story screen (Type 5): landscape image, text, then Continue, answer cards, or a written answer.
+  function story(root, opts) {
+    root.innerHTML = '<div class="q-hero">' + media(opts.image, '', { shape: 'landscape', cover: true, index: 0 }) + '</div>' +
+      '<p class="q-story">' + esc(opts.text) + '</p>' +
+      (opts.extra ? '<p class="q-story-extra">' + esc(opts.extra) + '</p>' : '') +
+      (opts.question ? '<p class="q-story-question">' + esc(opts.question) + '</p>' : '') +
+      (opts.options ? '<div class="q-stack">' + opts.options.map(function (o) { return '<button class="q-card" type="button" data-value="' + esc(o[1]) + '">' + esc(o[0]) + '</button>'; }).join('') + '</div>' : '') +
+      (opts.write ? '<div class="q-stack"><div><textarea class="q-field" id="q-text" aria-label="Your answer" placeholder="' + esc(opts.write.placeholder) + '">' + esc(opts.write.value || '') + '</textarea><p class="q-error" id="q-err" hidden></p></div></div>' : '') +
+      (!opts.options ? '<div class="q-actions"><button class="q-btn" id="q-continue" type="button">Continue</button></div>' : '');
+    if (opts.options) {
+      markSelected(root, '[data-value]', opts.selected, 'value');
+      root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () { choose(b, function () { opts.onPick(b.getAttribute('data-value')); }); }); });
+      return;
+    }
+    $('q-continue').addEventListener('click', function () {
+      if (!opts.write) return complete(noop);
+      var value = $('q-text').value.trim(), err = $('q-err');
+      if (!value) { err.textContent = 'Please fill this in.'; err.hidden = false; return; }
+      if (wordCount(value) < opts.write.minWords) { err.textContent = 'Tell us a little more: at least ' + opts.write.minWords + ' words.'; err.hidden = false; return; }
+      complete(function () { opts.write.onDone(value); });
+    });
+  }
+  // Text answer screen (Type 6a / 6b).
+  function writeScreen(root, opts) {
+    root.innerHTML = (opts.image ? '<div class="q-hero">' + media(opts.image, '', { shape: 'landscape', cover: true }) + '</div>' : '') +
+      '<h1 class="q-title' + (opts.question ? ' is-question' : '') + '" tabindex="-1">' + esc(opts.title) + '</h1><div class="q-stack"><div>' +
+      (opts.multi ? '<textarea class="q-field" id="q-text" aria-label="Your answer" placeholder="' + esc(opts.placeholder) + '">' + esc(opts.value || '') + '</textarea>'
+        : '<input class="q-field" id="q-text" type="text" autocomplete="off" aria-label="Your answer" placeholder="' + esc(opts.placeholder) + '" value="' + esc(opts.value || '') + '">') +
+      '<p class="q-error" id="q-err" hidden>Please fill this in.</p></div></div><div class="q-actions"><button class="q-btn" id="q-continue" type="button">Continue</button></div>';
+    $('q-continue').addEventListener('click', function () {
+      var value = $('q-text').value.trim();
+      if (!value) { $('q-err').hidden = false; return; }
+      complete(function () { opts.onDone(value); });
+    });
+  }
+  function triggersScreen(root) {
+    var q = LEGACY.triggers, chosen = state.legacy[q.id] || [];
+    var options = q.options.map(function (o) { return o.value || o; }).concat([TRIGGERS_OTHER]);
+    root.innerHTML = '<h1 class="q-title" tabindex="-1">' + esc(q.prompt) + '</h1><div class="q-ticks">' +
+      options.map(function (v, i) { var on = chosen.indexOf(v) !== -1; return '<label class="q-tick' + (on ? ' is-checked' : '') + '"><input type="checkbox" id="q-t' + i + '"' + (on ? ' checked' : '') + '><span>' + esc(v) + '</span></label>'; }).join('') +
+      '<input class="q-field" id="q-other" type="text" autocomplete="off" aria-label="Tell us more" placeholder="Tell us more" value="' + esc(a().triggers_other || '') + '"' + (chosen.indexOf(TRIGGERS_OTHER) === -1 ? ' hidden' : '') + '>' +
+      '</div><div class="q-actions"><button class="q-btn" id="q-continue" type="button">Continue</button></div>';
+    var otherIndex = options.length - 1;
+    function current() { return options.filter(function (_, i) { return $('q-t' + i).checked; }); }
+    options.forEach(function (_, i) { $('q-t' + i).addEventListener('change', function (e) {
+      e.target.parentNode.classList.toggle('is-checked', e.target.checked);
+      if (i === otherIndex) { $('q-other').hidden = !e.target.checked; if (e.target.checked) $('q-other').focus(); else $('q-other').value = ''; }
+    }); });
+    $('q-continue').addEventListener('click', function () {
+      var list = current(), other = list.indexOf(TRIGGERS_OTHER) !== -1 ? $('q-other').value.trim() : '';
+      complete(function () { var l = {}; l[q.id] = list; save({ triggers_other: other || null }, l); track.milestone('full1_complete'); });
+    });
+  }
+  // G2: one book per screen. Buttons only; the book slides out left, the next slides in right.
+  function swipeScreen(root, n, field) {
+    var deck = state.deck || [], book = deck[n];
+    if (!book) { root.innerHTML = '<p class="q-copy">Your books are still loading.</p>'; return; }
+    var saved = a()[field], savedAnswer = saved && saved.split(' | ').pop();
+    root.innerHTML = '<p class="q-counter">' + (n + 1) + ' of 12</p>' +
+      '<div class="q-book">' + media(book.image, book.title, { shape: 'portrait', index: 0 }) + '</div>' +
+      '<p class="q-book-title">' + esc(book.title) + '</p><p class="q-book-author">' + esc(book.author) + '</p><p class="q-book-hook">' + esc(book.hook) + '</p>' +
+      '<div class="q-swipe-grid">' + SWIPE_ANSWERS.reduce(function (all, row) { return all.concat(row); }, []).map(function (ans) {
+        return '<button class="q-card" type="button" data-value="' + esc(ans) + '">' + esc(ans) + '</button>'; }).join('') + '</div>';
+    markSelected(root, '[data-value]', savedAnswer, 'value');
+    if (deck[n + 1]) preload([deck[n + 1].image]);
+    root.querySelectorAll('[data-value]').forEach(function (b) { b.addEventListener('click', function () {
+      choose(b, function () { var c = { swipe_deck: state.a.final_archetype || (state.results && state.results.final_archetype) }; c[field] = L.swipeValue(book, b.getAttribute('data-value')); save(c); }, { swipe: true });
+    }); });
+  }
+
+  // ── Navigation ───────────────────────────────────────────────────────────
+  var locked = false, browserDepth = 0;
+  function go(id, options) {
+    options = options || {};
+    var forward = !options.back && !options.replace && state.screen !== id;
+    if (forward) { state.history.push(state.screen); try { history.pushState({ soulboxQuiz: true }, ''); browserDepth += 1; } catch (_) {} }
+    state.screen = id; persist();
+    var root = $('q-screen');
+    root.classList.add(options.swipe ? 'is-swipe-out' : 'is-leaving');
+    setTimeout(function () { render(options.back, options.swipe); window.scrollTo(0, 0); locked = false; }, options.swipe ? 260 : 180);
+  }
+  // A completed screen: save, then move to the next visible screen.
+  function complete(saveFn, options) {
+    var from = state.screen;
+    saveFn();
+    track.screenComplete(screenName(from), { reader_id: state.reader_id });
+    var next = nextAfter(from);
+    if (from === 'masks_black') next = 'loading';
+    if (from === 'final_rejection') next = 'results';
+    go(next || 'results', options);
+  }
+  function choose(button, saveFn, options) {
+    if (locked) return; locked = true;
+    var group = button.parentNode.querySelectorAll('.is-selected');
+    for (var i = 0; i < group.length; i++) group[i].classList.remove('is-selected');
+    button.classList.add('is-selected');
+    setTimeout(function () { complete(saveFn, options); }, 300);
+  }
+  function stepBack() { if (state.history.length) go(state.history.pop(), { back: true }); }
+  $('q-back').addEventListener('click', function () { if (locked || !state.history.length) return; if (browserDepth > 0) history.back(); else { locked = true; stepBack(); } });
+  window.addEventListener('popstate', function () {
+    if (browserDepth > 0) browserDepth -= 1;
+    if (!state.history.length || NO_BACK[state.screen]) return;
+    (function attempt() { if (locked) setTimeout(attempt, 120); else { locked = true; stepBack(); } })();
+  });
+  var NO_BACK = { choice: true, loading: true, results: true, not_found: true };
+
+  // ── Progress (0.5): Quick fills to the Black; Full fills to the last question, Masks at about 50% ──
+  function updateChrome() {
+    var id = state.screen;
+    var f = flow().filter(function (s) { return s !== 'loading' && s !== 'results'; });
+    var start = f.indexOf('doors'), i = f.indexOf(id);
+    var pct = id === 'choice' ? 0 : i === -1 ? 100 : Math.round((Math.max(0, i - start) / Math.max(1, f.length - 1 - start)) * 100);
+    $('q-progress-fill').style.width = pct + '%';
+    $('q-progress').setAttribute('aria-valuenow', String(pct));
+    $('q-progress').classList.toggle('is-hidden', id === 'results' || id === 'loading' || id === 'not_found');
+    $('q-back').classList.toggle('is-hidden', !state.history.length || !!NO_BACK[id] || state.history[state.history.length - 1] === 'loading');
+    $('q-app').classList.toggle('is-wide', !!S[id] && !!S[id].wide);
+  }
+
+  function render(isBack, isSwipe) {
+    var root = $('q-screen');
+    root.className = 'q-screen' + (isSwipe ? ' is-swipe-in' : isBack ? ' is-back' : '');
+    (S[state.screen] || S.choice).render(root);
+    root.querySelectorAll('.q-tile, .q-card, .q-tick, .q-stack > div, .q-actions, .q-passage, .q-story, .q-note').forEach(function (el, i) {
+      if (isSwipe) return; el.classList.add('q-rise'); el.style.setProperty('--i', String(Math.min(i, 8)));
+    });
+    revealImages(root);
+    updateChrome();
+    var name = screenName(state.screen);
+    track.screenView(name, { reader_id: state.reader_id });
+    if (state.reader_id && state.screen !== 'loading') save({ last_screen_reached: name });
+    if (state.screen === 'choice' && !state.seen.started) { state.seen.started = true; track.milestone('reading_started'); persist(); }
+    var title = root.querySelector('.q-title'); if (title && state.history.length) title.focus({ preventScroll: true });
+    setTimeout(function () { var n = nextAfter(state.screen); if (n && S[n].images) preload(S[n].images()); }, 250);
+  }
+
+  // Background preloading of the next screen's images
+  S.doors.images = function () { return DOORS.map(function (d) { return d.file; }); };
+  S.mystery.images = function () { return MYSTERY.map(function (m) { return m[1]; }); };
+  S.gate_2.images = function () { return (GATE_2[a().gate_1] || []).map(function (o) { return o[1]; }); };
+  ['prologue', 'silver', 'gold', 'black'].forEach(function (k) { S['masks_' + k].images = function () { return [MASKS[k].image]; }; });
+  ['prologue', 'first_law', 'shortage', 'betrayal', 'epilogue'].forEach(function (k) { S['eden_' + k].images = function () { return [EDEN[k].image]; }; });
+
+  // ── Results (calculated on the server from the saved answers) ────────────
+  function fetchResults() {
+    return flushAll().then(function () {
+      return fetch(API + '/reader/' + encodeURIComponent(state.reader_id) + '/results', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || 'Results unavailable'); return d; }); })
+      .then(function (d) { state.results = d.results; state.deck = d.swipe_deck; state.a.final_archetype = d.results.final_archetype; persist(); return d; });
+  }
+
+  // ── Part M: the "Finish your reading" link (?id=) ────────────────────────
+  var params = new URLSearchParams(location.search);
+  var linkId = params.get('id');
+  function startFromLink(id) {
+    $('q-screen').innerHTML = '<p class="q-loading" role="status">Finding your reading…</p>';
+    fetch(API + '/reader/' + encodeURIComponent(id)).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); }).then(function (res) {
+      if (!res.ok || !res.d.results) throw new Error('not found');
+      var keep = state.reader_id === id ? state : freshState();
+      keep.reader_id = id; keep.results = res.d.results; keep.deck = res.d.swipe_deck;
+      keep.a.final_archetype = res.d.results.final_archetype; keep.a.reading_type = 'full';
+      keep.history = [];
+      keep.screen = res.d.full_reading_completed === 'yes' ? 'results' : (keep.reader_id === id && S[keep.screen] && keep.screen !== 'results' && flow().indexOf(keep.screen) > flow().indexOf('full1_intro') ? keep.screen : 'full1_intro');
+      state = keep; persist();
+      // The upgrade to a Full Reading is saved on the same row.
+      enqueue({ kind: 'update', reader_id: id, answers: { reading_type: 'full' } });
+      track.register({ reader_id: id, reading_type: 'full' });
+      try { history.replaceState(null, '', location.pathname); } catch (_) {}
+      render();
+    }).catch(function () {
+      state.screen = 'not_found'; render();
+    });
+  }
+  screen('not_found', { name: 'not_found', when: function () { return false; }, render: function (root) {
+    root.classList.add('is-centred');
+    root.innerHTML = '<h1 class="q-title" tabindex="-1">We couldn\'t find your reading.</h1><div class="q-actions"><button class="q-btn q-btn--main" id="q-new" type="button">Start a new reading</button></div>';
+    $('q-new').addEventListener('click', function () { state = freshState(); queue = []; persistQueue(); persist(); try { history.replaceState(null, '', location.pathname); } catch (_) {} render(); });
+  } });
+
+  // Expose a little for the results module and for tests.
+  window.SoulBoxQuiz = { state: function () { return state; }, save: save, go: go, flushAll: flushAll, api: API, media: media, esc: esc, imageUrl: imageUrl, revealImages: revealImages, track: track, persist: persist };
+
+  track.register({ reading_type: a().reading_type || null, reader_id: state.reader_id || null });
+  if (linkId) startFromLink(linkId); else render();
+  flush();
+})();
+</script>

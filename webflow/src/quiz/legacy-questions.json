@@ -1,0 +1,1303 @@
+{
+ "_source": "Copied unchanged from the live Webflow quiz pages (/quiz, /quiz-2, /quiz-3) on 9 November 2026. The Build Brief keeps these questions as they are.",
+ "romance_route": {
+  "id": "desire.genre_calling",
+  "type": "image",
+  "prompt": "Love takes place where, for you?",
+  "gridClass": "grid-2x1",
+  "isRoutingQuestion": true,
+  "options": [
+   {
+    "value": "Romantasy",
+    "label": "The Fantastical",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1737de371861510cd1_NEWROMANTASYROUTE.jpg",
+    "image_id": "NEWROMANTASYROUTE"
+   },
+   {
+    "value": "Romance",
+    "label": "The Grounded",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dcbdc6600f35c0ff_NEWROMANCEROUTE.jpg",
+    "image_id": "NEWROMANCEROUTE"
+   }
+  ],
+  "conditional": true,
+  "conditionType": "romance_intermediary"
+ },
+ "genre_flavour": {
+  "id": "desire.genre_flavour",
+  "type": "image",
+  "prompt": "Choose the image that feels like your world.",
+  "gridClass": "grid-3x2",
+  "options": [],
+  "dynamicOptions": {
+   "Horror": [
+    {
+     "value": "horror_psychological",
+     "label": "Psychological Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1718d9ee3bac5d2137_q1_horror_01.jpg",
+     "image_id": "q1_horror_01.jpg"
+    },
+    {
+     "value": "horror_supernatural",
+     "label": "Supernatural Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1736e990a2e237c34d_q1_horror_02.jpg",
+     "image_id": "q1_horror_02.jpg"
+    },
+    {
+     "value": "horror_cosmic",
+     "label": "Cosmic Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178740aaa736cd5c51_q1_horror_03.jpg",
+     "image_id": "q1_horror_03.jpg"
+    },
+    {
+     "value": "horror_body",
+     "label": "Body Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17e80abd0572c47970_q1_horror_04.jpg",
+     "image_id": "q1_horror_04.jpg"
+    },
+    {
+     "value": "horror_folk",
+     "label": "Folk Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc189790610aa319eacb_q1_horror_05.jpg",
+     "image_id": "q1_horror_05.jpg"
+    },
+    {
+     "value": "horror_predator",
+     "label": "Predator Horror",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18dca040ee7c1ca058_q1_horror_06.jpg",
+     "image_id": "q1_horror_06.jpg"
+    }
+   ],
+   "Historical Fiction": [
+    {
+     "value": "hist_ancient_world",
+     "label": "Ancient World",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc178a6d86fced830eac_q1_hist_01.jpg",
+     "image_id": "q1_hist_01.jpg"
+    },
+    {
+     "value": "hist_age_sword",
+     "label": "Age of Sword",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17b662e7aa3848b388_q1_hist_02.jpg",
+     "image_id": "q1_hist_02.jpg"
+    },
+    {
+     "value": "hist_age_gunpowder",
+     "label": "Age of Gunpowder",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ebc_q1_hist_03.jpg",
+     "image_id": "q1_hist_03.jpg"
+    },
+    {
+     "value": "hist_british",
+     "label": "The British",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc176056f57508233ec0_q1_hist_04.jpg",
+     "image_id": "q1_hist_04.jpg"
+    },
+    {
+     "value": "hist_recent_past",
+     "label": "The Recent Past",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17dc5aabbe1f669717_q1_hist_05.jpg",
+     "image_id": "q1_hist_05.jpg"
+    }
+   ],
+   "Literary": [
+    {
+     "value": "cont_family",
+     "label": "Family",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56de_q1_cont_01.jpg",
+     "image_id": "q1_cont_01.jpg"
+    },
+    {
+     "value": "cont_love",
+     "label": "Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d7ced48cb55c4ae8_q1_cont_02.jpg",
+     "image_id": "q1_cont_02.jpg"
+    },
+    {
+     "value": "cont_identity",
+     "label": "Identity",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc177aad5170f4f2ad51_q1_cont_03.jpg",
+     "image_id": "q1_cont_03.jpg"
+    },
+    {
+     "value": "cont_mind",
+     "label": "Mind",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17acbc5ce17ba73823_q1_cont_04.jpg",
+     "image_id": "q1_cont_04.jpg"
+    },
+    {
+     "value": "cont_society",
+     "label": "Society",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d54e6bcacb505127_q1_cont_05.jpg",
+     "image_id": "q1_cont_05.jpg"
+    }
+   ],
+   "Contemporary": [
+    {
+     "value": "cont_family",
+     "label": "Family",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56de_q1_cont_01.jpg",
+     "image_id": "q1_cont_01.jpg"
+    },
+    {
+     "value": "cont_love",
+     "label": "Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d7ced48cb55c4ae8_q1_cont_02.jpg",
+     "image_id": "q1_cont_02.jpg"
+    },
+    {
+     "value": "cont_identity",
+     "label": "Identity",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc177aad5170f4f2ad51_q1_cont_03.jpg",
+     "image_id": "q1_cont_03.jpg"
+    },
+    {
+     "value": "cont_mind",
+     "label": "Mind",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17acbc5ce17ba73823_q1_cont_04.jpg",
+     "image_id": "q1_cont_04.jpg"
+    },
+    {
+     "value": "cont_society",
+     "label": "Society",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17d54e6bcacb505127_q1_cont_05.jpg",
+     "image_id": "q1_cont_05.jpg"
+    }
+   ],
+   "Science Fiction": [
+    {
+     "value": "sci_space_opera",
+     "label": "Space Opera",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae79ba069b22957e83d_q1_scifi_01.jpg.jpg",
+     "image_id": "q1_scifi_01.jpg"
+    },
+    {
+     "value": "sci_cyber",
+     "label": "Cyber",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7957bde17bd60445e_q1_scifi_02.jpg.jpg",
+     "image_id": "q1_scifi_02.jpg"
+    },
+    {
+     "value": "sci_science_heavy",
+     "label": "Science Heavy",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae71b6339d16e6465ad_q1_scifi_03.jpg.jpg",
+     "image_id": "q1_scifi_03.jpg"
+    },
+    {
+     "value": "sci_afterworld",
+     "label": "Afterworld",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae767882e58954b97f2_q1_scifi_04.jpg.jpg",
+     "image_id": "q1_scifi_04.jpg"
+    },
+    {
+     "value": "sci_first_contact",
+     "label": "First Contact",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7e74d18cc1220e784_q1_scifi_05.jpg.jpg",
+     "image_id": "q1_scifi_05.jpg"
+    },
+    {
+     "value": "sci_strange",
+     "label": "The Strange",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae799227bfe72e9052d_q1_scifi_06.jpg.jpg",
+     "image_id": "q1_scifi_06.jpg"
+    }
+   ],
+   "Fantasy": [
+    {
+     "value": "fantasy_grand_adventure",
+     "label": "Grand Adventure",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7d5a4e43a01b7e651_q1_fantasy_01.jpg.jpg",
+     "image_id": "q1_fantasy_01.jpg"
+    },
+    {
+     "value": "fantasy_survive",
+     "label": "Survive",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc183f3896cc582d28b3_q1_fantasy_02.jpg.jpg",
+     "image_id": "q1_fantasy_02.jpg"
+    },
+    {
+     "value": "fantasy_heart_home",
+     "label": "Heart & Home",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae760ce9b7902770a0b_q1_fantasy_03.jpg.jpg",
+     "image_id": "q1_fantasy_03.jpg"
+    },
+    {
+     "value": "fantasy_sacred_strange",
+     "label": "Sacred or Strange",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70de9c8a091acd587_q1_fantasy_04.jpg.jpg",
+     "image_id": "q1_fantasy_04.jpg"
+    },
+    {
+     "value": "fantasy_schemes_politics",
+     "label": "Schemes & Politics",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7f8f7174269e5c75c_q1_fantasy_05.jpg.jpg",
+     "image_id": "q1_fantasy_05.jpg"
+    },
+    {
+     "value": "fantasy_modern_magic",
+     "label": "Modern Magic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc15f66f79789ea55f6f_q1_fantasy_06.jpg.jpg",
+     "image_id": "q1_fantasy_06.jpg"
+    }
+   ],
+   "Romantasy": [
+    {
+     "value": "rom_conflict_dynamic",
+     "label": "Conflict Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70ed342eba35114ac_q1_rom_01.jpg.jpg",
+     "image_id": "q1_rom_01.jpg"
+    },
+    {
+     "value": "rom_outsider_dynamic",
+     "label": "Outsider Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7ec6f84eedbfdb588_q1_rom_02.jpg.jpg",
+     "image_id": "q1_rom_02.jpg"
+    },
+    {
+     "value": "rom_bond_dynamic",
+     "label": "Bond Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7607c6dc7efabed5d_q1_rom_03.jpg.jpg",
+     "image_id": "q1_rom_03.jpg"
+    },
+    {
+     "value": "rom_sanctuary_dynamic",
+     "label": "Sanctuary Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7a30d3242d40a1b2d_q1_rom_04.jpg.jpg",
+     "image_id": "q1_rom_04.jpg"
+    }
+   ],
+   "Romance": [
+    {
+     "value": "rce_conflict_dynamic",
+     "label": "Conflict Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70ed342eba35114ac_q1_rom_01.jpg.jpg",
+     "image_id": "q1_rce_01.jpg"
+    },
+    {
+     "value": "rce_outsider_dynamic",
+     "label": "Outsider Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7ec6f84eedbfdb588_q1_rom_02.jpg.jpg",
+     "image_id": "q1_rce_02.jpg"
+    },
+    {
+     "value": "rce_bond_dynamic",
+     "label": "Bond Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7607c6dc7efabed5d_q1_rom_03.jpg.jpg",
+     "image_id": "q1_rce_03.jpg"
+    },
+    {
+     "value": "rce_sanctuary_dynamic",
+     "label": "Sanctuary Dynamic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7a30d3242d40a1b2d_q1_rom_04.jpg.jpg",
+     "image_id": "q1_rce_04.jpg"
+    }
+   ]
+  }
+ },
+ "genre_subflavour": {
+  "id": "desire.genre_subflavour",
+  "type": "image",
+  "prompt": "Refine your choice.",
+  "gridClass": "grid-2x1",
+  "options": [],
+  "dynamicOptions": {
+   "cont_family": [
+    {
+     "value": "cont_family_secrets",
+     "label": "Family Secrets & Legacy",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e0a9a0910c442b93_q1b_fam_01.jpg",
+     "image_id": "q1b_fam_01.jpg"
+    },
+    {
+     "value": "cont_family_caregiving",
+     "label": "Caregiving & Kinship",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18bff580afc1e45ff5_q1b_fam_02.jpg",
+     "image_id": "q1b_fam_02.jpg"
+    },
+    {
+     "value": "cont_family_breaking",
+     "label": "Breaking the Pattern",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc15441e03bb80c27dd2_q1b_fam_03.jpg",
+     "image_id": "q1b_fam_03.jpg"
+    }
+   ],
+   "cont_love": [
+    {
+     "value": "cont_love_unravelling",
+     "label": "The Slow Unravelling",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc13d326b360e655faa3_q1b_love_01.jpg",
+     "image_id": "q1b_love_01.jpg"
+    },
+    {
+     "value": "cont_love_modern",
+     "label": "Modern Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19dcbdc6600f35c8d5_q1b_love_02.jpg",
+     "image_id": "q1b_love_02.jpg"
+    },
+    {
+     "value": "cont_love_friendships",
+     "label": "Deep Friendships",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1db18ad47dadb1c101_q1b_love_03.jpg",
+     "image_id": "q1b_love_03.jpg"
+    }
+   ],
+   "cont_identity": [
+    {
+     "value": "cont_identity_race",
+     "label": "Race, Culture & Belonging",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc194164caab75ac75f3_q1b_identity_01.jpg",
+     "image_id": "q1b_identity_01.jpg"
+    },
+    {
+     "value": "cont_identity_gender",
+     "label": "Sex, Gender & Desire",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc1038f16094f7444905_q1b_identity_02.jpg",
+     "image_id": "q1b_identity_02.jpg"
+    },
+    {
+     "value": "cont_identity_reinvention",
+     "label": "Reinvention",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc145cd223a118c339da_q1b_identity_03.jpg",
+     "image_id": "q1b_identity_03.jpg"
+    }
+   ],
+   "cont_mind": [
+    {
+     "value": "cont_mind_grief",
+     "label": "Grief & Loss",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1936e990a2e237c85b_q1b_mind_01.jpg",
+     "image_id": "q1b_mind_01.jpg"
+    },
+    {
+     "value": "cont_mind_wounds",
+     "label": "Old Wounds",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19972ac4970d708869_q1b_mind_02.jpg",
+     "image_id": "q1b_mind_02.jpg"
+    },
+    {
+     "value": "cont_mind_crisis",
+     "label": "The Quiet Crisis",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc198740aaa736cd5d15_q1b_mind_03.jpg",
+     "image_id": "q1b_mind_03.jpg"
+    }
+   ],
+   "cont_society": [
+    {
+     "value": "cont_society_survival",
+     "label": "Modern Survival",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc17e233493b9f57f454_q1b_society_01.jpg",
+     "image_id": "q1b_society_01.jpg"
+    },
+    {
+     "value": "cont_society_digital",
+     "label": "Digital Loneliness",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da40_q1b_society_02.jpg",
+     "image_id": "q1b_society_02.jpg"
+    },
+    {
+     "value": "cont_society_unequal",
+     "label": "An Unequal World",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1aacbc5ce17ba73bdd_q1b_society_03.jpg",
+     "image_id": "q1b_society_03.jpg"
+    },
+    {
+     "value": "cont_society_crisis",
+     "label": "A World in Crisis",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc19f4f6f40df37d7c98_q1b_society_04.jpg",
+     "image_id": "q1b_society_04.jpg"
+    }
+   ],
+   "hist_ancient_world": [
+    {
+     "value": "hist_ancient_egypt",
+     "label": "Egypt",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1864ddb74f3be96d83_q1b_ancient_01.jpg",
+     "image_id": "q1b_ancient_01.jpg"
+    },
+    {
+     "value": "hist_ancient_greece",
+     "label": "Greece",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18d54e6bcacb505162_q1b_ancient_02.jpg",
+     "image_id": "q1b_ancient_02.jpg"
+    },
+    {
+     "value": "hist_ancient_rome",
+     "label": "Rome",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18ba313327bf6e92cd_q1b_ancient_03.jpg",
+     "image_id": "q1b_ancient_03.jpg"
+    },
+    {
+     "value": "hist_ancient_persia",
+     "label": "Persia",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1895f8b3779907b6cc_q1b_ancient_04.jpg",
+     "image_id": "q1b_ancient_04.jpg"
+    }
+   ],
+   "hist_age_sword": [
+    {
+     "value": "hist_sword_vikings",
+     "label": "Vikings",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a338bfedff0d1b23f_q1b_sword_01.jpg",
+     "image_id": "q1b_sword_01.jpg"
+    },
+    {
+     "value": "hist_sword_crusades",
+     "label": "Crusades",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a99a728deb665b524_q1b_sword_02.jpg",
+     "image_id": "q1b_sword_02.jpg"
+    },
+    {
+     "value": "hist_sword_islamic",
+     "label": "Islamic World",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da47_q1b_sword_03.jpg",
+     "image_id": "q1b_sword_03.jpg"
+    },
+    {
+     "value": "hist_sword_mongols",
+     "label": "Mongols",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a8b034178821c1a99_q1b_sword_04.jpg",
+     "image_id": "q1b_sword_04.jpg"
+    },
+    {
+     "value": "hist_sword_samurai",
+     "label": "Samurai",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a9c775de11bbbac32_q1b_sword_05.jpg",
+     "image_id": "q1b_sword_05.jpg"
+    }
+   ],
+   "hist_age_gunpowder": [
+    {
+     "value": "hist_gunpowder_renaissance",
+     "label": "Renaissance",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18338bfedff0d1b074_q1b_gunpowder_01.jpg",
+     "image_id": "q1b_gunpowder_01.jpg"
+    },
+    {
+     "value": "hist_gunpowder_empire",
+     "label": "Age of Empire",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1960f2fa3b2510dfaa_q1b_gunpowder_02.jpg",
+     "image_id": "q1b_gunpowder_02.jpg"
+    },
+    {
+     "value": "hist_gunpowder_pirates",
+     "label": "Pirates",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e0a9a0910c442ba7_q1b_gunpowder_03.jpg",
+     "image_id": "q1b_gunpowder_03.jpg"
+    },
+    {
+     "value": "hist_gunpowder_napoleonic",
+     "label": "Napoleonic Wars",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19e97151d6ff9405b7_q1b_gunpowder_04.jpg",
+     "image_id": "q1b_gunpowder_04.jpg"
+    },
+    {
+     "value": "hist_gunpowder_wildwest",
+     "label": "American Wild West",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc195b903a2fa50b6cd7_q1b_gunpowder_05.jpg",
+     "image_id": "q1b_gunpowder_05.jpg"
+    }
+   ],
+   "hist_british": [
+    {
+     "value": "hist_british_tudors",
+     "label": "Tudors",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18e97151d6ff940140_q1b_british_01.jpg",
+     "image_id": "q1b_british_01.jpg"
+    },
+    {
+     "value": "hist_british_regency",
+     "label": "Regency",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1864ddb74f3be96d95_q1b_british_02.jpg",
+     "image_id": "q1b_british_02.jpg"
+    },
+    {
+     "value": "hist_british_victorian",
+     "label": "Victorian Britain",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc188740aaa736cd5ca7_q1b_british_03.jpg",
+     "image_id": "q1b_british_03.jpg"
+    },
+    {
+     "value": "hist_british_industrial",
+     "label": "Industrial Revolution",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc18d6acf999f469f011_q1b_british_04.jpg",
+     "image_id": "q1b_british_04.jpg"
+    }
+   ],
+   "hist_recent_past": [
+    {
+     "value": "hist_recent_ww1",
+     "label": "World War I",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19ba313327bf6e93be_q1b_recent_01.jpg",
+     "image_id": "q1b_recent_01.jpg"
+    },
+    {
+     "value": "hist_recent_ww2",
+     "label": "World War II",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19d7bf40956c04cb7e_q1b_recent_02.jpg",
+     "image_id": "q1b_recent_02.jpg"
+    },
+    {
+     "value": "hist_recent_coldwar",
+     "label": "Cold War",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19b768fad8c4ae7356_q1b_recent_03.jpg",
+     "image_id": "q1b_recent_03.jpg"
+    },
+    {
+     "value": "hist_recent_liberation",
+     "label": "Liberation",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc19392145753429d9e7_q1b_recent_04.jpg",
+     "image_id": "q1b_recent_04.jpg"
+    },
+    {
+     "value": "hist_recent_late20th",
+     "label": "Late 20th",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1a392145753429da05_q1b_recent_05.jpg",
+     "image_id": "q1b_recent_05.jpg"
+    }
+   ],
+   "fantasy_grand_adventure": [
+    {
+     "value": "fantasy_epic_quests",
+     "label": "Epic Quests",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68f21da55b46c2cb58df276f_q1b_adventure_01.jpg-min.png",
+     "image_id": "q1b_grand_01.jpg"
+    },
+    {
+     "value": "fantasy_clever_sparks",
+     "label": "Clever Sparks",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68f21cb9cd47a082978ccb64_q1b_adventure_02.jpg.png",
+     "image_id": "q1b_grand_02.jpg"
+    }
+   ],
+   "fantasy_survive": [
+    {
+     "value": "fantasy_lone_wolves",
+     "label": "Lone Wolves",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8e747a47e48f7bd9f_q1b_survive_01.jpg.jpg",
+     "image_id": "q1b_survive_01.jpg"
+    },
+    {
+     "value": "fantasy_wartime_epics",
+     "label": "Wartime Epics",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8b02638ad533eb6c2_q1b_survive_02.jpg.jpg",
+     "image_id": "q1b_survive_02.jpg"
+    },
+    {
+     "value": "fantasy_blazing_trials",
+     "label": "Blazing Trials",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8131fa99f0824f63b_q1c_visual_01.jpg.jpg",
+     "image_id": "q1b_survive_03.jpg"
+    }
+   ],
+   "fantasy_heart_home": [
+    {
+     "value": "fantasy_cosy_realms",
+     "label": "Cosy Realms",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7fb144dd9fff34206_q1b_home_01.jpg.jpg",
+     "image_id": "q1b_heart_01.jpg"
+    },
+    {
+     "value": "fantasy_whispers_wonders",
+     "label": "Whispers & Wonders",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae75fafc152333f4337_q1b_home_02.jpg.jpg",
+     "image_id": "q1b_heart_02.jpg"
+    }
+   ],
+   "fantasy_sacred_strange": [
+    {
+     "value": "fantasy_sacred_myths",
+     "label": "Sacred Myths",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae77a39cc3975342bf9_q1b_sacred_01.jpg.jpg",
+     "image_id": "q1b_sacred_01.jpg"
+    },
+    {
+     "value": "fantasy_weird",
+     "label": "Weird",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7dfbae78dd1b2b5d5_q1b_sacred_02.jpg.jpg",
+     "image_id": "q1b_sacred_02.jpg"
+    }
+   ],
+   "fantasy_schemes_politics": [
+    {
+     "value": "fantasy_dark_academia",
+     "label": "Dark Academia",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8e59108ade413e203_q1b_schemes_01.jpg.jpg",
+     "image_id": "q1b_schemes_01.jpg"
+    },
+    {
+     "value": "fantasy_dark_labyrinths",
+     "label": "Dark Labyrinths",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8611e90c20d295bd4_q1b_schemes_02.jpg.jpg",
+     "image_id": "q1b_schemes_02.jpg"
+    }
+   ],
+   "fantasy_modern_magic": [
+    {
+     "value": "fantasy_hidden_realms",
+     "label": "Hidden Realms",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7ef8bdd04f2bdfb02_q1b_modern_01.jpg.jpg",
+     "image_id": "q1b_modern_01.jpg"
+    },
+    {
+     "value": "fantasy_urban_frontline",
+     "label": "Urban Frontline",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7dd34971b0afb7ff1_q1b_modern_02.jpg.jpg",
+     "image_id": "q1b_modern_02.jpg"
+    }
+   ],
+   "rom_conflict_dynamic": [
+    {
+     "value": "rom_enemies_to_lovers",
+     "label": "Enemies to Lovers",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7aa47e1d2fa4dfd67_q1b_conflict_01.jpg.jpg",
+     "image_id": "q1b_conflict_01.jpg"
+    },
+    {
+     "value": "rom_conflict_obsession",
+     "label": "Dark Obsession",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e12272ea337a74cad3_(ROMANTASY%20MISSING)%20q1b_conflict_02.jpg.jpg",
+     "image_id": "q1b_conflict_02.jpg"
+    },
+    {
+     "value": "rom_power_play",
+     "label": "Power Play",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae750cd97bbea0e7ff1_q1b_conflict_03.jpg.jpg",
+     "image_id": "q1b_conflict_03.jpg"
+    }
+   ],
+   "rom_outsider_dynamic": [
+    {
+     "value": "rom_forbidden_love",
+     "label": "Forbidden Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7924534dac533ba08_q1b_outsider_01.jpg.jpg",
+     "image_id": "q1b_outsider_01.jpg"
+    },
+    {
+     "value": "rom_star_crossed",
+     "label": "Star-Crossed",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae73af2ee14eb5d906d_q1b_outsider_02.jpg.jpg",
+     "image_id": "q1b_outsider_02.jpg"
+    },
+    {
+     "value": "rom_outsider_political",
+     "label": "Political Intrigue",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1ba756a61b00322b0_(ROMANTASY%20MISSING)%20q1b_outsider_03.jpg.jpg",
+     "image_id": "q1b_outsider_03.jpg"
+    }
+   ],
+   "rom_bond_dynamic": [
+    {
+     "value": "rom_fated_bonds",
+     "label": "Fated Bonds",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae750bf7962806cadcc_q1b_bond_01.jpg.jpg",
+     "image_id": "q1b_bond_01.jpg"
+    },
+    {
+     "value": "rom_slow_burn",
+     "label": "Slow Burn",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7dd34971b0afb7fdc_q1b_bond_02.jpg.jpg",
+     "image_id": "q1b_bond_02.jpg"
+    }
+   ],
+   "rom_sanctuary_dynamic": [
+    {
+     "value": "rom_healing_love",
+     "label": "Healing Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae71ebc339b428ba410_q1b_sanctuary_02.jpg.jpg",
+     "image_id": "q1b_sanctuary_01.jpg"
+    },
+    {
+     "value": "rom_protector_protected",
+     "label": "Protector & Protected",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70f250dbafa8c2121_q1b_sanctuary_01.jpg.jpg",
+     "image_id": "q1b_sanctuary_02.jpg"
+    }
+   ],
+   "rom_nocturne": [
+    {
+     "value": "rom_mystic_romance",
+     "label": "Mystic Romance",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68dbc43c74282079720bec42_Q1b%20Nocturne%20-%20Romantasy.png",
+     "image_id": "q1b_nocturne_01.jpg"
+    },
+    {
+     "value": "rom_shadowed_hearts",
+     "label": "Shadowed Hearts",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/68dbc43c74282079720bec42_Q1b%20Nocturne%20-%20Romantasy.png",
+     "image_id": "q1b_nocturne_02.jpg"
+    }
+   ],
+   "rce_conflict_dynamic": [
+    {
+     "value": "rce_conflict_enemies",
+     "label": "Enemies to Lovers",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7aa47e1d2fa4dfd67_q1b_conflict_01.jpg.jpg",
+     "image_id": "q1b_rce_conflict_01.jpg"
+    },
+    {
+     "value": "rce_conflict_obsession",
+     "label": "Dark Obsession",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e12272ea337a74cad3_(ROMANTASY%20MISSING)%20q1b_conflict_02.jpg.jpg",
+     "image_id": "q1b_rce_conflict_02.jpg"
+    },
+    {
+     "value": "rce_conflict_powerplay",
+     "label": "Power Play",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae750cd97bbea0e7ff1_q1b_conflict_03.jpg.jpg",
+     "image_id": "q1b_rce_conflict_03.jpg"
+    }
+   ],
+   "rce_outsider_dynamic": [
+    {
+     "value": "rce_outsider_forbidden",
+     "label": "Forbidden Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7924534dac533ba08_q1b_outsider_01.jpg.jpg",
+     "image_id": "q1b_rce_outsider_01.jpg"
+    },
+    {
+     "value": "rce_outsider_starcrossed",
+     "label": "Star-Crossed",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae73af2ee14eb5d906d_q1b_outsider_02.jpg.jpg",
+     "image_id": "q1b_rce_outsider_02.jpg"
+    },
+    {
+     "value": "rce_outsider_fake",
+     "label": "Fake Relationship",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e11b3e6c9739b941d6_q1b_rce_outsider_03.jpg",
+     "image_id": "q1b_rce_outsider_03.jpg"
+    }
+   ],
+   "rce_bond_dynamic": [
+    {
+     "value": "rce_bond_friends",
+     "label": "Friends to Lovers",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e14725bb5df715c6d8_q1b_rce_bond_01.jpg",
+     "image_id": "q1b_rce_bond_01.jpg"
+    },
+    {
+     "value": "rce_bond_slowburn",
+     "label": "Slow Burn",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae7dd34971b0afb7fdc_q1b_bond_02.jpg.jpg",
+     "image_id": "q1b_rce_bond_02.jpg"
+    },
+    {
+     "value": "rce_bond_secondchance",
+     "label": "Second Chance",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1668dab60cfd44660_q1b_rce_bond_03.jpg",
+     "image_id": "q1b_rce_bond_03.jpg"
+    }
+   ],
+   "rce_sanctuary_dynamic": [
+    {
+     "value": "rce_sanctuary_protected",
+     "label": "Protector & Protected",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae70f250dbafa8c2121_q1b_sanctuary_01.jpg.jpg",
+     "image_id": "q1b_rce_sanctuary_01.jpg"
+    },
+    {
+     "value": "rce_sanctuary_healing",
+     "label": "Healing Love",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae71ebc339b428ba410_q1b_sanctuary_02.jpg.jpg",
+     "image_id": "q1b_rce_sanctuary_02.jpg"
+    }
+   ]
+  },
+  "conditional": true
+ },
+ "genre_visual_route": {
+  "id": "desire.genre_visual_route",
+  "type": "image",
+  "prompt": "The Novel as...",
+  "gridClass": "grid-3x1",
+  "showLabelBelow": true,
+  "options": [
+   {
+    "value": "literary_style_q1d_beauty",
+    "label": "Novel as Beauty",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dcbdc6600f35c0d1_Literary.NovelAs_Beauty.jpg",
+    "image_id": "Literary.NovelAs_Beauty"
+   },
+   {
+    "value": "literary_style_q1d_truth",
+    "label": "Novel as Truth",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16950ac3e9712f6a88_Literary.NovelAs_Truth.jpg",
+    "image_id": "Literary.NovelAs_Truth"
+   },
+   {
+    "value": "literary_style_q1d_game",
+    "label": "Novel as Game",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17fbb935ec54ea017b_Literary.NovelAs_Game.jpg",
+    "image_id": "Literary.NovelAs_Game"
+   }
+  ],
+  "conditional": true,
+  "conditionType": "literary_style_q1c"
+ },
+ "genre_visual": {
+  "id": "desire.genre_visual",
+  "type": "image",
+  "prompt": "And more specifically...",
+  "gridClass": "grid-3x1",
+  "showLabelBelow": true,
+  "options": [],
+  "dynamicOptions": {
+   "literary_style_q1d_beauty": [
+    {
+     "value": "Lyrical",
+     "label": "Lyrical",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb18ad47dadb1bd43_LiteraryStyle.Lyrical.jpg",
+     "image_id": "LiteraryStyle.Lyrical"
+    },
+    {
+     "value": "Gothic",
+     "label": "Gothic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc166056f57508233df9_LiteraryStyle.Gothic.jpg",
+     "image_id": "LiteraryStyle.Gothic"
+    },
+    {
+     "value": "MagicalRealism",
+     "label": "Magical Realism",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc17b662e7aa3848b2fe_LiteraryStyle.MagicalRealism.jpg",
+     "image_id": "LiteraryStyle.MagicalRealism"
+    }
+   ],
+   "literary_style_q1d_truth": [
+    {
+     "value": "Minimalist",
+     "label": "Minimalist",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dcf1118afd882ab2_LiteraryStyle.Minimalist.jpg",
+     "image_id": "LiteraryStyle.Minimalist"
+    },
+    {
+     "value": "Psychological",
+     "label": "Psychological",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1744e8daf778cd2aa3_LiteraryStyle.Psychological.jpg",
+     "image_id": "LiteraryStyle.Psychological"
+    },
+    {
+     "value": "Satirical",
+     "label": "Satirical",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16392145753429d41a_LiteraryStyle.Satirical.jpg",
+     "image_id": "LiteraryStyle.Satirical"
+    }
+   ],
+   "literary_style_q1d_game": [
+    {
+     "value": "Experimental",
+     "label": "Experimental",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16dca040ee7c1c9fe5_LiteraryStyle.Experimental.jpg",
+     "image_id": "LiteraryStyle.Experimental"
+    },
+    {
+     "value": "Postmodern",
+     "label": "Postmodern",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16b768fad8c4ae6f7e_LiteraryStyle.Postmodern.jpg",
+     "image_id": "LiteraryStyle.Postmodern"
+    },
+    {
+     "value": "Structural",
+     "label": "Structural",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1792e75db5dcab56b5_LiteraryStyle.Structural.jpg",
+     "image_id": "LiteraryStyle.Structural"
+    }
+   ],
+   "Romantasy": [
+    {
+     "value": "rom_visual_blazing",
+     "label": "Blazing Trials",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8131fa99f0824f63b_q1c_visual_01.jpg.jpg",
+     "image_id": "q1c_visual_01.jpg"
+    },
+    {
+     "value": "rom_visual_feral",
+     "label": "Feral Magic",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8a867e4951bab687e_q1c_visual_02.jpg.jpg",
+     "image_id": "q1c_visual_02.jpg"
+    },
+    {
+     "value": "rom_visual_soft",
+     "label": "Soft Spellwork",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8d1c0271960db04b6_q1c_visual_03.jpg.jpg",
+     "image_id": "q1c_visual_03.jpg"
+    },
+    {
+     "value": "rom_visual_royal",
+     "label": "Royal Intrigue",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8a6a973c2b607a8b8_q1c_visual_04.jpg.jpg",
+     "image_id": "q1c_visual_04.jpg"
+    },
+    {
+     "value": "rom_visual_nocturne",
+     "label": "Nocturne",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6967fae8607c6dc7efabef06_q1c_visual_05.jpg.jpg",
+     "image_id": "q1c_visual_05.jpg"
+    }
+   ],
+   "Romance": [
+    {
+     "value": "rce_visual_bigcity",
+     "label": "Big City",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e110312fb188f80214_q1c_rce_visual_01.jpg",
+     "image_id": "q1c_rce_visual_01.jpg"
+    },
+    {
+     "value": "rce_visual_historical",
+     "label": "Historical",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e108c1d4e0990b9bd5_q1c_rce_visual_02.jpg",
+     "image_id": "q1c_rce_visual_02.jpg"
+    },
+    {
+     "value": "rce_visual_smalltown",
+     "label": "Small Town",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e11b3e6c9739b941d1_q1c_rce_visual_03.jpg",
+     "image_id": "q1c_rce_visual_03.jpg"
+    },
+    {
+     "value": "rce_visual_campus",
+     "label": "Campus",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e10a6002872a988976_q1c_rce_visual_04.jpg",
+     "image_id": "q1c_rce_visual_04.jpg"
+    },
+    {
+     "value": "rce_visual_highsociety",
+     "label": "High Society",
+     "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e14e0970d41c564ae8_q1c_rce_visual_05.jpg",
+     "image_id": "q1c_rce_visual_05.jpg"
+    }
+   ]
+  },
+  "conditional": true,
+  "conditionType": "literary_style_q1d"
+ },
+ "storytellers": {
+  "id": "cultural_lens",
+  "type": "button",
+  "prompt": "The underrepresented storytellers should be heard.",
+  "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc16392145753429d3e3_CulturalLens.Image.jpg",
+  "gridClass": "button-grid",
+  "buttons": [
+   {
+    "value": "Progressive",
+    "label": "Yes. And loudly!",
+    "imageId": "CulturalLens.Image"
+   },
+   {
+    "value": "Balanced",
+    "label": "Sure, but only if...",
+    "imageId": "CulturalLens.Image"
+   },
+   {
+    "value": "Traditional",
+    "label": "No. I'm sorry, but the best voices should be.",
+    "imageId": "CulturalLens.Image"
+   }
+  ]
+ },
+ "darkness": {
+  "id": "desire.sensitivity",
+  "type": "slider",
+  "prompt": "How sensitive are you to heavy themes? Slide to where you feel at home.",
+  "options": [
+   "Gentle",
+   "Testing",
+   "Unflinching"
+  ]
+ },
+ "tone": {
+  "id": "desire.tone",
+  "type": "image",
+  "prompt": "Every story carries a mood. Which calls you most?",
+  "gridClass": "grid-3x2",
+  "options": [
+   {
+    "value": "Warm",
+    "label": "Warm",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b702_Tone.Warm.jpg",
+    "image_id": "Tone.Warm"
+   },
+   {
+    "value": "Playful",
+    "label": "Playful",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc171d83e014473ff076_Tone.Playful.jpg",
+    "image_id": "Tone.Playful"
+   },
+   {
+    "value": "Grounded",
+    "label": "Grounded",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6ab9dc145cd223a118c33a1e_Copy%20of%20Tone.Grounded.jpg",
+    "image_id": "Tone.Grounded"
+   },
+   {
+    "value": "Melancholic",
+    "label": "Melancholic",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bacbc5ce17ba73c28_Tone.Melancholic.jpg",
+    "image_id": "Tone.Melancholic"
+   },
+   {
+    "value": "Tense",
+    "label": "Tense",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1ba8270492863aae6a_Tone.Tense.jpg",
+    "image_id": "Tone.Tense"
+   },
+   {
+    "value": "Heavy",
+    "label": "Heavy",
+    "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1bb662e7aa3848b6e8_Tone.Heavy.jpg",
+    "image_id": "Tone.Heavy"
+   }
+  ]
+ },
+ "triggers": {
+  "id": "reader_context.heavy_triggers",
+  "type": "checkbox",
+  "prompt": "Are there any themes you cannot read? Triggers you must avoid? Your comfort and needs matter to us. So please, let us know.",
+  "image": null,
+  "options": [
+   {
+    "value": "Death",
+    "label": "Death"
+   },
+   {
+    "value": "Abuse",
+    "label": "Abuse"
+   },
+   {
+    "value": "Sexual violence",
+    "label": "Sexual violence"
+   },
+   {
+    "value": "Racism",
+    "label": "Racism"
+   },
+   {
+    "value": "Homophobia",
+    "label": "Homophobia"
+   },
+   {
+    "value": "Transphobia",
+    "label": "Transphobia"
+   },
+   {
+    "value": "Mental illness",
+    "label": "Mental illness"
+   }
+  ]
+ },
+ "whisper": {
+  "id": "soul_climate.temperature_secondary.whisper_text",
+  "type": "grid",
+  "gridType": "grid-3x3",
+  "prompt": "Your mind is quiet. The dead of night. Then it whispers, a few quiet words…",
+  "options": [
+   {
+    "value": "Hopeful",
+    "label": "‘Today was good. Tomorrow, better.’",
+    "text": "‘Today was good. Tomorrow, better.’",
+    "imageId": "q8b_w_01"
+   },
+   {
+    "value": "Lonely",
+    "label": "‘I am alone.’",
+    "text": "‘I am alone.’",
+    "imageId": "q8b_w_02"
+   },
+   {
+    "value": "Anxious",
+    "label": "‘Something’s wrong.’",
+    "text": "‘Something’s wrong.’",
+    "imageId": "q8b_w_03"
+   },
+   {
+    "value": "Restless",
+    "label": "‘I need to move. Somewhere. Anywhere.’",
+    "text": "‘I need to move. Somewhere. Anywhere.’",
+    "imageId": "q8b_w_04"
+   },
+   {
+    "value": "Grieving",
+    "label": "‘They are gone.’",
+    "text": "‘They are gone.’",
+    "imageId": "q8b_w_05"
+   },
+   {
+    "value": "Numb",
+    "label": "‘Why don’t I feel?’",
+    "text": "‘Why don’t I feel?’",
+    "imageId": "q8b_w_06"
+   },
+   {
+    "value": "Ashamed",
+    "label": "‘Why did I do that?!’",
+    "text": "‘Why did I do that?!’",
+    "imageId": "q8b_w_07"
+   },
+   {
+    "value": "Bitter",
+    "label": "It should have been mine.",
+    "text": "It should have been mine.",
+    "imageId": "q8b_w_08"
+   },
+   {
+    "value": "Searching",
+    "label": "There's something out there. I can feel it.",
+    "text": "There's something out there. I can feel it.",
+    "imageId": "q8b_w_09"
+   }
+  ]
+ },
+ "one_issue": {
+  "id": "reader_context.issues_struggles",
+  "type": "text",
+  "prompt": "If you could solve one issue — inside you, or in the world — what would it be?",
+  "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6ea33d4cf749a95b1_q13.jpg.jpg"
+ },
+ "childhood": {
+  "id": "wounds",
+  "type": "button",
+  "prompt": "You're crying in the car after school. Your mom looks back and gently asks, “What's wrong?” You look down and sob:",
+  "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54dc1662cd0a61dd5c8b73_Image.Wounds.jpg",
+  "gridClass": "button-grid",
+  "buttons": [
+   {
+    "value": "wounds.rejection",
+    "label": "Nobody wanted to be my partner today.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.humiliation",
+    "label": "Everyone laughed at me at lunch.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.injustice",
+    "label": "I got in trouble for something I didn't do.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.abandonment",
+    "label": "My best friend left without me.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.betrayal",
+    "label": "I told a secret and they told the whole class.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.invisibility",
+    "label": "The teacher wouldn't even look at me.",
+    "imageId": "Image.Wounds"
+   },
+   {
+    "value": "wounds.none",
+    "label": "None of these",
+    "imageId": "Image.Wounds"
+   }
+  ]
+ },
+ "image": {
+  "id": "yearning.cluster_image",
+  "type": "grid",
+  "gridType": "grid-2x2",
+  "prompt": "",
+  "options": [
+   {
+    "value": "cluster_1",
+    "label": "A place of belonging",
+    "text": "You walk into the room. Faces turn, eyes soften, smiles spread wide — honest, true. A chair is pulled out for you. Hands reach, laughter opens. They are not smiling at the mask, not the act — they are smiling at you.",
+    "imageId": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb567284d846e047521_q10a_01.jpg.jpg"
+   },
+   {
+    "value": "cluster_2",
+    "label": "A world of freedom",
+    "text": "You stand on the mountain’s peak. The horizon stretches wide, unbroken. Cliffs. Rivers. A world. The wind rushes into your chest, sharp and alive. Behind you, the old weight has fallen. Before you, everything begins again — and all of it waits for you.",
+    "imageId": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6d46f27f86e902bb1_q10a_02.jpg.jpg"
+   },
+   {
+    "value": "cluster_3",
+    "label": "A moment of peace",
+    "text": "You sit on a worn bench by the sea. The tide rolls in and out, the dark past soon forgotten. A soft breeze brushes your skin. The noise is gone — outside, inside. For the first time, you exhale, and the weight does not return.",
+    "imageId": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6ea33d4cf749a95a1_q10a_03.jpg.jpg"
+   },
+   {
+    "value": "cluster_4",
+    "label": "A legacy enduring",
+    "text": "You place the torch in a child’s hands. Their eyes shine as they lift it high. “Thank you,” the girl says. The flame catches, and the night glows bright around you. It is not lost — it endures, carried forward, alive because of you.",
+    "imageId": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb6a6bf20ffc4a8f593_q10a_04.jpg.jpg"
+   }
+  ]
+ },
+ "last_words": {
+  "id": "yearning.final",
+  "type": "grid",
+  "gridType": "grid-2x2",
+  "prompt": "",
+  "image": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb65f04f871f0fdfe76_q10b_01.jpg.jpg",
+  "storyText": "You smile. The setting sun drifts off, thirst squeezes your throat. But the image does not leave your mind.\nAnd then the words leave your lips.\nWords you never thought you would say. Words you always wished you had.",
+  "dynamicOptions": {
+   "cluster_1": [
+    {
+     "value": "To be loved",
+     "label": "I am loved.",
+     "imageId": "q10b_w_01"
+    },
+    {
+     "value": "To belong",
+     "label": "I finally belong.",
+     "imageId": "q10b_w_02"
+    },
+    {
+     "value": "To be seen",
+     "label": "They see me.",
+     "imageId": "q10b_w_03"
+    },
+    {
+     "value": "To feel worthy",
+     "label": "I am enough.",
+     "imageId": "q10b_w_04"
+    }
+   ],
+   "cluster_2": [
+    {
+     "value": "To be free",
+     "label": "I am free.",
+     "imageId": "q10b_w_05"
+    },
+    {
+     "value": "To change",
+     "label": "Change is here.",
+     "imageId": "q10b_w_06"
+    },
+    {
+     "value": "To discover",
+     "label": "The world. For me to see.",
+     "imageId": "q10b_w_07"
+    }
+   ],
+   "cluster_3": [
+    {
+     "value": "To feel peace",
+     "label": "Peace. Finally, peace.",
+     "imageId": "q10b_w_08"
+    },
+    {
+     "value": "To redeem",
+     "label": "I made it right again.",
+     "imageId": "q10b_w_09"
+    }
+   ],
+   "cluster_4": [
+    {
+     "value": "To preserve",
+     "label": "The good will endure.",
+     "imageId": "q10b_w_10"
+    },
+    {
+     "value": "To leave an impact",
+     "label": "They will remember me.",
+     "imageId": "q10b_w_11"
+    }
+   ]
+  }
+ }
+}

@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const apiRoutes = require("./routes/api");
 const giftRoutes = require("./routes/gift-routes");
+const readerRoutes = require("./routes/reader-routes");
 
 // Load .env from project root
 dotenv.config({ path: __dirname + "/../.env" });
@@ -28,6 +29,7 @@ app.post("/api/stripe-webhook", express.raw({ type: "application/json" }), giftR
 
 app.use(express.json({ limit: "200kb" }));
 app.use("/api", giftRoutes.router);
+app.use("/api", readerRoutes.router);
 app.use("/api", apiRoutes);
 
 app.listen(port, () => {

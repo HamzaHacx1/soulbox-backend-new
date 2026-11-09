@@ -1,6 +1,7 @@
 // Readers (Logic & Data Spec 7.2, Section 9) for the November quiz.
 const db = require("./supabase");
 const L = require("../logic/soulbox-logic");
+const sheet = require("./sheet-mirror");
 
 const SITE = "https://soulboxed.com";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -121,6 +122,7 @@ async function updateReader(readerId, patch) {
   if (!Object.keys(clean).length) return { reader_id: id };
   const rows = await db.update("readers", `reader_id=${db.eq(id)}`, { ...clean, sheet_synced_at: null });
   if (!rows.length) throw new ReaderError(404, "Reader not found.");
+  if ("house_joined" in clean || clean.full_reading_completed === "yes") await syncReaderToSheet(rows[0]);
   return { reader_id: id, reader: rows[0] };
 }
 
@@ -153,7 +155,8 @@ async function calculateResults(readerId) {
     final_archetype: result.final_archetype, house: result.house, soul_character: result.soul_character,
     swipe_deck: result.final_archetype, sheet_synced_at: null,
   };
-  await db.update("readers", `reader_id=${db.eq(reader.reader_id)}`, saved);
+  const rows = await db.update("readers", `reader_id=${db.eq(reader.reader_id)}`, saved);
+  await syncReaderToSheet(rows[0]);
   return publicResults({ ...reader, ...saved }, result);
 }
 
@@ -188,6 +191,67 @@ function publicResults(reader, result) {
   };
 }
 
+// After a successful Stripe payment for the Soul Report or SoulBox (sales page).
+const PURCHASE_PLANS = { soul_report_september: "soul_report", soulbox_september: "soulbox" };
+async function markReaderPurchase(session) {
+  const purchase = PURCHASE_PLANS[session && session.metadata && session.metadata.plan];
+  const id = session && session.metadata && session.metadata.submissionId;
+  if (!purchase || !id || !UUID.test(id)) return { handled: false };
+  if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") return { handled: true, paid: false };
+  const rows = await db.update("readers", `reader_id=${db.eq(id.toLowerCase())}`, { purchase, sheet_synced_at: null });
+  if (rows.length) {
+    const r = rows[0];
+    await db.insert("events", { reader_id: r.reader_id, session_id: r.session_id, event_type: "milestone", milestone_name: "purchase_complete",
+      source_ref: r.source_ref, ab_variant: r.ab_variant, reading_type: r.reading_type }).catch((e) => console.error("[reader] event failed:", e.message));
+    await syncReaderToSheet(r);
+  }
+  return { handled: true, paid: true, reader_id: id, found: rows.length > 0 };
+}
+
+// ── Google Sheet mirror ("Readers" tab, Logic & Data Spec 7.1) ──────────────
+// Existing questions (kept in `answers`) get their own columns under their old field names.
+const LEGACY_COLUMNS = [
+  "desire.genre_calling", "desire.genre_flavour", "desire.genre_subflavour", "desire.genre_visual_route", "desire.genre_visual",
+  "cultural_lens", "desire.sensitivity", "desire.tone", "reader_context.heavy_triggers",
+  "soul_climate.temperature_secondary.whisper_text", "reader_context.issues_struggles", "wounds", "yearning.cluster_image", "yearning.final",
+];
+const SHEET_COLUMNS = [
+  "reader_id", "created_at", "source_ref", "ab_variant", "reading_type", "full_reading_link", "full_reading_completed", "last_screen_reached",
+  "genre_calling", "genre_flavour", "gate_1", "gate_2", "darkness",
+  "olympics_q1", "olympics_q2", "olympics_q3", "olympics_q4", "olympics_q5", "masks_silver", "masks_gold", "masks_black",
+  "olympics_total", "literary_grade", "masks_total", "moral_tier", "moral_band", "provisional_archetype", "validation_changed",
+  "fallback_used", "highbrow_override", "final_archetype", "house", "soul_character",
+  "swipe_deck", ...Array.from({ length: 12 }, (_, i) => `swipe_${String(i + 1).padStart(2, "0")}`), "triggers_other",
+  "eden_first_law", "eden_shortage", "eden_betrayal", "final_mirror", "final_ghost", "final_rejection",
+  "results_saved", "house_joined", "first_name", "email", "country", "country_detected", "purchase",
+  ...LEGACY_COLUMNS,
+  "curator_posture_primary", "curator_posture_secondary", "curator_wound", "curator_yearning", "curator_notes",
+];
+// The curator columns are filled in by hand in the Sheet, so the mirror never overwrites them.
+const CURATOR_COLUMNS = SHEET_COLUMNS.filter((c) => c.startsWith("curator_"));
+const MIRRORED_COLUMNS = SHEET_COLUMNS.filter((c) => !c.startsWith("curator_"));
+
+async function syncReaderToSheet(reader) {
+  if (!reader || !sheet.sheetId()) return { skipped: true };
+  try {
+    const row = { ...reader, ...Object.fromEntries(LEGACY_COLUMNS.map((k) => [k, (reader.answers || {})[k]])) };
+    await sheet.upsertRow({ tab: process.env.READERS_SHEET_TAB || "Readers", columns: MIRRORED_COLUMNS, header: SHEET_COLUMNS, row });
+    await db.update("readers", `reader_id=${db.eq(reader.reader_id)}`, { sheet_synced_at: new Date().toISOString() });
+    return { synced: true };
+  } catch (error) {
+    console.error("[reader] sheet sync failed:", error.message);
+    return { synced: false, error: error.message };
+  }
+}
+
+// Catch-up mirror for every reader changed since its last sync (run on a schedule).
+async function syncPendingReaders(limit = 50) {
+  const rows = await db.select("readers", `select=*&sheet_synced_at=is.null&order=updated_at.asc&limit=${limit}`);
+  const results = [];
+  for (const reader of rows) results.push({ reader_id: reader.reader_id, ...(await syncReaderToSheet(reader)) });
+  return results;
+}
+
 // Section 9: the "Finish your reading" link.
 async function readerForFullReading(readerId) {
   const reader = await getReader(readerId);
@@ -197,5 +261,6 @@ async function readerForFullReading(readerId) {
 
 module.exports = {
   ReaderError, FIELD_RULES, SWIPE_ANSWERS,
-  sanitizeReaderPatch, fullReadingLink, createReader, updateReader, getReader, calculateResults, publicResults, readerForFullReading,
+  sanitizeReaderPatch, fullReadingLink, createReader, updateReader, getReader, calculateResults, publicResults, readerForFullReading, markReaderPurchase,
+  SHEET_COLUMNS, CURATOR_COLUMNS, syncReaderToSheet, syncPendingReaders,
 };

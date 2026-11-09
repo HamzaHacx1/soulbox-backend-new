@@ -52,7 +52,8 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-words.is-good{opacity:1;color:var(--beige)}
   /* Sized so "Begin" stays above the fold on a phone. */
   .gift-hero{width:min(100%,220px,34vh);margin:0 auto 16px}
-  .gift-header{margin:0 0 20px}
+  /* Header images sit above the question, small enough that the form and Continue stay on screen. */
+  .gift-header{width:min(100%,200px,26vh);margin:0 auto 16px}
   .gift-media.is-auto{aspect-ratio:16/9}
   .gift-media.is-auto:not(.is-loading){aspect-ratio:auto}
   .gift-media.is-auto:not(.is-loading) img{position:static;height:auto}

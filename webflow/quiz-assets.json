@@ -1,0 +1,53 @@
+{
+  "_note": "Quiz images (Build Brief Part P). Empty = not delivered yet; the quiz shows a labelled placeholder.",
+  "doors": {
+    "door_fantasy.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ca198e151c0f00c454_door_fantasy.jpg",
+    "door_sciencefiction.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb23b4cae415fd1419_door_sciencefiction.jpg",
+    "door_romance.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cac95c78fd3062c3e1_door_romance.jpg",
+    "door_historical.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6a54daca4164caab75ab7073_NEWGENRE.HOSTORICALFICTION.jpg",
+    "door_horror.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e14067954580d6b749_Section%200%20-%20Horror.jpg",
+    "door_mystery.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2caf493a82f31b5f8b1_door_mystery.jpg",
+    "door_literary.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69dae7e1fe51da321b9d137e_Section%200%20-%20Literary.jpg",
+    "door_contemporary.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ca76904a614f9d77f9_door_contemporary.jpg"
+  },
+  "mystery": {
+    "mystery_action.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ce59a91f4cdb2bd365_mystery_action.jpg",
+    "mystery_cozy.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ce9bfc8e65178a5aac_mystery_cozy.jpg",
+    "mystery_evidence.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ce23b4cae415fd151c_mystery_evidence.jpg",
+    "mystery_noir.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ce0865545df13087ef_mystery_noir.jpg",
+    "mystery_psychological.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cedb5879d3c948f3aa_mystery_psychological.jpg",
+    "mystery_who.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ce744788a272fb0954_mystery_who.jpg"
+  },
+  "gates": {
+    "gate_guilty_dark.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb35394b9b95be855f_gate_guilty_dark.jpg",
+    "gate_guilty_drama.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb9d0c5be8f2647318_gate_guilty_drama.jpg",
+    "gate_guilty_heat.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb35394b9b95be85b3_gate_guilty_heat.jpg",
+    "gate_love_fallinginlove.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cc1c76afa2e8fba83d_gate_love_fallinginlove.jpg",
+    "gate_love_feelingathome.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cc1fca8be4f5b0beb8_gate_love_feelingathome.jpg",
+    "gate_story_adventure.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ccddead90cd959265e_gate_story_adventure.jpg",
+    "gate_story_hero.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2ccc95c78fd3062c4a7_gate_story_hero.jpg",
+    "gate_story_meaning.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cd35394b9b95be867c_gate_story_meaning.jpg",
+    "gate_story_rush.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cd254ff4ff113a44dd_gate_story_rush.jpg",
+    "gate_story_twists.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cdedfb600b4c6f4db5_gate_story_twists.jpg",
+    "gate_story_world.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cdedfb600b4c6f4dc6_gate_story_world.jpg"
+  },
+  "masks": {
+    "masks_prologue.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cd336de47fca6c8150_masks_prologue.jpg",
+    "masks_silver.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cec95c78fd3062c512_masks_silver.jpg",
+    "masks_gold.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cd254ff4ff113a4583_masks_gold.jpg",
+    "masks_black.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cd744788a272fb0905_masks_black.jpg"
+  },
+  "eden": {
+    "eden_prologue.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb76904a614f9d787d_eden_prologue.jpg",
+    "eden_firstlaw.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cbdb5879d3c948f306_eden_firstlaw.jpg",
+    "eden_shortage.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb35394b9b95be8535_eden_shortage.jpg",
+    "eden_betrayal.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af1a2cb9d0c5be8f26472c0_eden_betrayal.jpg",
+    "eden_epilogue.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/69ac6eb61f5279435800872f_q10_preface.jpg.jpg"
+  },
+  "emblems": {
+    "emblem_heart.png": "",
+    "emblem_body.png": "",
+    "emblem_soul.png": "",
+    "emblem_mind.png": ""
+  }
+}

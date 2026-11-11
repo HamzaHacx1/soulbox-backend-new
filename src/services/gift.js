@@ -199,8 +199,16 @@ function paidUpdateFromSession(session) {
   };
 }
 
+// The gift a Checkout session paid for. Our own sessions carry metadata.gift_id; the
+// client's Stripe Payment Link carries it as client_reference_id (added by the gift page).
+function giftIdOf(session) {
+  if (session?.metadata?.plan === "gift_box" && UUID.test(session.metadata.gift_id || "")) return session.metadata.gift_id.toLowerCase();
+  if (session?.payment_link && UUID.test(session.client_reference_id || "")) return session.client_reference_id.toLowerCase();
+  return null;
+}
+
 function isGiftSession(session) {
-  return session?.metadata?.plan === "gift_box" && UUID.test(session.metadata.gift_id || "");
+  return giftIdOf(session) !== null;
 }
 
 // Marks the gift paid. Safe to call from both the webhook and the thank-you
@@ -208,7 +216,7 @@ function isGiftSession(session) {
 async function markGiftPaid(session, deps = {}) {
   if (!isGiftSession(session)) return { handled: false };
   if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") return { handled: true, paid: false };
-  const id = session.metadata.gift_id.toLowerCase();
+  const id = giftIdOf(session);
   const rows = await db.update("gifts", `gift_id=${db.eq(id)}&payment_status=${db.eq("not paid")}`, {
     ...paidUpdateFromSession(session),
     last_screen_reached: "gift_thank_you",
@@ -332,6 +340,6 @@ module.exports = {
   RELATIONSHIPS, OCCASIONS, MOOD_FIELDS, MOOD_VALUES, HARD_NOS, LIFE_CHAPTERS, READING_FUELS, SCREENS,
   GIFT_BOX, SHEET_COLUMNS,
   GiftError,
-  sanitizeGiftPatch, sanitizeMeta, missingAnswers, buildGiftCheckout, paidUpdateFromSession, isGiftSession, sheetRow,
+  sanitizeGiftPatch, sanitizeMeta, missingAnswers, buildGiftCheckout, paidUpdateFromSession, isGiftSession, giftIdOf, sheetRow,
   createGift, updateGift, getGift, markGiftPaid, recordMilestone, syncGiftToSheet, syncPendingGifts, newGiftId,
 };

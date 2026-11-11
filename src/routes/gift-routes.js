@@ -73,7 +73,7 @@ router.get("/gift/:giftId/confirm", async (req, res) => {
     const sessionId = String(req.query.session_id || "");
     if (!/^cs_[A-Za-z0-9_]+$/.test(sessionId)) return res.status(400).json({ ok: false, error: "Invalid session." });
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (!gifts.isGiftSession(session) || session.metadata.gift_id.toLowerCase() !== String(req.params.giftId).toLowerCase()) {
+    if (gifts.giftIdOf(session) !== String(req.params.giftId).toLowerCase()) {
       return res.status(404).json({ ok: false, error: "Payment not found for this gift." });
     }
     const result = await gifts.markGiftPaid(session);

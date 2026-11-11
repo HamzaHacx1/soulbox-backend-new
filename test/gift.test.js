@@ -111,3 +111,13 @@ test('the source tag and A/B variant are cleaned before saving', () => {
   assert.deepEqual(gifts.sanitizeMeta({ source_ref: '  creatorname ', ab_variant: 'B', session_id: 'abc' }), { source_ref: 'creatorname', ab_variant: 'B', session_id: 'abc' });
   assert.deepEqual(gifts.sanitizeMeta({ source_ref: '', ab_variant: 'C' }), { source_ref: null, ab_variant: null, session_id: null });
 });
+
+test("payments from the client's Payment Link are matched by client_reference_id", () => {
+  const id = "3b5af68e-e832-4ce3-bab7-fb37f59d0357";
+  const gifts = require("../src/services/gift");
+  assert.equal(gifts.giftIdOf({ payment_link: "plink_1", client_reference_id: id.toUpperCase() }), id);
+  assert.equal(gifts.giftIdOf({ metadata: { plan: "gift_box", gift_id: id } }), id);
+  assert.equal(gifts.giftIdOf({ client_reference_id: id }), null); // not from a Payment Link
+  assert.equal(gifts.giftIdOf({ payment_link: "plink_1", client_reference_id: "abc" }), null);
+  assert.equal(gifts.giftIdOf({ metadata: { submissionId: id } }), null);
+});

@@ -150,6 +150,9 @@ Edit this source file, then run `node webflow/build.js`.
   var API = 'https://soulbox-backend-new.vercel.app/api';
   // Christmas line on the checkout card. Fill in the date, e.g. '15 December'. Empty hides the line.
   var CHRISTMAS_ORDER_BY = '16 December';
+  // The client's Stripe Payment Link for the £45 Gift Box. The gift id goes along as
+  // client_reference_id so the payment is matched to this gift's answers. Empty uses our own Checkout.
+  var GIFT_PAYMENT_LINK = 'https://buy.stripe.com/5kQaEXemBbBl9XY9VF8k805';
   var SHOW_PRODUCT_IMAGE = true; // gift_box_product.jpg at the top of the checkout card
   var IMAGES = window.SOULBOX_GIFT_IMAGES || {};
   var STATE_KEY = 'soulboxGift';
@@ -744,6 +747,17 @@ Edit this source file, then run `node webflow/build.js`.
       var button = $('gift-buy'); var status = $('gift-status');
       button.disabled = true; status.textContent = 'Opening secure checkout…';
       track.milestone('gift_buy_tapped', { gift_id: state.gift_id });
+      if (GIFT_PAYMENT_LINK) {
+        flushAll().then(function () {
+          track.screenComplete('gift_checkout', { gift_id: state.gift_id });
+          window.location.assign(GIFT_PAYMENT_LINK + '?client_reference_id=' + encodeURIComponent(state.gift_id));
+        }).catch(function (error) {
+          console.error('[SoulBox gift] saving answers failed', error);
+          button.disabled = false;
+          status.textContent = 'We could not save your answers. Please check your connection and try again.';
+        });
+        return;
+      }
       flushAll().then(function () {
         return fetch(API + '/gift/' + encodeURIComponent(state.gift_id) + '/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
       }).then(function (response) {
@@ -812,7 +826,8 @@ Edit this source file, then run `node webflow/build.js`.
   // ── Returning from Stripe ────────────────────────────────────────────────
   var params = new URLSearchParams(location.search);
   var returnStatus = params.get('status');
-  var returnGift = params.get('gift_id');
+  // The Payment Link's confirmation page can only add the session id, so fall back to this browser's gift.
+  var returnGift = params.get('gift_id') || (params.get('session_id') ? state.gift_id : null);
   if (returnStatus && returnGift) {
     if (returnGift !== state.gift_id) { state = freshState(); state.gift_id = returnGift; }
     if (returnStatus === 'success') {

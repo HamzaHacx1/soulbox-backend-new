@@ -13,8 +13,9 @@ function sheets() {
   return client;
 }
 
-// The new SoulBox Sheet (Logic & Data Spec 7.1): tabs "Readers" and "Gifts".
-function sheetId() { return process.env.SOULBOX_SHEET_ID || process.env.GIFTS_SHEET_ID || null; }
+// The SoulBox Sheet for quiz readers ("Readers" tab). Gifts have their own Sheet (GIFTS_SHEET_ID),
+// so readers are never written into the client's gift Sheet.
+function sheetId() { return process.env.READERS_SHEET_ID || process.env.SOULBOX_SHEET_ID || null; }
 
 function cell(value) {
   if (value === null || value === undefined) return "";

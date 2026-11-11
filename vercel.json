@@ -7,5 +7,16 @@
       "maxDuration": 10
     }
   },
-  "routes": [{ "src": "/api/(.*)", "dest": "/src/index.js" }]
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/src/index.js"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/gift-sync-sheet",
+      "schedule": "17 6 * * *"
+    }
+  ]
 }

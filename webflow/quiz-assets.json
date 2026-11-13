@@ -49,5 +49,27 @@
     "emblem_body.png": "",
     "emblem_soul.png": "",
     "emblem_mind.png": ""
+  },
+  "archetype_gate": {
+    "gate1_guilty.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4478364326b7c851d9f_gate1_guilty.jpg",
+    "gate1_love.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4478364326b7c851db0_gate1_love.jpg",
+    "gate1_story.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447639955fb8b807a40_gate1_story.jpg",
+    "gate1_writing.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447639955fb8b807a51_gate1_writing.jpg"
+  },
+  "depth": {
+    "depth_city_climb.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a446cedb251d4f2ae7ce_depth_city_climb.jpg",
+    "depth_city_wander.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4465d1cb79b5ee048df_depth_city_wander.jpg",
+    "depth_colour_blue.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4465d1cb79b5ee048f0_depth_colour_blue.jpg",
+    "depth_colour_gold.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a446639955fb8b8079f8_depth_colour_gold.jpg",
+    "depth_colour_green.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a44617f7e2f914243a32_depth_colour_green.jpg",
+    "depth_colour_pink.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a446a65a9a7d64329174_depth_colour_pink.jpg",
+    "depth_colour_purple.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a446b1ed65394542d7ff_depth_colour_purple.jpg",
+    "depth_colour_red.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4468364326b7c851d12_depth_colour_red.jpg",
+    "depth_dream_felt.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a4466400d14a7f677432_depth_dream_felt.jpg",
+    "depth_dream_happened.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447b1ed65394542d828_depth_dream_happened.jpg",
+    "depth_sleep_back.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447e91fd55f64f25b0e_depth_sleep_back.jpg",
+    "depth_sleep_forward.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447e91fd55f64f25b1f_depth_sleep_forward.jpg",
+    "depth_voice_no.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447ac4b7aa1dfae8d53_depth_voice_no.jpg",
+    "depth_voice_yes.jpg": "https://cdn.prod.website-files.com/68d100639551287fadcf87e3/6af6a447fcebb8dc0992104c_depth_voice_yes.jpg"
   }
 }

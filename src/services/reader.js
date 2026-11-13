@@ -60,6 +60,12 @@ const FIELD_RULES = {
   gate_1: oneOf(L.GATE_1),
   gate_2: oneOf(Object.values(L.GATE_TABLE).flatMap((row) => Object.keys(row)).filter((k) => k !== "*")),
   darkness: oneOf(DARKNESS),
+  // How your mind works (saved only; no effect on results)
+  depth_colour: oneOf(["red", "pink", "purple", "blue", "green", "gold"]),
+  depth_dream: oneOf(["happened", "felt"]),
+  depth_city: oneOf(["climb", "wander"]),
+  depth_sleep: oneOf(["back", "forward"]),
+  depth_voice: oneOf(["yes", "no"]),
   olympics_q1: oneOf(["correct", "decoy", "optout"]),
   olympics_q2: oneOf(["correct", "decoy", "optout"]),
   olympics_q3: oneOf(["correct", "decoy", "optout"]),
@@ -218,6 +224,7 @@ const LEGACY_COLUMNS = [
 const SHEET_COLUMNS = [
   "reader_id", "created_at", "source_ref", "ab_variant", "reading_type", "full_reading_link", "full_reading_completed", "last_screen_reached",
   "genre_calling", "genre_flavour", "gate_1", "gate_2", "darkness",
+  "depth_colour", "depth_dream", "depth_city", "depth_sleep", "depth_voice",
   "olympics_q1", "olympics_q2", "olympics_q3", "olympics_q4", "olympics_q5", "masks_silver", "masks_gold", "masks_black",
   "olympics_total", "literary_grade", "masks_total", "moral_tier", "moral_band", "provisional_archetype", "validation_changed",
   "fallback_used", "highbrow_override", "final_archetype", "house", "soul_character",

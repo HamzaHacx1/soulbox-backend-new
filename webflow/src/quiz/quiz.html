@@ -46,8 +46,9 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
   .q-card.is-split{justify-content:space-between;text-align:left}
   .q-card.is-split em{font-size:14px;opacity:.8}
   .q-card.is-passage{display:block;padding:20px 22px;text-align:left;line-height:1.65;background:rgba(255,255,255,.07)}
-  .q-passage{margin:6px 0 16px;padding:22px;border:1.5px solid var(--beige);border-radius:10px;background:rgba(255,255,255,.07);font-size:17px;line-height:1.7;text-align:left}
-  .q-question{margin:0 0 6px;font-size:16px;line-height:1.5}
+  .q-passage{margin:14px 0 18px;font-size:18.5px;line-height:1.7;text-align:center;white-space:pre-line}
+  .q-question{margin:-6px 0 18px;font-size:18.5px;line-height:1.6;text-align:center}
+  .q-olympics .q-card{font-size:14.5px}
   .q-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;margin:14px 0 6px}
   .q-grid>.is-odd-last{grid-column:1/-1;justify-self:center;width:calc(50% - 7px)}
   .q-grid.is-doors{gap:14px}
@@ -63,7 +64,7 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
   .q-media::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 30%,rgba(245,230,211,.14) 50%,transparent 70%);background-size:220% 100%;opacity:0;transition:opacity .3s ease}
   .q-media.is-loading::before{opacity:1;animation:qShimmer 1.3s ease-in-out infinite}
   @keyframes qShimmer{from{background-position:120% 0}to{background-position:-120% 0}}
-  .q-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:12px;transition:opacity .55s ease,transform .7s cubic-bezier(.2,.7,.2,1),filter .55s ease}
+  .q-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:12px;transition:opacity .55s ease,transform .7s cubic-bezier(.2,.7,.2,1),filter .55s ease}
   .q-media.is-cover img{object-fit:cover}
   .q-media.is-loading img{opacity:0;transform:scale(1.04);filter:blur(10px)}
   .q-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:10px;font-size:11px;line-height:1.3;word-break:break-all;opacity:.55;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 10px,rgba(255,255,255,.08) 10px 20px)}
@@ -196,6 +197,17 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
     ['Cozy', 'mystery_cozy.jpg'], ['Who?!', 'mystery_who.jpg'], ['Noir', 'mystery_noir.jpg'],
     ['Evidence', 'mystery_evidence.jpg'], ['Psychological', 'mystery_psychological.jpg'], ['Action', 'mystery_action.jpg']
   ];
+  var GATE_1_IMAGES = { 'The love': 'gate1_love.jpg', 'The guilty pleasure': 'gate1_guilty.jpg', 'The story': 'gate1_story.jpg', 'The writing': 'gate1_writing.jpg' };
+  // Part E0: How your mind works. Saved only; no effect on results.
+  var DEPTH = [
+    { field: 'depth_colour', title: 'Throughout your life, which colour has felt most like you?', labels: false,
+      options: [['Red', 'red'], ['Pink', 'pink'], ['Purple', 'purple'], ['Blue', 'blue'], ['Green', 'green'], ['Gold', 'gold']] },
+    { field: 'depth_dream', title: 'When you remember a dream, what stays with you?', options: [['What happened', 'happened'], ['Only how it felt', 'felt']] },
+    { field: 'depth_city', title: 'You\u2019re lost in a new city. Do you climb somewhere high to see the whole layout, or just pick a street and see where it spits you out?',
+      options: [['Climb high', 'climb'], ['Pick a street', 'wander']] },
+    { field: 'depth_sleep', title: 'On nights you can\u2019t sleep, where does your mind wander?', options: [['Back, into memories', 'back'], ['Forward, into what-ifs', 'forward']] },
+    { field: 'depth_voice', title: 'When you are sitting quietly, thinking, can you hear a voice talking in your head?', options: [['Yes', 'yes'], ['No', 'no']] }
+  ];
   var GATE_2 = {
     'The love': [['Falling in love', 'gate_love_fallinginlove.jpg'], ['Feeling at home', 'gate_love_feelingathome.jpg']],
     'The guilty pleasure': [['The heat', 'gate_guilty_heat.jpg'], ['The drama', 'gate_guilty_drama.jpg'], ['The dark', 'gate_guilty_dark.jpg']],
@@ -224,7 +236,7 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
       options: [['Extravagantly luxurious, with an underlying sense of decay.', 'decoy'],
         ['Superficially attractive, but ultimately tawdry and without genuine value.', 'correct'],
         ['Please seek the assistance of a dictionary, thanks.', 'optout']] },
-    { label: 'Question 5 of 5 · The same moment. Which do you prefer?', passages: true,
+    { label: 'Question 5 of 5', passage: 'The same moment. Which do you prefer?', passages: true,
       options: [['The door was open. She never left it open. She grabbed her phone, stepped inside, and heard it. Footsteps. Upstairs. Coming down.', 'commercial'],
         ['The door was open, and for one second she believed he\'d come home. He\'d be in the kitchen, burning toast, sorry for everything. Then she saw his keys on the floor, and her heart knew before she did.', 'upmarket'],
         ['The door stood open the way a mouth does after the word has already been said, and the hallway kept its long, held composure, as if the house had decided, without consulting her, what she would be allowed to know.', 'literary']] }
@@ -464,7 +476,8 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
 
   // D3 and D4: the archetype gates
   screen('gate_1', { name: 'gate_1', render: function (root) {
-    textChoice(root, { title: 'I read for…', options: L.GATE_1.map(function (g) { return [g, g]; }), selected: a().gate_1, onPick: function (value) {
+    imageChoice(root, { title: 'I read for…', options: L.GATE_1.map(function (g) { return { label: g, value: g, file: GATE_1_IMAGES[g] }; }),
+      selected: a().gate_1, showLabels: true, onPick: function (o) { var value = o.value;
       save({ gate_1: value, gate_2: value === 'The writing' ? null : (GATE_2[value] || []).some(function (o) { return o[0] === a().gate_2; }) ? a().gate_2 : null });
     } });
   } });
@@ -489,12 +502,22 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
     });
   } });
 
+  // Part E0: How your mind works (everyone)
+  DEPTH.forEach(function (q) {
+    screen(q.field, { name: q.field, render: function (root) {
+      imageChoice(root, { label: 'How your mind works', title: q.title, showLabels: q.labels !== false,
+        options: q.options.map(function (o) { return { label: o[0], value: o[1], file: q.field + '_' + o[1] + '.jpg' }; }),
+        selected: a()[q.field], onPick: function (o) { var c = {}; c[q.field] = o.value; save(c); } });
+    } });
+  });
+
   // Part E: the Literary Snob Olympics
   screen('olympics_intro', { name: 'olympics_intro', render: function (root) { intro(root, 'Part Two', 'The Literary Snob Olympics', 'How much of a snob are you?'); } });
   OLYMPICS.forEach(function (q, n) {
     var field = 'olympics_q' + (n + 1);
     screen(field, { name: field, render: function (root) {
       var options = shuffle(q.options);
+      root.classList.add('q-olympics');
       root.innerHTML = '<p class="q-label">' + esc(q.label) + '</p>' +
         (q.passage ? '<div class="q-passage">' + esc(q.passage) + '</div>' : '') +
         (q.question ? '<p class="q-question">' + esc(q.question) + '</p>' : '') +
@@ -620,7 +643,7 @@ The Webflow page holds only the loader in webflow/dist/quiz.html.
   }
   function imageChoice(root, opts) {
     var count = opts.options.length;
-    root.innerHTML = (opts.title ? '<h1 class="q-title" tabindex="-1">' + esc(opts.title) + '</h1>' : '') + '<div class="q-grid">' +
+    root.innerHTML = (opts.label ? '<p class="q-label">' + esc(opts.label) + '</p>' : '') + (opts.title ? '<h1 class="q-title" tabindex="-1">' + esc(opts.title) + '</h1>' : '') + '<div class="q-grid">' +
       opts.options.map(function (o, i) {
         var odd = count % 2 === 1 && i === count - 1;
         return '<button class="q-tile' + (odd ? ' is-odd-last' : '') + '" type="button" data-value="' + esc(o.value) + '" aria-label="' + esc(o.label) + '">' +

@@ -16,15 +16,17 @@ const MOOD_VALUES = ["Loved it", "Maybe", "Not them"];
 const HARD_NOS = ["No heavy trauma or grief", "No explicit spice", "No gore or horror", "No preachy self-help", "Something else"];
 const HARD_NOS_OTHER = "Something else"; // its text is saved as hard_nos_other
 const LIFE_CHAPTERS = ["Running on empty", "Starting something new", "Thriving", "Craving excitement", "Steady as ever"];
-const READING_FUELS = ["Shortbread", "Dark Chocolate", "Candy Kittens", "Fudge"];
+const READING_FUELS = ["Kettle Chips", "Shortbread", "Fudge", "Dark Chocolate", "Candy Kittens"];
+const REVEAL = ["Yes", "Mystery"];
+const BOOKWORM = ["Reading is who they are", "They read regularly", "Now and again", "They\u2019re just getting into it"];
 const SCREENS = [
-  "gift_uk_notice", "gift_names", "gift_relationship", "gift_occasion", "gift_moods",
+  "gift_uk_notice", "gift_names", "gift_relationship", "gift_occasion", "gift_reveal", "gift_moods", "gift_bookworm",
   "gift_loved_book", "gift_hard_nos", "gift_life_chapter", "gift_details", "gift_meaning",
-  "gift_memory_choice", "gift_memory_place", "gift_memory_joke", "gift_memory_tribute",
+  "gift_memory_choice", "gift_memory_intro", "gift_memory_place", "gift_memory_joke", "gift_memory_tribute",
   "gift_fuel", "gift_checkout", "gift_thank_you",
 ];
 
-// Stripe product "The Gift Box" (£45) and its UK shipping rate. Env vars override for testing.
+// Stripe product "The Gift Box" (£45, the old Checkout) and its UK shipping rate. Env vars override for testing.
 const GIFT_BOX = {
   name: "The Gift Box",
   amount: 4500,
@@ -33,6 +35,9 @@ const GIFT_BOX = {
   shippingRateId: "shr_1UYoFoFHbt8VjRVzpMTWMgXa",
 };
 const GIFT_PAGE_PATH = "/gift";
+// The £59 Gift Box (client changes, November): one line per gift, free delivery on two or more.
+const GIFT_BOX_V2 = { name: "The Gift Box", amount: 5900, currency: "gbp", shippingAmount: 199, maxGifts: 10 };
+const GIFT_PAGES = new Set(["/gift", "/gift-preview"]);
 const ALLOWED_ORIGINS = new Set(["https://soulboxed.com", "https://www.soulboxed.com", "https://soul-box.webflow.io"]);
 const POSTHOG_HOST = "https://eu.i.posthog.com";
 const POSTHOG_PROJECT_KEY = "phc_vZ7z2DsaWJ88MzhzF36a35mNWjKvGPrMfFo4FZwQujS6"; // public project key
@@ -81,6 +86,8 @@ const FIELD_RULES = {
   memory_joke: longText(LONG_TEXT),
   memory_tribute: longText(LONG_TEXT),
   reading_fuel: oneOf(READING_FUELS),
+  reveal: oneOf(REVEAL),
+  bookworm: oneOf(BOOKWORM),
   last_screen_reached: oneOf(SCREENS),
 };
 
@@ -118,6 +125,13 @@ function sanitizeMeta(meta = {}) {
     ab_variant: meta.ab_variant === "A" || meta.ab_variant === "B" ? meta.ab_variant : null,
     session_id: session || null,
   };
+}
+
+// The £59 flow: reveal and bookworm are required and memory cards are always included.
+function missingAnswersV2(gift) {
+  const required = ["gifter_name", "recipient_name", "relationship", "occasion", "reveal", ...MOOD_FIELDS, "bookworm",
+    "life_chapter", "specific_details", "what_they_mean", "memory_place", "memory_joke", "memory_tribute", "reading_fuel"];
+  return required.filter((field) => !gift[field]);
 }
 
 // Answers that must be present before checkout (Screens 1–4, 7–11).
@@ -183,6 +197,39 @@ function buildGiftCheckout({
   };
 }
 
+// One Checkout for one or more gifts from the same gifter (\u00a359 each; free delivery on two or more).
+function buildMultiGiftCheckout({ gifts, origin, page = GIFT_PAGE_PATH, shippingRateId = process.env.STRIPE_GIFT_SHIPPING_RATE_ID || GIFT_BOX.shippingRateId }) {
+  const site = siteFor(origin);
+  const path = GIFT_PAGES.has(page) ? page : GIFT_PAGE_PATH;
+  const ids = gifts.map((g) => g.gift_id);
+  const back = `${site}${path}?gift_id=${encodeURIComponent(ids[ids.length - 1])}`;
+  const free = gifts.length > 1;
+  return {
+    mode: "payment",
+    client_reference_id: ids[0],
+    line_items: gifts.map((g) => ({
+      price_data: {
+        currency: GIFT_BOX_V2.currency,
+        unit_amount: GIFT_BOX_V2.amount,
+        product_data: { name: GIFT_BOX_V2.name, description: `For ${String(g.recipient_name || "them").slice(0, 80)}` },
+      },
+      quantity: 1,
+    })),
+    shipping_address_collection: { allowed_countries: ["GB"] },
+    shipping_options: [free
+      ? { shipping_rate_data: { type: "fixed_amount", display_name: "Free delivery (2+ gifts)", fixed_amount: { amount: 0, currency: "gbp" } } }
+      : shippingRateId
+        ? { shipping_rate: shippingRateId }
+        : { shipping_rate_data: { type: "fixed_amount", display_name: "UK delivery", fixed_amount: { amount: GIFT_BOX_V2.shippingAmount, currency: "gbp" } } }],
+    phone_number_collection: { enabled: true },
+    allow_promotion_codes: true,
+    success_url: `${back}&status=success&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${back}&status=cancelled`,
+    metadata: { plan: "gift_box", gift_id: ids[0], gift_ids: ids.join(",") },
+    payment_intent_data: { metadata: { plan: "gift_box", gift_id: ids[0], gift_ids: ids.join(",") } },
+  };
+}
+
 // Stripe moved shipping details to collected_information in newer API versions.
 function paidUpdateFromSession(session) {
   const shipping = session.collected_information?.shipping_details || session.shipping_details || session.customer_details || {};
@@ -207,6 +254,15 @@ function giftIdOf(session) {
   return null;
 }
 
+// Every gift a session paid for (one Checkout can hold several gifts).
+function giftIdsOf(session) {
+  const listed = String(session?.metadata?.plan === "gift_box" && session.metadata.gift_ids || "")
+    .split(",").map((id) => id.trim().toLowerCase()).filter((id) => UUID.test(id));
+  if (listed.length) return [...new Set(listed)];
+  const one = giftIdOf(session);
+  return one ? [one] : [];
+}
+
 function isGiftSession(session) {
   return giftIdOf(session) !== null;
 }
@@ -216,19 +272,23 @@ function isGiftSession(session) {
 async function markGiftPaid(session, deps = {}) {
   if (!isGiftSession(session)) return { handled: false };
   if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") return { handled: true, paid: false };
-  const id = giftIdOf(session);
-  const rows = await db.update("gifts", `gift_id=${db.eq(id)}&payment_status=${db.eq("not paid")}`, {
-    ...paidUpdateFromSession(session),
-    last_screen_reached: "gift_thank_you",
-  });
-  if (rows.length) {
-    const gift = rows[0];
-    await Promise.allSettled([
-      recordMilestone(gift, "gift_paid", { posthog: true }),
-      (deps.syncSheet || syncGiftToSheet)(gift),
-    ]);
+  const ids = giftIdsOf(session);
+  let first = false;
+  for (const id of ids) {
+    const rows = await db.update("gifts", `gift_id=${db.eq(id)}&payment_status=${db.eq("not paid")}`, {
+      ...paidUpdateFromSession(session),
+      last_screen_reached: "gift_thank_you",
+    });
+    if (rows.length) {
+      first = true;
+      const gift = rows[0];
+      await Promise.allSettled([
+        recordMilestone(gift, "gift_paid", { posthog: true }),
+        (deps.syncSheet || syncGiftToSheet)(gift),
+      ]);
+    }
   }
-  return { handled: true, paid: true, gift_id: id, first: rows.length > 0 };
+  return { handled: true, paid: true, gift_id: ids[0], gift_ids: ids, first };
 }
 
 // ── Tracking (server-side milestones; the page sends screen events to PostHog) ──
@@ -273,6 +333,8 @@ const SHEET_COLUMNS = [
   ...MOOD_FIELDS, "loved_book", "hard_nos", "hard_nos_other", "life_chapter", "specific_details", "what_they_mean",
   "memory_cards", "memory_place", "memory_joke", "memory_tribute", "reading_fuel", "last_screen_reached",
   "payment_status", "stripe_order_id", "paid_at", "gifter_email", "shipping_name", "shipping_phone", "shipping_address",
+  // Added November (client changes); kept at the end so existing Sheet columns do not move.
+  "reveal", "bookworm",
 ];
 
 function sheetRow(gift) {
@@ -340,6 +402,7 @@ module.exports = {
   RELATIONSHIPS, OCCASIONS, MOOD_FIELDS, MOOD_VALUES, HARD_NOS, LIFE_CHAPTERS, READING_FUELS, SCREENS,
   GIFT_BOX, SHEET_COLUMNS,
   GiftError,
-  sanitizeGiftPatch, sanitizeMeta, missingAnswers, buildGiftCheckout, paidUpdateFromSession, isGiftSession, giftIdOf, sheetRow,
+  sanitizeGiftPatch, sanitizeMeta, missingAnswers, buildGiftCheckout, paidUpdateFromSession, isGiftSession, giftIdOf, giftIdsOf, sheetRow,
+  missingAnswersV2, buildMultiGiftCheckout, GIFT_BOX_V2,
   createGift, updateGift, getGift, markGiftPaid, recordMilestone, syncGiftToSheet, syncPendingGifts, newGiftId,
 };

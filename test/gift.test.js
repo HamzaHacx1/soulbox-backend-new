@@ -36,11 +36,11 @@ test('skipping memory cards clears the three memory answers', () => {
   assert.deepEqual(gifts.sanitizeGiftPatch({ memory_cards: 'No' }), { memory_cards: 'No', memory_place: null, memory_joke: null, memory_tribute: null });
 });
 
-test('every one of the 12 moods and the 17 screen names are accepted', () => {
+test('every one of the 12 moods and the 20 screen names are accepted', () => {
   for (const field of gifts.MOOD_FIELDS) for (const value of gifts.MOOD_VALUES) gifts.sanitizeGiftPatch({ [field]: value });
   for (const screen of gifts.SCREENS) gifts.sanitizeGiftPatch({ last_screen_reached: screen });
   assert.equal(gifts.MOOD_FIELDS.length, 12);
-  assert.equal(gifts.SCREENS.length, 17);
+  assert.equal(gifts.SCREENS.length, 20);
 });
 
 test('checkout requires every required answer, and memory text only when memory cards were added', () => {
@@ -120,4 +120,33 @@ test("payments from the client's Payment Link are matched by client_reference_id
   assert.equal(gifts.giftIdOf({ client_reference_id: id }), null); // not from a Payment Link
   assert.equal(gifts.giftIdOf({ payment_link: "plink_1", client_reference_id: "abc" }), null);
   assert.equal(gifts.giftIdOf({ metadata: { submissionId: id } }), null);
+});
+
+test('£59 Checkout: one line per gift, £1.99 delivery for one, free for two, promo codes on', () => {
+  const g = (id, name) => ({ gift_id: id, recipient_name: name });
+  const a = '3b241101-e2bb-4255-8caf-4136c566a962', b = '3b241101-e2bb-4255-8caf-4136c566a963';
+  const one = gifts.buildMultiGiftCheckout({ gifts: [g(a, 'Karen')], origin: 'https://soul-box.webflow.io', page: '/gift-preview', shippingRateId: 'shr_x' });
+  assert.equal(one.line_items.length, 1);
+  assert.equal(one.line_items[0].price_data.unit_amount, 5900);
+  assert.deepEqual(one.shipping_options, [{ shipping_rate: 'shr_x' }]);
+  assert.equal(one.allow_promotion_codes, true);
+  assert.match(one.success_url, /^https:\/\/soul-box\.webflow\.io\/gift-preview\?gift_id=/);
+  const two = gifts.buildMultiGiftCheckout({ gifts: [g(a, 'Karen'), g(b, 'Leo')], origin: 'https://evil.example', page: '/elsewhere' });
+  assert.equal(two.line_items.length, 2);
+  assert.equal(two.shipping_options[0].shipping_rate_data.fixed_amount.amount, 0);
+  assert.equal(two.metadata.gift_ids, a + ',' + b);
+  assert.match(two.success_url, /^https:\/\/www\.soulboxed\.com\/gift\?/);
+  assert.deepEqual(gifts.giftIdsOf({ metadata: two.metadata }), [a, b]);
+});
+
+test('£59 flow requires reveal, bookworm and all three memories', () => {
+  const complete = {
+    gifter_name: 'Amy', recipient_name: 'Karen', relationship: 'Parent', occasion: 'Birthday', reveal: 'Mystery',
+    ...Object.fromEntries(gifts.MOOD_FIELDS.map((f) => [f, 'Maybe'])), bookworm: 'Now and again',
+    life_chapter: 'Thriving', specific_details: 'x', what_they_mean: 'y', memory_place: 'a', memory_joke: 'b', memory_tribute: 'c', reading_fuel: 'Kettle Chips',
+  };
+  assert.deepEqual(gifts.missingAnswersV2(complete), []);
+  assert.deepEqual(gifts.missingAnswersV2({ ...complete, reveal: null, memory_joke: null }), ['reveal', 'memory_joke']);
+  gifts.sanitizeGiftPatch({ reveal: 'Mystery', bookworm: 'They’re just getting into it', reading_fuel: 'Kettle Chips' });
+  assert.throws(() => gifts.sanitizeGiftPatch({ reveal: 'No' }));
 });

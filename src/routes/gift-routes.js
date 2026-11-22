@@ -26,7 +26,9 @@ router.get("/gift-app.js", (req, res) => {
     "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
     "Access-Control-Allow-Origin": "*",
   });
-  res.send(require("../generated/gift-app.js"));
+  // ?preview=1 serves the next version (the /gift-preview page) while /gift keeps the current one.
+  const next = req.query.preview === "1" || process.env.GIFT_APP_VERSION === "next";
+  res.send(require(next ? "../generated/gift-app.js" : "../generated/gift-app-current.js"));
 });
 
 // Screen 0: "I'm in the UK". The browser generates gift_id so the call can be retried safely.
@@ -65,6 +67,29 @@ router.post("/gift/:giftId/checkout", async (req, res) => {
   } catch (error) { fail(res, error); }
 });
 
+// "Buy" in the \u00a359 flow: one Checkout for every gift in the basket (free delivery on two or more).
+router.post("/gift-checkout", async (req, res) => {
+  try {
+    const stripe = getStripe();
+    if (!stripe) return res.status(500).json({ ok: false, error: "Checkout is not configured." });
+    const raw = Array.isArray(req.body && req.body.gift_ids) ? req.body.gift_ids : [];
+    const ids = [...new Set(raw.map((id) => String(id).toLowerCase()))];
+    if (!ids.length || ids.length > gifts.GIFT_BOX_V2.maxGifts) return res.status(400).json({ ok: false, error: "Invalid gifts." });
+    const rows = [];
+    for (const id of ids) {
+      const gift = await gifts.getGift(id);
+      if (!gift) return res.status(404).json({ ok: false, error: "Gift not found.", gift_id: id });
+      if (gift.payment_status === "paid") return res.status(409).json({ ok: false, error: "This gift has already been paid for.", gift_id: id });
+      const missing = gifts.missingAnswersV2(gift);
+      if (missing.length) return res.status(400).json({ ok: false, error: "Some answers are missing.", missing, gift_id: id });
+      rows.push(gift);
+    }
+    const session = await stripe.checkout.sessions.create(gifts.buildMultiGiftCheckout({ gifts: rows, origin: req.headers.origin, page: req.body.page }));
+    await Promise.allSettled(rows.flatMap((gift) => [gifts.recordMilestone(gift, "gift_buy_tapped"), gifts.syncGiftToSheet(gift)]));
+    res.json({ ok: true, url: session.url });
+  } catch (error) { fail(res, error); }
+});
+
 // Thank-you screen: confirm payment straight from Stripe (backs up the webhook).
 router.get("/gift/:giftId/confirm", async (req, res) => {
   try {
@@ -73,7 +98,7 @@ router.get("/gift/:giftId/confirm", async (req, res) => {
     const sessionId = String(req.query.session_id || "");
     if (!/^cs_[A-Za-z0-9_]+$/.test(sessionId)) return res.status(400).json({ ok: false, error: "Invalid session." });
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (gifts.giftIdOf(session) !== String(req.params.giftId).toLowerCase()) {
+    if (!gifts.giftIdsOf(session).includes(String(req.params.giftId).toLowerCase())) {
       return res.status(404).json({ ok: false, error: "Payment not found for this gift." });
     }
     const result = await gifts.markGiftPaid(session);

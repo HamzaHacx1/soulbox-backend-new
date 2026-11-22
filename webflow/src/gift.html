@@ -70,6 +70,37 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-media.is-auto:not(.is-loading) img{position:static;height:auto}
   .gift-welcome-copy{margin-bottom:28px;font-size:16px;line-height:1.5;text-wrap:balance}
   .gift-app.is-welcome{padding-top:14px;padding-bottom:14px}
+  /* Landing: the first screen sells, the rest sits below the fold */
+  .gift-fold{min-height:calc(100dvh - 28px);display:flex;flex-direction:column;justify-content:center;text-align:center}
+  .gift-tagline{margin:0 0 22px;font:italic 400 17px/1.4 'Cormorant Garamond',Georgia,serif;letter-spacing:.02em;opacity:.95}
+  .gift-more{display:inline-block;margin:14px auto 0;padding:8px 12px;color:var(--cream);font-size:14px;text-decoration:none;opacity:.8}
+  .gift-below{padding:28px 0 8px;text-align:center}
+  .gift-below h2{font:500 30px/1.15 'Cormorant Garamond',Georgia,serif;margin:34px 0 18px}
+  .gift-inside{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .gift-inside figure{margin:0}
+  .gift-inside .gift-media{border-radius:10px}
+  .gift-inside figcaption{margin-top:7px;font-size:12.5px;line-height:1.25}
+  .gift-inside-dot{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;border:1.5px solid var(--beige);border-radius:10px;background:rgba(255,255,255,.06);font:500 22px 'Cormorant Garamond',Georgia,serif}
+  .gift-how{list-style:none;padding:0;margin:0;display:grid;gap:12px;counter-reset:how}
+  .gift-how li{counter-increment:how;display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid rgba(244,242,236,.28);border-radius:10px;text-align:left;font-size:16px;line-height:1.4}
+  .gift-how li::before{content:counter(how);flex:0 0 30px;height:30px;border-radius:50%;border:1.5px solid var(--beige);display:flex;align-items:center;justify-content:center;font:500 18px 'Cormorant Garamond',Georgia,serif}
+  .gift-faq{text-align:left;display:grid;gap:10px}
+  .gift-faq details{border:1px solid rgba(244,242,236,.28);border-radius:10px;padding:0 16px}
+  .gift-faq summary{cursor:pointer;list-style:none;padding:15px 22px 15px 0;position:relative;font-size:16px;line-height:1.35}
+  .gift-faq summary::-webkit-details-marker{display:none}
+  .gift-faq summary::after{content:"+";position:absolute;right:0;top:12px;font-size:20px;opacity:.8}
+  .gift-faq details[open] summary::after{content:"\2212"}
+  .gift-faq p{margin:0 0 15px;font-size:15px;line-height:1.55;opacity:.92}
+  .gift-faq a,.gift-allergen a{color:var(--cream)}
+  .gift-below .gift-btn--welcome{margin-top:34px}
+  .gift-allergen{margin:14px 0 0;text-align:center;font-size:13px;opacity:.85}
+  .gift-bookworm-art{width:min(46%,190px);margin:0 auto 16px}
+  .gift-basket{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px;text-align:left}
+  .gift-basket li{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(244,242,236,.22);font-size:15px}
+  .gift-basket li.is-total{border-bottom:0;font-weight:600}
+  .gift-offer .gift-basket li{padding-left:0}.gift-offer .gift-basket li::before{display:none}
+  .gift-btn--another{margin-top:12px;white-space:normal}
+  @media (max-width:380px){.gift-inside{grid-template-columns:repeat(3,1fr)}}
   .gift-app.is-welcome .gift-foot{display:none}
   @media(max-height:600px){
     .gift-hero{width:min(100%,calc(24vh * 778 / 596));margin-bottom:20px}
@@ -150,9 +181,15 @@ Edit this source file, then run `node webflow/build.js`.
   var API = 'https://soulbox-backend-new.vercel.app/api';
   // Christmas line on the checkout card. Fill in the date, e.g. '15 December'. Empty hides the line.
   var CHRISTMAS_ORDER_BY = '16 December';
-  // The client's Stripe Payment Link for the £45 Gift Box. The gift id goes along as
-  // client_reference_id so the payment is matched to this gift's answers. Empty uses our own Checkout.
-  var GIFT_PAYMENT_LINK = 'https://buy.stripe.com/5kQaEXemBbBl9XY9VF8k805';
+  // Price shown everywhere on the page. Checkout charges £59 per gift (backend), £1.99 delivery, free on two or more.
+  var PRICE = '£59';
+  var PRICE_PENCE = 5900;
+  var DELIVERY_PENCE = 199;
+  var MAX_GIFTS = 10;
+  // Link for "Allergen info" (treats screen and FAQ). Empty shows the words without a link.
+  var ALLERGEN_INFO_URL = '';
+  // Stripe sends buyers back to the page they came from (/gift, or /gift-preview while testing).
+  var PAGE_PATH = /^\/gift-preview/.test(location.pathname) ? '/gift-preview' : '/gift';
   var SHOW_PRODUCT_IMAGE = true; // gift_box_product.jpg at the top of the checkout card
   var IMAGES = window.SOULBOX_GIFT_IMAGES || {};
   var STATE_KEY = 'soulboxGift';
@@ -193,10 +230,16 @@ Edit this source file, then run `node webflow/build.js`.
   ];
   var MEANING_MIN_WORDS = 20;
   var MEANING_GOOD_WORDS = 50;
+  // [saved value, image, label shown if different]
   var FUELS = [
-    ['Shortbread', 'gift_fuel_shortbread.jpg'], ['Dark Chocolate', 'gift_fuel_darkchocolate.jpg'],
-    ['Candy Kittens', 'gift_fuel_candykittens.jpg'], ['Fudge', 'gift_fuel_fudge.jpg']
+    ['Kettle Chips', 'gift_fuel_kettlechips.jpg'], ['Shortbread', 'gift_fuel_shortbread.jpg'], ['Fudge', 'gift_fuel_fudge.jpg'],
+    ['Dark Chocolate', 'gift_fuel_darkchocolate.jpg'], ['Candy Kittens', 'gift_fuel_candykittens.jpg', 'Candy Kittens (V)']
   ];
+  var REVEAL = [['Yes', 'Yes'], ['Keep it a mystery', 'Mystery']]; // [label, saved value]
+  var BOOKWORM = ['Reading is who they are', 'They read regularly', 'Now and again', 'They\u2019re just getting into it'];
+  // What's inside (landing page). Photos show once uploaded under these file names.
+  var INSIDE = [['Hardback', 'gift_inside_hardback.jpg'], ['Letter', 'gift_inside_letter.jpg'], ['3 memories', 'gift_inside_memories.jpg'],
+    ['Keepsakes', 'gift_inside_keepsakes.jpg'], ['Treat', 'gift_inside_treat.jpg']];
   var MEMORY_SCREENS = {
     memory_place: { title: 'A place only the two of you would remember, and why.', field: 'memory_place', placeholder: 'e.g. The café where we stayed until closing, the night everything changed…' },
     memory_joke: { title: 'A running joke you share.', field: 'memory_joke', placeholder: 'Tell us the joke, and how it started.' },
@@ -207,6 +250,7 @@ Edit this source file, then run `node webflow/build.js`.
   var SCREEN_NAMES = {
     uk: 'gift_uk_notice', names: 'gift_names', relationship: 'gift_relationship', occasion: 'gift_occasion',
     moods: 'gift_moods', loved_book: 'gift_loved_book', hard_nos: 'gift_hard_nos', life_chapter: 'gift_life_chapter',
+    reveal: 'gift_reveal', bookworm: 'gift_bookworm', memory_intro: 'gift_memory_intro',
     details: 'gift_details', meaning: 'gift_meaning', memory_choice: 'gift_memory_choice',
     memory_place: 'gift_memory_place', memory_joke: 'gift_memory_joke', memory_tribute: 'gift_memory_tribute',
     fuel: 'gift_fuel', checkout: 'gift_checkout', thank_you: 'gift_thank_you'
@@ -274,10 +318,11 @@ Edit this source file, then run `node webflow/build.js`.
 
   // ── State ────────────────────────────────────────────────────────────────
   function freshState() {
-    return { v: 1, gift_id: null, answers: { hard_nos: [] }, screen: 'uk', history: [], updatedAt: Date.now(), seen: {} };
+    return { v: 1, gift_id: null, answers: { hard_nos: [] }, screen: 'uk', history: [], updatedAt: Date.now(), seen: {}, basket: [] };
   }
   var state = read(STATE_KEY);
   if (!state || state.v !== 1 || state.paid || Date.now() - (state.updatedAt || 0) > RESUME_HOURS * 3600 * 1000) state = freshState();
+  if (!state.basket) state.basket = [];
   function persist() { state.updatedAt = Date.now(); write(STATE_KEY, state); }
 
   // ── Save queue: every answer is kept in the browser until the server has it ─
@@ -370,13 +415,10 @@ Edit this source file, then run `node webflow/build.js`.
 
   // ── Flow ─────────────────────────────────────────────────────────────────
   function flowSteps() {
-    var steps = ['names', 'relationship', 'occasion', 'moods', 'loved_book', 'hard_nos', 'life_chapter', 'details', 'meaning', 'memory_choice'];
-    if (state.answers.memory_cards === 'Yes') steps.push('memory_place', 'memory_joke', 'memory_tribute');
-    steps.push('fuel');
-    return steps;
+    return ['names', 'relationship', 'occasion', 'reveal', 'moods', 'bookworm', 'loved_book', 'hard_nos', 'life_chapter', 'details', 'meaning',
+      'memory_intro', 'memory_place', 'memory_joke', 'memory_tribute', 'fuel'];
   }
   function nextAfter(screen) {
-    if (screen === 'memory_choice') return state.answers.memory_cards === 'Yes' ? 'memory_place' : 'fuel';
     if (screen === 'fuel') return 'checkout';
     var steps = flowSteps();
     var index = steps.indexOf(screen);
@@ -431,6 +473,7 @@ Edit this source file, then run `node webflow/build.js`.
   function updateChrome() {
     var screen = state.screen;
     $('gift-back').classList.toggle('is-hidden', screen === 'uk' || screen === 'thank_you' || !state.history.length);
+    $('gift-app').classList.toggle('is-landing', screen === 'uk');
     var steps = flowSteps();
     var index = steps.indexOf(screen);
     var pct = screen === 'uk' ? 0 : index === -1 ? 100 : Math.round(((index + 1) / steps.length) * 100);
@@ -467,26 +510,54 @@ Edit this source file, then run `node webflow/build.js`.
   var screens = {};
 
   // Screen 0: welcome (also the UK notice).
+  function allergenLine(text) {
+    return ALLERGEN_INFO_URL ? '<a href="' + esc(ALLERGEN_INFO_URL) + '" target="_blank" rel="noopener">' + esc(text) + '</a>' : esc(text);
+  }
+  function startGift() {
+    if (!state.gift_id) {
+      state.gift_id = uuid();
+      enqueue(createItem(state.gift_id));
+      track.register({ gift_id: state.gift_id, reading_type: 'gift' });
+    }
+    track.milestone('gift_uk_confirmed', { gift_id: state.gift_id });
+    track.screenComplete('gift_uk_notice', { gift_id: state.gift_id });
+    go('names');
+  }
+
+  // Screen 0: the landing page (also the UK notice).
   screens.uk = function (root) {
-    root.classList.add('is-centred');
+    var christmas = CHRISTMAS_ORDER_BY ? ' · Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas' : '';
     root.innerHTML =
+      '<section class="gift-fold">' +
       '<div class="gift-hero">' + media('gift_box_product.jpg', 'The SoulBox Gift Box', { index: 0 }) + '</div>' +
-      // Two balanced lines, never one word alone on the second.
-      '<h1 class="gift-title gift-welcome-title" tabindex="-1"><span>A book chosen for</span> <span>someone you love.</span></h1>' +
-      '<p class="gift-copy gift-welcome-copy">Tell us about them. Our curator chooses their book and writes them a letter, from your words.</p>' +
-      '<p class="gift-price">£45' + (CHRISTMAS_ORDER_BY ? ' · Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas' : '') + '</p>' +
-      '<button class="gift-btn gift-btn--main gift-btn--welcome gift-btn--nowrap" id="gift-uk-yes" type="button">Start their gift</button>' +
+      '<h1 class="gift-title gift-welcome-title" tabindex="-1"><span>The book gift only</span> <span>you could give.</span></h1>' +
+      '<p class="gift-copy gift-welcome-copy">A 3-minute quiz about them. We choose their book, write their letter and craft their box.</p>' +
+      '<p class="gift-tagline">Your love. Our curators. Their gift.</p>' +
+      '<p class="gift-price">' + PRICE + christmas + '</p>' +
+      '<button class="gift-btn gift-btn--main gift-btn--welcome gift-btn--nowrap gift-start" type="button">Start their gift</button>' +
       '<p class="gift-uk-note">UK delivery only</p>' +
-      '<a class="gift-home-link" href="/">Back to homepage</a>';
-    $('gift-uk-yes').addEventListener('click', function () {
-      if (!state.gift_id) {
-        state.gift_id = uuid();
-        enqueue(createItem(state.gift_id));
-        track.register({ gift_id: state.gift_id, reading_type: 'gift' });
-      }
-      track.milestone('gift_uk_confirmed', { gift_id: state.gift_id });
-      track.screenComplete('gift_uk_notice', { gift_id: state.gift_id });
-      go('names');
+      '<a class="gift-more" href="#gift-inside">See what\u2019s inside \u2193</a>' +
+      '</section>' +
+      '<section class="gift-below">' +
+      '<h2 id="gift-inside">What\u2019s inside</h2>' +
+      '<div class="gift-inside">' + INSIDE.map(function (item, i) {
+        var art = IMAGES[item[1]] ? media(item[1], item[0], { index: 5 + i }) : '<span class="gift-inside-dot" aria-hidden="true">' + (i + 1) + '</span>';
+        return '<figure>' + art + '<figcaption>' + esc(item[0]) + '</figcaption></figure>';
+      }).join('') + '</div>' +
+      '<h2>How it works</h2>' +
+      '<ol class="gift-how"><li>You take the quiz</li><li>We choose the book and write the letter</li><li>They open it</li></ol>' +
+      '<h2>Questions</h2>' +
+      '<div class="gift-faq">' +
+      '<details><summary>Will they know it\u2019s from me?</summary><p>Only if you want them to. You choose in the quiz.</p></details>' +
+      '<details><summary>When does it arrive?</summary><p>We aim to get it into their hands within 10 days.' + (CHRISTMAS_ORDER_BY ? ' Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas.' : '') + '</p></details>' +
+      '<details><summary>What about allergies?</summary><p>Choose from five treats. Vegan options are marked (V). Full allergen info: ' + allergenLine(ALLERGEN_INFO_URL ? 'see the list' : 'just ask us') + '.</p></details>' +
+      '<details><summary>What if they\u2019ve already read the book?</summary><p>We look past the obvious and choose books for them specifically, so our picks often lean classic or a little off the beaten path. Every book is a hardback made to keep, and there\u2019s nothing wrong with a reread ;) As every box is made for one person, we can\u2019t offer refunds on book choice.</p></details>' +
+      '</div>' +
+      '<button class="gift-btn gift-btn--main gift-btn--welcome gift-btn--nowrap gift-start" type="button">Start their gift</button>' +
+      '</section>';
+    root.querySelectorAll('.gift-start').forEach(function (b) { b.addEventListener('click', startGift); });
+    root.querySelector('.gift-more').addEventListener('click', function (e) {
+      e.preventDefault(); $('gift-inside').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   };
 
@@ -513,7 +584,7 @@ Edit this source file, then run `node webflow/build.js`.
           (f.minWords ? '<p class="gift-words" id="gift-w' + i + '" aria-live="polite"></p>' : '') +
           '<p class="gift-error" id="gift-e' + i + '" hidden>Please fill this in.</p></div>';
       }).join('') + '</div>' +
-      '<div class="gift-actions"><button class="gift-btn" id="gift-continue" type="button">Continue</button></div>' +
+      '<div class="gift-actions"><button class="gift-btn" id="gift-continue" type="button">' + esc(opts.button || 'Continue') + '</button></div>' +
       (opts.skip ? '<button class="gift-link" id="gift-skip" type="button">Skip</button>' : '');
 
     // Fields with a minimum word count keep Continue disabled until they reach it.
@@ -565,8 +636,8 @@ Edit this source file, then run `node webflow/build.js`.
         var selected = state.answers[opts.field] === o[0];
         var odd = count % 2 === 1 && i === count - 1;
         return '<button class="gift-tile' + (selected ? ' is-selected' : '') + (odd ? ' is-odd-last' : '') + '" type="button" data-value="' + esc(o[0]) + '" aria-pressed="' + selected + '">' +
-          media(o[1], o[0], { index: i }) + '<span class="gift-tile-title">' + esc(o[0]) + '</span></button>';
-      }).join('') + '</div>';
+          media(o[1], o[2] || o[0], { index: i }) + '<span class="gift-tile-title">' + esc(o[2] || o[0]) + '</span></button>';
+      }).join('') + '</div>' + (opts.after || '');
     root.querySelectorAll('.gift-tile').forEach(function (button) {
       button.addEventListener('click', function () {
         var answers = {}; answers[opts.field] = button.getAttribute('data-value');
@@ -577,10 +648,12 @@ Edit this source file, then run `node webflow/build.js`.
 
   function cardScreen(root, opts) {
     root.innerHTML =
+      (opts.art ? '<div class="gift-bookworm-art">' + media(opts.art, '', { index: 0 }) + '</div>' : '') +
       '<h1 class="gift-title" tabindex="-1">' + esc(opts.title) + '</h1>' +
-      '<div class="gift-stack">' + opts.options.map(function (value) {
+      '<div class="gift-stack">' + opts.options.map(function (option) {
+        var label = Array.isArray(option) ? option[0] : option, value = Array.isArray(option) ? option[1] : option;
         var selected = state.answers[opts.field] === value;
-        return '<button class="gift-card' + (selected ? ' is-selected' : '') + '" type="button" data-value="' + esc(value) + '" aria-pressed="' + selected + '">' + esc(value) + '</button>';
+        return '<button class="gift-card' + (selected ? ' is-selected' : '') + '" type="button" data-value="' + esc(value) + '" aria-pressed="' + selected + '">' + esc(label) + '</button>';
       }).join('') + '</div>';
     root.querySelectorAll('.gift-card').forEach(function (button) {
       button.addEventListener('click', function () {
@@ -598,6 +671,14 @@ Edit this source file, then run `node webflow/build.js`.
   };
   screens.relationship = function (root) { imageScreen(root, { title: 'Who are they to you?', field: 'relationship', options: RELATIONSHIPS }); };
   screens.occasion = function (root) { imageScreen(root, { title: "What's the occasion?", field: 'occasion', options: OCCASIONS }); };
+  screens.reveal = function (root) { cardScreen(root, { title: 'Should they know it\u2019s from you?', field: 'reveal', options: REVEAL }); };
+  screens.bookworm = function (root) { cardScreen(root, { art: 'gift_bookworm.jpg', title: 'How much of a bookworm are they?', field: 'bookworm', options: BOOKWORM }); };
+  screens.memory_intro = function (root) {
+    root.classList.add('is-centred');
+    root.innerHTML = '<h1 class="gift-title" tabindex="-1">3 quick questions to create their memory cards.</h1>' +
+      '<div class="gift-actions"><button class="gift-btn gift-btn--main" id="gift-continue" type="button">Next</button></div>';
+    $('gift-continue').addEventListener('click', function () { if (locked) return; locked = true; complete({ memory_cards: 'Yes' }); });
+  };
 
   screens.moods = function (root) {
     root.innerHTML =
@@ -699,67 +780,74 @@ Edit this source file, then run `node webflow/build.js`.
     });
   };
 
-  screens.memory_choice = function (root) {
-    root.innerHTML =
-      '<h1 class="gift-title" tabindex="-1">Would you like printed cards celebrating your shared memories?</h1>' +
-      '<div class="gift-actions">' +
-      '<button class="gift-btn gift-btn--main" id="gift-memory-yes" type="button">Add memory cards</button>' +
-      '<button class="gift-btn gift-btn--outline" id="gift-memory-no" type="button">Skip for now</button>' +
-      '</div>';
-    $('gift-memory-yes').addEventListener('click', function () { if (locked) return; locked = true; complete({ memory_cards: 'Yes' }); });
-    $('gift-memory-no').addEventListener('click', function () {
-      if (locked) return; locked = true;
-      state.answers.memory_place = state.answers.memory_joke = state.answers.memory_tribute = null;
-      complete({ memory_cards: 'No' });
-    });
-  };
+  // Memory cards are always included now; an old saved spot on the yes/no screen lands on the intro.
+  screens.memory_choice = function (root) { state.screen = 'memory_intro'; screens.memory_intro(root); };
   Object.keys(MEMORY_SCREENS).forEach(function (id) {
     screens[id] = function (root) {
       var s = MEMORY_SCREENS[id];
-      textScreen(root, { title: s.title, fields: [{ field: s.field, multi: true, required: true, placeholder: s.placeholder }] });
+      textScreen(root, { title: s.title, button: 'Next', fields: [{ field: s.field, multi: true, required: true, placeholder: s.placeholder }] });
     };
   });
 
-  screens.fuel = function (root) { imageScreen(root, { title: 'Choose their reading fuel.', field: 'reading_fuel', options: FUELS }); };
+  screens.fuel = function (root) {
+    imageScreen(root, { title: 'Choose their reading fuel.', field: 'reading_fuel', options: FUELS, after: '<p class="gift-allergen">' + allergenLine('Allergen info') + '</p>' });
+  };
+
+  function pounds(pence) { return '\u00a3' + (pence % 100 ? (pence / 100).toFixed(2) : String(pence / 100)); }
+  // Every gift in this order: earlier ones from "Add another gift", then the current one.
+  function orderGifts() { return state.basket.concat([{ gift_id: state.gift_id, recipient_name: recipient() }]); }
 
   screens.checkout = function (root) {
     var name = esc(recipient());
+    var items = orderGifts();
+    var many = items.length > 1;
+    var delivery = many ? 0 : DELIVERY_PENCE;
+    var total = items.length * PRICE_PENCE + delivery;
     root.innerHTML =
       '<article class="gift-offer">' +
       (SHOW_PRODUCT_IMAGE && IMAGES['gift_box_product.jpg'] ? '<img class="gift-offer-image" src="' + esc(IMAGES['gift_box_product.jpg']) + '" alt="The Gift Box" loading="lazy" decoding="async">' : '') +
-      '<h2>The Gift Box</h2>' +
-      '<p class="gift-offer-price">£45</p>' +
-      '<p class="gift-offer-tag">Not a guess. A book chosen for who ' + name + ' is, and a letter telling them why.</p>' +
+      '<h2>' + (many ? 'Your Gift Boxes' : 'The Gift Box') + '</h2>' +
+      (many ? '' : '<p class="gift-offer-price">' + PRICE + '</p>' +
+        '<p class="gift-offer-tag">Not a guess. A book chosen for who ' + name + ' is, and a letter telling them why.</p>') +
+      (many ? '<ul class="gift-basket">' + items.map(function (g) {
+        return '<li><span>The Gift Box for ' + esc(g.recipient_name || 'them') + '</span><span>' + PRICE + '</span></li>';
+      }).join('') + '<li><span>Delivery</span><span>Free</span></li><li class="is-total"><span>Total</span><span>' + pounds(total) + '</span></li></ul>' :
       '<ul>' +
-      '<li>A book chosen for ' + name + '</li>' +
+      '<li>A hardback book chosen for ' + name + '</li>' +
       '<li>A personal letter from our curator to ' + name + '</li>' +
-      '<li>Three memory cards <em>(if you added them)</em></li>' +
-      '<li>A keepsake</li>' +
-      '<li>Their chosen reading fuel</li>' +
-      '</ul>' +
+      '<li>Three memory cards</li>' +
+      '<li>Keepsakes</li>' +
+      '<li>Their chosen treat</li>' +
+      '</ul>') +
       '<p class="gift-offer-note">Wrapped, sealed and sent straight to their door.</p>' +
       (CHRISTMAS_ORDER_BY ? '<p class="gift-offer-small">(Christmas orders: order by ' + esc(CHRISTMAS_ORDER_BY) + ' for delivery before Christmas.)</p>' : '') +
-      '<button class="gift-btn gift-btn--main" id="gift-buy" type="button">Buy the Gift Box</button>' +
+      '<button class="gift-btn gift-btn--main" id="gift-buy" type="button">' + (many ? 'Buy ' + items.length + ' Gift Boxes' : 'Buy the Gift Box') + '</button>' +
+      (items.length < MAX_GIFTS ? '<button class="gift-btn gift-btn--outline gift-btn--another" id="gift-another" type="button">Add another gift: free delivery on ' + (many ? 'all' : 'both') + '</button>' : '') +
       '<p class="gift-status" id="gift-status" aria-live="polite"></p>' +
       '</article>';
 
+    if ($('gift-another')) $('gift-another').addEventListener('click', function () {
+      if (locked) return; locked = true;
+      track.milestone('gift_add_another', { gift_id: state.gift_id });
+      // Keep this gift in the order, then start the quiz again for the next person.
+      state.basket.push({ gift_id: state.gift_id, recipient_name: recipient() });
+      var from = gifter();
+      state.gift_id = uuid();
+      enqueue(createItem(state.gift_id));
+      track.register({ gift_id: state.gift_id, reading_type: 'gift' });
+      state.answers = { hard_nos: [], gifter_name: from || null };
+      state.history = []; state.seen.checkout = false;
+      if (from) save({ gifter_name: from });
+      go('names', { replace: true });
+    });
+
     $('gift-buy').addEventListener('click', function () {
       var button = $('gift-buy'); var status = $('gift-status');
-      button.disabled = true; status.textContent = 'Opening secure checkout…';
-      track.milestone('gift_buy_tapped', { gift_id: state.gift_id });
-      if (GIFT_PAYMENT_LINK) {
-        flushAll().then(function () {
-          track.screenComplete('gift_checkout', { gift_id: state.gift_id });
-          window.location.assign(GIFT_PAYMENT_LINK + '?client_reference_id=' + encodeURIComponent(state.gift_id));
-        }).catch(function (error) {
-          console.error('[SoulBox gift] saving answers failed', error);
-          button.disabled = false;
-          status.textContent = 'We could not save your answers. Please check your connection and try again.';
-        });
-        return;
-      }
+      button.disabled = true; status.textContent = 'Opening secure checkout\u2026';
+      track.milestone('gift_buy_tapped', { gift_id: state.gift_id, gifts: items.length });
       flushAll().then(function () {
-        return fetch(API + '/gift/' + encodeURIComponent(state.gift_id) + '/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        return fetch(API + '/gift-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gift_ids: orderGifts().map(function (g) { return g.gift_id; }), page: PAGE_PATH }) });
       }).then(function (response) {
         return response.json().then(function (data) { return { response: response, data: data }; });
       }).then(function (result) {
@@ -784,7 +872,7 @@ Edit this source file, then run `node webflow/build.js`.
     var who = gifter();
     root.innerHTML =
       '<h1 class="gift-title" tabindex="-1">' + (who ? 'Thank you, ' + esc(who) + '.' : 'Thank you.') + '</h1>' +
-      '<p class="gift-copy">Your gift for ' + esc(recipient()) + ' is in our hands. Our curator will choose their book and write their letter, and you\'ll receive a confirmation email shortly.</p>' +
+      '<p class="gift-copy">Your ' + (state.basket.length ? 'gifts are' : 'gift for ' + esc(recipient()) + ' is') + ' in our hands. Our curator will choose their book and write their letter, and you\'ll receive a confirmation email shortly.</p>' +
       '<div class="gift-actions"><a class="gift-btn gift-btn--main" href="/">Back to homepage</a></div>';
   };
 
@@ -796,6 +884,7 @@ Edit this source file, then run `node webflow/build.js`.
     occasion: OCCASIONS.map(function (o) { return o[1]; }),
     moods: MOODS.map(function (m) { return m[3]; }),
     fuel: FUELS.map(function (f) { return f[1]; }),
+    bookworm: ['gift_bookworm.jpg'],
     checkout: SHOW_PRODUCT_IMAGE ? ['gift_box_product.jpg'] : []
   };
   // Start downloading the images of the next three screens.
@@ -832,6 +921,7 @@ Edit this source file, then run `node webflow/build.js`.
     if (returnGift !== state.gift_id) { state = freshState(); state.gift_id = returnGift; }
     if (returnStatus === 'success') {
       state.screen = 'thank_you'; state.history = []; state.paid = true;
+      if (!state.basket) state.basket = [];
       var sessionId = params.get('session_id') || '';
       (function confirm(attempt) {
         fetch(API + '/gift/' + encodeURIComponent(returnGift) + '/confirm?session_id=' + encodeURIComponent(sessionId))

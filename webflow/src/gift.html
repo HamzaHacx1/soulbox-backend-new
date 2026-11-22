@@ -93,7 +93,13 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-faq p{margin:0 0 15px;font-size:15px;line-height:1.55;opacity:.92}
   .gift-faq a,.gift-allergen a{color:var(--cream)}
   .gift-below .gift-btn--welcome{margin-top:34px}
-  .gift-allergen{margin:14px 0 0;text-align:center;font-size:13px;opacity:.85}
+  .gift-allergen{position:relative;margin:14px 0 0;text-align:center}
+  .gift-allergen-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px;border:0;background:none;color:var(--cream);font:400 14px 'Source Serif Pro',Georgia,serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.9}
+  .gift-allergen-btn i{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border:1.2px solid currentColor;border-radius:50%;font:italic 600 11px Georgia,serif;text-decoration:none}
+  .gift-allergen-tip{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);width:min(300px,86vw);padding:14px 16px;border:1px solid var(--beige);border-radius:10px;background:#5f1220;box-shadow:0 10px 28px rgba(0,0,0,.35);color:var(--cream);font-size:13.5px;line-height:1.5;text-align:left;z-index:30}
+  .gift-allergen-tip::after{content:"";position:absolute;left:50%;top:100%;width:10px;height:10px;background:#5f1220;border-right:1px solid var(--beige);border-bottom:1px solid var(--beige);transform:translate(-50%,-5px) rotate(45deg)}
+  .gift-allergen-tip[hidden]{display:none}
+  .gift-allergen-tip p{margin:0 0 6px}.gift-allergen-tip p:last-child{margin:0}
   .gift-bookworm-art{width:min(46%,190px);margin:0 auto 16px}
   .gift-basket{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px;text-align:left}
   .gift-basket li{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(244,242,236,.22);font-size:15px}
@@ -186,8 +192,12 @@ Edit this source file, then run `node webflow/build.js`.
   var PRICE_PENCE = 5900;
   var DELIVERY_PENCE = 199;
   var MAX_GIFTS = 10;
-  // Link for "Allergen info" (treats screen and FAQ). Empty shows the words without a link.
-  var ALLERGEN_INFO_URL = '';
+  // "Allergen info" tooltip on the treats screen (and the FAQ answer). One line per paragraph.
+  // Replace with the client's allergen list for each treat.
+  var ALLERGEN_INFO = [
+    'Vegan options are marked (V).',
+    'For allergen details on any treat, just ask us before ordering.'
+  ];
   // Stripe sends buyers back to the page they came from (/gift, or /gift-preview while testing).
   var PAGE_PATH = /^\/gift-preview/.test(location.pathname) ? '/gift-preview' : '/gift';
   var SHOW_PRODUCT_IMAGE = true; // gift_box_product.jpg at the top of the checkout card
@@ -510,8 +520,19 @@ Edit this source file, then run `node webflow/build.js`.
   var screens = {};
 
   // Screen 0: welcome (also the UK notice).
-  function allergenLine(text) {
-    return ALLERGEN_INFO_URL ? '<a href="' + esc(ALLERGEN_INFO_URL) + '" target="_blank" rel="noopener">' + esc(text) + '</a>' : esc(text);
+  function allergenParagraphs() { return ALLERGEN_INFO.map(function (line) { return '<p>' + esc(line) + '</p>'; }).join(''); }
+  // A tap-to-open tooltip; tapping anywhere else (or Escape) closes it.
+  function allergenTip() {
+    return '<div class="gift-allergen"><button class="gift-allergen-btn" id="gift-allergen-btn" type="button" aria-expanded="false" aria-controls="gift-allergen-tip">Allergen info <i aria-hidden="true">i</i></button>' +
+      '<div class="gift-allergen-tip" id="gift-allergen-tip" role="tooltip" hidden>' + allergenParagraphs() + '</div></div>';
+  }
+  function wireAllergenTip() {
+    var button = $('gift-allergen-btn'), tip = $('gift-allergen-tip');
+    if (!button) return;
+    function set(open) { tip.hidden = !open; button.setAttribute('aria-expanded', String(open)); }
+    button.addEventListener('click', function (e) { e.stopPropagation(); set(tip.hidden); });
+    document.addEventListener('click', function close(e) { if (!$('gift-allergen-tip')) return document.removeEventListener('click', close); if (!tip.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
   }
   function startGift() {
     if (!state.gift_id) {
@@ -550,7 +571,7 @@ Edit this source file, then run `node webflow/build.js`.
       '<div class="gift-faq">' +
       '<details><summary>Will they know it\u2019s from me?</summary><p>Only if you want them to. You choose in the quiz.</p></details>' +
       '<details><summary>When does it arrive?</summary><p>We aim to get it into their hands within 10 days.' + (CHRISTMAS_ORDER_BY ? ' Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas.' : '') + '</p></details>' +
-      '<details><summary>What about allergies?</summary><p>Choose from five treats. Vegan options are marked (V). Full allergen info: ' + allergenLine(ALLERGEN_INFO_URL ? 'see the list' : 'just ask us') + '.</p></details>' +
+      '<details><summary>What about allergies?</summary><p>Choose from five treats. Vegan options are marked (V).</p>' + ALLERGEN_INFO.slice(1).map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</details>' +
       '<details><summary>What if they\u2019ve already read the book?</summary><p>We look past the obvious and choose books for them specifically, so our picks often lean classic or a little off the beaten path. Every book is a hardback made to keep, and there\u2019s nothing wrong with a reread ;) As every box is made for one person, we can\u2019t offer refunds on book choice.</p></details>' +
       '</div>' +
       '<button class="gift-btn gift-btn--main gift-btn--welcome gift-btn--nowrap gift-start" type="button">Start their gift</button>' +
@@ -790,7 +811,8 @@ Edit this source file, then run `node webflow/build.js`.
   });
 
   screens.fuel = function (root) {
-    imageScreen(root, { title: 'Choose their reading fuel.', field: 'reading_fuel', options: FUELS, after: '<p class="gift-allergen">' + allergenLine('Allergen info') + '</p>' });
+    imageScreen(root, { title: 'Choose their reading fuel.', field: 'reading_fuel', options: FUELS, after: allergenTip() });
+    wireAllergenTip();
   };
 
   function pounds(pence) { return '\u00a3' + (pence % 100 ? (pence / 100).toFixed(2) : String(pence / 100)); }

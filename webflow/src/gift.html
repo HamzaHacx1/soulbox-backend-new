@@ -96,7 +96,7 @@ Edit this source file, then run `node webflow/build.js`.
   .gift-allergen{position:relative;margin:14px 0 0;text-align:center}
   .gift-allergen-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px;border:0;background:none;color:var(--cream);font:400 14px 'Source Serif Pro',Georgia,serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.9}
   .gift-allergen-btn i{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border:1.2px solid currentColor;border-radius:50%;font:italic 600 11px Georgia,serif;text-decoration:none}
-  .gift-allergen-tip{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);width:min(300px,86vw);padding:14px 16px;border:1px solid var(--beige);border-radius:10px;background:#5f1220;box-shadow:0 10px 28px rgba(0,0,0,.35);color:var(--cream);font-size:13.5px;line-height:1.5;text-align:left;z-index:30}
+  .gift-allergen-tip{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);width:min(360px,90vw);max-height:62vh;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px;border:1px solid var(--beige);border-radius:10px;background:#5f1220;box-shadow:0 10px 28px rgba(0,0,0,.35);color:var(--cream);font-size:13.5px;line-height:1.5;text-align:left;z-index:30}
   .gift-allergen-tip::after{content:"";position:absolute;left:50%;top:100%;width:10px;height:10px;background:#5f1220;border-right:1px solid var(--beige);border-bottom:1px solid var(--beige);transform:translate(-50%,-5px) rotate(45deg)}
   .gift-allergen-tip[hidden]{display:none}
   .gift-allergen-tip p{margin:0 0 6px}.gift-allergen-tip p:last-child{margin:0}
@@ -192,12 +192,17 @@ Edit this source file, then run `node webflow/build.js`.
   var PRICE_PENCE = 5900;
   var DELIVERY_PENCE = 199;
   var MAX_GIFTS = 10;
-  // "Allergen info" tooltip on the treats screen (and the FAQ answer). One line per paragraph.
-  // Replace with the client's allergen list for each treat.
+  // "Allergen info" tooltip on the treats screen (also the FAQ answer). Client's wording, 24 Nov.
+  // [heading or '', text]; a heading shows in bold before its text.
+  var ALLERGEN_INTRO = 'Allergens are in CAPITALS. Every treat arrives in its original sealed pack with the full label.';
   var ALLERGEN_INFO = [
-    'Vegan options are marked (V).',
-    'For allergen details on any treat, just ask us before ordering.'
+    ['Shortbread', 'WHEAT flour (WHEAT flour, calcium carbonate, iron, niacin, thiamin), butter (MILK) (32%), sugar, salt. Contains: WHEAT (gluten), MILK.'],
+    ['Fudge', 'sugar, glucose syrup, sweetened condensed milk (skimmed MILK, sugar, lactose (MILK)), palm oil, fondant (sugar, glucose syrup, water), whey powder (MILK), cornflour, dextrose, butter (MILK), salt, natural flavouring. Contains: MILK.'],
+    ['Dark Chocolate (V)', 'cocoa mass, sugar, cocoa butter, emulsifier: sunflower lecithin, vanilla.'],
+    ['Kettle Chips Lightly Sea Salted (V)', 'potatoes, sunflower oil, sea salt.'],
+    ['Candy Kittens', 'sugar, glucose syrup, modified starch, dextrose, strawberry juice from concentrate (6%), coconut water from concentrate (4%), malic acid, citric acid, lactic acid, potato protein, natural flavourings, fruit and plant concentrates (sweet potato, apple), hydrolysed pea protein, vegetable oil (sunflower), glazing agent: beeswax (white and yellow). Vegetarian, not vegan.']
   ];
+  var ALLERGEN_OUTRO = 'All treats may be made in factories that also handle nuts, peanuts, sesame, milk or gluten. If you have a severe allergy, please check the pack before eating.';
   // Stripe sends buyers back to the page they came from (/gift, or /gift-preview while testing).
   var PAGE_PATH = /^\/gift-preview/.test(location.pathname) ? '/gift-preview' : '/gift';
   var SHOW_PRODUCT_IMAGE = true; // gift_box_product.jpg at the top of the checkout card
@@ -242,8 +247,8 @@ Edit this source file, then run `node webflow/build.js`.
   var MEANING_GOOD_WORDS = 50;
   // [saved value, image, label shown if different]
   var FUELS = [
-    ['Kettle Chips', 'gift_fuel_kettlechips.jpg'], ['Shortbread', 'gift_fuel_shortbread.jpg'], ['Fudge', 'gift_fuel_fudge.jpg'],
-    ['Dark Chocolate', 'gift_fuel_darkchocolate.jpg'], ['Candy Kittens', 'gift_fuel_candykittens.jpg', 'Candy Kittens (V)']
+    ['Kettle Chips', 'gift_fuel_kettlechips.jpg', 'Kettle Chips (V)'], ['Shortbread', 'gift_fuel_shortbread.jpg'], ['Fudge', 'gift_fuel_fudge.jpg'],
+    ['Dark Chocolate', 'gift_fuel_darkchocolate.jpg', 'Dark Chocolate (V)'], ['Candy Kittens', 'gift_fuel_candykittens.jpg']
   ];
   var REVEAL = [['Yes', 'Yes'], ['Keep it a mystery', 'Mystery']]; // [label, saved value]
   var BOOKWORM = ['Reading is who they are', 'They read regularly', 'Now and again', 'They\u2019re just getting into it'];
@@ -520,7 +525,11 @@ Edit this source file, then run `node webflow/build.js`.
   var screens = {};
 
   // Screen 0: welcome (also the UK notice).
-  function allergenParagraphs() { return ALLERGEN_INFO.map(function (line) { return '<p>' + esc(line) + '</p>'; }).join(''); }
+  function allergenParagraphs() {
+    return '<p>' + esc(ALLERGEN_INTRO) + '</p>' +
+      ALLERGEN_INFO.map(function (t) { return '<p><strong>' + esc(t[0]) + ':</strong> ' + esc(t[1]) + '</p>'; }).join('') +
+      '<p>' + esc(ALLERGEN_OUTRO) + '</p>';
+  }
   // A tap-to-open tooltip; tapping anywhere else (or Escape) closes it.
   function allergenTip() {
     return '<div class="gift-allergen"><button class="gift-allergen-btn" id="gift-allergen-btn" type="button" aria-expanded="false" aria-controls="gift-allergen-tip">Allergen info <i aria-hidden="true">i</i></button>' +
@@ -571,7 +580,7 @@ Edit this source file, then run `node webflow/build.js`.
       '<div class="gift-faq">' +
       '<details><summary>Will they know it\u2019s from me?</summary><p>Only if you want them to. You choose in the quiz.</p></details>' +
       '<details><summary>When does it arrive?</summary><p>We aim to get it into their hands within 10 days.' + (CHRISTMAS_ORDER_BY ? ' Order by ' + esc(CHRISTMAS_ORDER_BY) + ' for Christmas.' : '') + '</p></details>' +
-      '<details><summary>What about allergies?</summary><p>Choose from five treats. Vegan options are marked (V).</p>' + ALLERGEN_INFO.slice(1).map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</details>' +
+      '<details><summary>What about allergies?</summary><p>Choose from five treats. Vegan options are marked (V).</p>' + allergenParagraphs() + '</details>' +
       '<details><summary>What if they\u2019ve already read the book?</summary><p>We look past the obvious and choose books for them specifically, so our picks often lean classic or a little off the beaten path. Every book is a hardback made to keep, and there\u2019s nothing wrong with a reread ;) As every box is made for one person, we can\u2019t offer refunds on book choice.</p></details>' +
       '</div>' +
       '<button class="gift-btn gift-btn--main gift-btn--welcome gift-btn--nowrap gift-start" type="button">Start their gift</button>' +

@@ -26,9 +26,8 @@ router.get("/gift-app.js", (req, res) => {
     "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
     "Access-Control-Allow-Origin": "*",
   });
-  // ?preview=1 serves the next version (the /gift-preview page) while /gift keeps the current one.
-  const next = req.query.preview === "1" || process.env.GIFT_APP_VERSION === "next";
-  res.send(require(next ? "../generated/gift-app.js" : "../generated/gift-app-current.js"));
+  // One version for /gift and /gift-preview (the £59 flow went live 24 Nov).
+  res.send(require("../generated/gift-app.js"));
 });
 
 // Screen 0: "I'm in the UK". The browser generates gift_id so the call can be retried safely.

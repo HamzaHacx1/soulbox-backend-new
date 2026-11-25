@@ -122,12 +122,12 @@ test("payments from the client's Payment Link are matched by client_reference_id
   assert.equal(gifts.giftIdOf({ metadata: { submissionId: id } }), null);
 });
 
-test('£59 Checkout: one line per gift, £1.99 delivery for one, free for two, promo codes on', () => {
+test('£45 Checkout: one line per gift, £1.99 delivery for one, free for two, promo codes on', () => {
   const g = (id, name) => ({ gift_id: id, recipient_name: name });
   const a = '3b241101-e2bb-4255-8caf-4136c566a962', b = '3b241101-e2bb-4255-8caf-4136c566a963';
   const one = gifts.buildMultiGiftCheckout({ gifts: [g(a, 'Karen')], origin: 'https://soul-box.webflow.io', page: '/gift-preview', shippingRateId: 'shr_x' });
   assert.equal(one.line_items.length, 1);
-  assert.equal(one.line_items[0].price_data.unit_amount, 5900);
+  assert.equal(one.line_items[0].price_data.unit_amount, 4500);
   assert.deepEqual(one.shipping_options, [{ shipping_rate: 'shr_x' }]);
   assert.equal(one.allow_promotion_codes, true);
   assert.match(one.success_url, /^https:\/\/soul-box\.webflow\.io\/gift-preview\?gift_id=/);
@@ -139,7 +139,7 @@ test('£59 Checkout: one line per gift, £1.99 delivery for one, free for two, p
   assert.deepEqual(gifts.giftIdsOf({ metadata: two.metadata }), [a, b]);
 });
 
-test('£59 flow requires reveal, bookworm and all three memories', () => {
+test('Gift flow requires reveal, bookworm and all three memories', () => {
   const complete = {
     gifter_name: 'Amy', recipient_name: 'Karen', relationship: 'Parent', occasion: 'Birthday', reveal: 'Mystery',
     ...Object.fromEntries(gifts.MOOD_FIELDS.map((f) => [f, 'Maybe'])), bookworm: 'Now and again',

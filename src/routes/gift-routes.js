@@ -26,7 +26,7 @@ router.get("/gift-app.js", (req, res) => {
     "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=86400",
     "Access-Control-Allow-Origin": "*",
   });
-  // One version for /gift and /gift-preview (the £59 flow went live 24 Nov).
+  // One version for /gift and /gift-preview (price back to £45 on 25 Nov).
   res.send(require("../generated/gift-app.js"));
 });
 

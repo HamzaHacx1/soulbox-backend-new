@@ -35,8 +35,8 @@ const GIFT_BOX = {
   shippingRateId: "shr_1UYoFoFHbt8VjRVzpMTWMgXa",
 };
 const GIFT_PAGE_PATH = "/gift";
-// The £59 Gift Box (client changes, November): one line per gift, free delivery on two or more.
-const GIFT_BOX_V2 = { name: "The Gift Box", amount: 5900, currency: "gbp", shippingAmount: 199, maxGifts: 10 };
+// The Gift Box (£45 from 25 Nov): one line per gift, free delivery on two or more.
+const GIFT_BOX_V2 = { name: "The Gift Box", amount: 4500, currency: "gbp", shippingAmount: 199, maxGifts: 10 };
 const GIFT_PAGES = new Set(["/gift", "/gift-preview"]);
 const ALLOWED_ORIGINS = new Set(["https://soulboxed.com", "https://www.soulboxed.com", "https://soul-box.webflow.io"]);
 const POSTHOG_HOST = "https://eu.i.posthog.com";
@@ -127,7 +127,7 @@ function sanitizeMeta(meta = {}) {
   };
 }
 
-// The £59 flow: reveal and bookworm are required and memory cards are always included.
+// The current flow: reveal and bookworm are required and memory cards are always included.
 function missingAnswersV2(gift) {
   const required = ["gifter_name", "recipient_name", "relationship", "occasion", "reveal", ...MOOD_FIELDS, "bookworm",
     "life_chapter", "specific_details", "what_they_mean", "memory_place", "memory_joke", "memory_tribute", "reading_fuel"];
